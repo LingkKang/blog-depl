@@ -6,7 +6,7 @@
   <link href="https://lingkang.dev/atom.xml" rel="self"/>
   
   <link href="https://lingkang.dev/"/>
-  <updated>2024-08-13T01:20:32.380Z</updated>
+  <updated>2024-08-13T01:20:32.382Z</updated>
   <id>https://lingkang.dev/</id>
   
   <author>
@@ -15,29 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>Hello World</title>
-    <link href="https://lingkang.dev/2024/08/13/hello-world/"/>
-    <id>https://lingkang.dev/2024/08/13/hello-world/</id>
-    <published>2024-08-13T01:20:32.380Z</published>
-    <updated>2024-08-13T01:20:32.380Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot;</summary>
-        
-      
-    
-    
-    
-    <category term="Uncategorized" scheme="https://lingkang.dev/categories/Uncategorized/"/>
-    
-    
-  </entry>
   
   <entry>
     <title>Paper Notes: PeeK - Pruning for K-th Shortest Paths</title>
@@ -172,6 +149,29 @@
     <category term="Visualization" scheme="https://lingkang.dev/tags/Visualization/"/>
     
     <category term="Round Robin" scheme="https://lingkang.dev/tags/Round-Robin/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Install Lean 3 on Windows</title>
+    <link href="https://lingkang.dev/2023/10/05/lean-inst-win/"/>
+    <id>https://lingkang.dev/2023/10/05/lean-inst-win/</id>
+    <published>2023-10-04T21:23:32.000Z</published>
+    <updated>2023-11-12T13:21:32.000Z</updated>
+    
+    
+    <summary type="html">Quite annoying to get Lean 4 installed without noticing it.</summary>
+    
+    
+    
+    <category term="DevOps" scheme="https://lingkang.dev/categories/DevOps/"/>
+    
+    
+    <category term="VS Code" scheme="https://lingkang.dev/tags/VS-Code/"/>
+    
+    <category term="Lean" scheme="https://lingkang.dev/tags/Lean/"/>
+    
+    <category term="Windows" scheme="https://lingkang.dev/tags/Windows/"/>
     
   </entry>
   

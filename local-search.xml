@@ -4,25 +4,6 @@
   
   
   <entry>
-    <title>Hello World</title>
-    <link href="/2024/08/13/hello-world/"/>
-    <url>/2024/08/13/hello-world/</url>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="https://cdn.jsdelivr.net/npm/meting/dist/Meting.min.js"></script><p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
-    
-    
-    <categories>
-      
-      <category>Uncategorized</category>
-      
-    </categories>
-    
-    
-  </entry>
-  
-  
-  
-  <entry>
     <title>Paper Notes: PeeK - Pruning for K-th Shortest Paths</title>
     <link href="/2024/08/09/read-paper-peek/"/>
     <url>/2024/08/09/read-paper-peek/</url>
@@ -259,15 +240,15 @@
     
     <tags>
       
+      <tag>C</tag>
+      
+      <tag>Cpp</tag>
+      
       <tag>Optimization</tag>
       
       <tag>Memory</tag>
       
       <tag>Alignment</tag>
-      
-      <tag>C</tag>
-      
-      <tag>Cpp</tag>
       
       <tag>Padding</tag>
       
@@ -296,11 +277,11 @@
       
       <tag>Linux</tag>
       
+      <tag>WSL2</tag>
+      
       <tag>SQL</tag>
       
       <tag>Windows</tag>
-      
-      <tag>WSL2</tag>
       
       <tag>Hyper-V</tag>
       
@@ -446,13 +427,13 @@
       
       <tag>Matrix</tag>
       
-      <tag>Polymorphism</tag>
-      
       <tag>Haskell</tag>
       
       <tag>Functional Programming</tag>
       
       <tag>Currying</tag>
+      
+      <tag>Polymorphism</tag>
       
     </tags>
     
@@ -477,13 +458,13 @@
     
     <tags>
       
+      <tag>Polymorphism</tag>
+      
       <tag>Java</tag>
       
       <tag>Inheritance</tag>
       
       <tag>Static</tag>
-      
-      <tag>Polymorphism</tag>
       
       <tag>Overriding</tag>
       
@@ -677,15 +658,15 @@
     
     <tags>
       
-      <tag>Bitwise Operation</tag>
-      
       <tag>Optimization</tag>
-      
-      <tag>xv6</tag>
       
       <tag>Memory</tag>
       
       <tag>Alignment</tag>
+      
+      <tag>Bitwise Operation</tag>
+      
+      <tag>xv6</tag>
       
     </tags>
     
@@ -712,9 +693,9 @@
       
       <tag>Register</tag>
       
-      <tag>xv6</tag>
-      
       <tag>C</tag>
+      
+      <tag>xv6</tag>
       
       <tag>QEMU</tag>
       
@@ -755,11 +736,11 @@
       
       <tag>Register</tag>
       
-      <tag>xv6</tag>
+      <tag>C</tag>
       
       <tag>Memory</tag>
       
-      <tag>C</tag>
+      <tag>xv6</tag>
       
       <tag>Bootstrap</tag>
       
@@ -883,9 +864,9 @@
     
     <tags>
       
-      <tag>Memory</tag>
-      
       <tag>C</tag>
+      
+      <tag>Memory</tag>
       
       <tag>Debug</tag>
       
@@ -976,11 +957,11 @@
       
       <tag>Python</tag>
       
+      <tag>LeetCode</tag>
+      
       <tag>Tree</tag>
       
       <tag>Binary Tree</tag>
-      
-      <tag>LeetCode</tag>
       
     </tags>
     
