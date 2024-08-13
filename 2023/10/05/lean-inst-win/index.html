@@ -1,0 +1,851 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/profile_img.png">
+  <link rel="icon" href="/images/profile_img.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Lingkang">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Quite annoying to get Lean 4 installed without noticing it.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Install Lean 3 on Windows">
+<meta property="og:url" content="https://lingkang.dev/2023/10/05/lean-inst-win/index.html">
+<meta property="og:site_name" content="Lingkang&#39;s Blog">
+<meta property="og:description" content="Quite annoying to get Lean 4 installed without noticing it.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://lingkang.dev/images/lean/lean-warn.png">
+<meta property="og:image" content="https://lingkang.dev/images/lean/lean-ext.png">
+<meta property="og:image" content="https://lingkang.dev/images/lean/lean-done.png">
+<meta property="og:image" content="https://lingkang.dev/images/lean/lean-done-full.png">
+<meta property="article:published_time" content="2023-10-04T21:23:32.000Z">
+<meta property="article:modified_time" content="2023-11-12T13:21:32.000Z">
+<meta property="article:author" content="Lingkang">
+<meta property="article:tag" content="VS Code">
+<meta property="article:tag" content="Lean">
+<meta property="article:tag" content="Windows">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://lingkang.dev/images/lean/lean-warn.png">
+  
+  
+  
+    <meta name="google-site-verification" content="_Z4a0qEOBfzKcSi9b2FxvxEvBcSQPH0SDX8XFGBut9M">
+  
+  <title>Install Lean 3 on Windows - Lingkang&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"lingkang.dev","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":"G-S9PGLW5JVZ"},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Lingkang's Blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Lingkang&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>Links</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/images/bg_img/bg_post.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Install Lean 3 on Windows"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-10-04 22:23" pubdate>
+          October 4, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          9 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Install Lean 3 on Windows</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    Last updated on November 12, 2023 pm
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Install-Lean-3-on-Windows"><a href="#Install-Lean-3-on-Windows" class="headerlink" title="Install Lean 3 on Windows"></a>Install Lean 3 on Windows</h1><p>If you follow the <a target="_blank" rel="noopener" href="https://leanprover-community.github.io/install/windows.html">official installation guide on Windows</a>, Lean 4 will be installed automatically. However, if you want to install Lean 3 on Windows, you can follow the steps below.</p>
+<p>These should be the minimum steps and I will try to keep them as clear as possible.</p>
+<h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><p>I assume you have <a target="_blank" rel="noopener" href="https://code.visualstudio.com/">Visual Studio Code</a> installed. (And possibly a web browser 🤷)</p>
+<h2 id="1-Download-the-latest-release"><a href="#1-Download-the-latest-release" class="headerlink" title="1. Download the latest release"></a>1. Download the latest release</h2><p>Head to the <a target="_blank" rel="noopener" href="https://github.com/leanprover-community/lean">Lean 3 repository on GitHub</a>, find the latest release, and download the <code>lean-&lt;version&gt;-windows.zip</code> file.</p>
+<p>At the moment, the latest release is <a target="_blank" rel="noopener" href="https://github.com/leanprover-community/lean/releases/tag/v3.51.1">Release v3.51.1</a>, so I will download <code>lean-3.51.1-windows.zip</code>.</p>
+<p>There may be a warning that says “This file is not commonly downloaded and may be dangerous”, I’m not sure why, but just keep downloading it. It should be safe as long as you are downloading it from the official repository.</p>
+<p><img src="/../images/lean/lean-warn.png" srcset="/img/loading.gif" lazyload alt="Download Lean 3"></p>
+<div class="note note-primary">
+            <p>Lean 3 is no longer officially maintained, the version we downloaded here is the community one.</p><p>If you want to get the last official version, which was released in 2019, you can download it from <a target="_blank" rel="noopener" href="https://github.com/leanprover/lean3/releases/tag/v3.4.2"><u>Release v3.4.2 · leanprover&#x2F;lean3</u></a>, the rest of the steps should be the same.</p>
+          </div>
+
+<h2 id="2-Unzip-the-file"><a href="#2-Unzip-the-file" class="headerlink" title="2. Unzip the file"></a>2. Unzip the file</h2><p>Unzip the downloaded file to a directory of your choice. There should be three folders: <code>bin</code>, <code>include</code>, and <code>lib</code> respectively.</p>
+<p>I stored them on my D drive, and also renamed the folder to <code>lean</code>. So now I have <code>D:\lean\bin</code>, <code>D:\lean\include</code>, and <code>D:\lean\lib</code>.</p>
+<p>Optionally, you can test the <code>lean.exe</code> in the <code>bin</code> folder by running <code>.\lean.exe --version</code> in a command prompt or PowerShell:</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs PowerShell"><span class="hljs-built_in">PS</span> D:\lean&gt; <span class="hljs-built_in">cd</span> bin<br><span class="hljs-built_in">PS</span> D:\lean\bin&gt; ./lean <span class="hljs-literal">--version</span><br>Lean (version <span class="hljs-number">3.51</span>.<span class="hljs-number">1</span>, commit cce7990ea86a, Release)<br></code></pre></td></tr></table></figure>
+
+<h2 id="3-Add-the-path-to-the-environment-variables"><a href="#3-Add-the-path-to-the-environment-variables" class="headerlink" title="3. Add the path to the environment variables"></a>3. Add the path to the environment variables</h2><p>Add the path to the <code>bin</code> folder to the <code>PATH</code> environment variable.</p>
+<ol>
+<li>On the lower left <strong>Start</strong> menu or <strong>search bar</strong>, type <code>env</code> and select <strong>Edit the system environment variables</strong>.</li>
+<li>On the pop-up window, click the bottom right button <strong>Environment Variables…</strong>.</li>
+<li>On the <strong>System variables</strong> section, scroll down and find the <code>path</code> variable and double click it.</li>
+<li>On the pop-up window, click the <strong>New</strong> button. You will need to input the path to <code>lean</code>‘s <code>bin</code> folder (Better to copy and paste it from the file explorer). In my case, it is <code>D:\lean\bin</code>.</li>
+<li>Click <strong>OK</strong> on all the pop-up windows to save the changes.</li>
+</ol>
+<p>This change may take a few minutes to take effect (and terminals will not recognize <code>lean</code> until you close and reopen them), or you can simply restart your computer to make sure it works.</p>
+<h2 id="4-Test-the-installation-optional"><a href="#4-Test-the-installation-optional" class="headerlink" title="4. Test the installation (optional)"></a>4. Test the installation (optional)</h2><p>Open a new command prompt or PowerShell window, and run <code>lean --version</code> again:</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs PowerShell">PowerShell <span class="hljs-number">7.3</span>.<span class="hljs-number">7</span><br><span class="hljs-built_in">PS</span> C:\Users\Lingkang&gt; lean <span class="hljs-literal">--version</span><br>Lean (version <span class="hljs-number">3.51</span>.<span class="hljs-number">1</span>, commit cce7990ea86a, Release)<br><span class="hljs-built_in">PS</span> C:\Users\Lingkang&gt; lean <span class="hljs-literal">--help</span><br>Lean (version <span class="hljs-number">3.51</span>.<span class="hljs-number">1</span>, commit cce7990ea86a, Release)<br>Miscellaneous:<br>  <span class="hljs-literal">--help</span> <span class="hljs-literal">-h</span>          display this message<br>  <span class="hljs-literal">--version</span> <span class="hljs-literal">-v</span>       display version number<br>  <span class="hljs-literal">--githash</span>          display the git commit hash number used to build this binary<br>  <span class="hljs-literal">--run</span>              executes the <span class="hljs-string">&#x27;main&#x27;</span> definition<br>...<br></code></pre></td></tr></table></figure>
+
+<h2 id="5-Install-the-Lean-extension-for-VS-Code"><a href="#5-Install-the-Lean-extension-for-VS-Code" class="headerlink" title="5. Install the Lean extension for VS Code"></a>5. Install the Lean extension for VS Code</h2><p>At this point, you can use Lean 3 from the command prompt or PowerShell. However, if you want to use Lean 3 in VS Code, you will need to install the Lean extension for VS Code.</p>
+<p>Open VS Code, navigate to the <strong>Extensions</strong> tab, and search for <code>lean</code>. Most of the time, the first result should be what we want. Click the <strong>Install</strong> button to install it.</p>
+<p><img src="/../images/lean/lean-ext.png" srcset="/img/loading.gif" lazyload alt="Lean Extension"></p>
+<p>The extension is supposed to find the installed Lean 3 automatically.</p>
+<h2 id="6-Done"><a href="#6-Done" class="headerlink" title="6. Done!"></a>6. Done!</h2><p>Up to now, the vanilla Lean 3 installation is done.</p>
+<p>Create a new file with extension <code>.lean</code>, and you should see the Lean logo on the bottom-right corner of the window. Click it to start the Lean server if needed.</p>
+<p>Try some basic Lean code:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Lean">#eval 1 + 1<br></code></pre></td></tr></table></figure>
+
+<p>or </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Lean">#print &quot;Hello world!&quot;<br></code></pre></td></tr></table></figure>
+
+<p>The <code>Lean Infoview</code> window should pop up to provide plenty of information about the code, including the result.</p>
+<p><img src="/../images/lean/lean-done.png" srcset="/img/loading.gif" lazyload alt="Lean 3 in VS Code"></p>
+<h2 id="7-Add-project-manager-and-package-manager"><a href="#7-Add-project-manager-and-package-manager" class="headerlink" title="7. Add project manager and package manager"></a>7. Add project manager and package manager</h2><p>However, if you want to use importation in Lean 3, for example <code>import tactic</code>, it is rather difficult to configure.</p>
+<p>Lean 3 uses <code>leanproject</code> as the project manager and <code>leanpkg</code> as the package manager.</p>
+<h3 id="7-1-Get-leanproject"><a href="#7-1-Get-leanproject" class="headerlink" title="7.1. Get leanproject"></a>7.1. Get <code>leanproject</code></h3><p>The <code>leanproject</code> is written in Python and can be installed using <code>pip</code>. </p>
+<ol>
+<li>Have Python 3 installed (Python 3.7 or later is recommended);</li>
+<li>Have <code>pip</code> installed by running <code>python -m pip install --upgrade pip</code> in a command prompt or PowerShell (<code>python</code> or <code>python3</code> doesn’t matter, as long as it is your desired version from the last step);</li>
+<li>run <code>pip3 install mathlibtools</code> to install <code>leanproject</code>;</li>
+</ol>
+<p>It is quite weird that the <code>leanproject</code> has name <code>mathlibtools</code> on PyPI, but it is the correct one.</p>
+<p>Check the installation by running <code>leanproject --version</code>:</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs PowerShell"><span class="hljs-built_in">PS</span> E:\Code\Lean&gt; leanproject <span class="hljs-literal">--version</span><br>leanproject, version <span class="hljs-number">1.3</span>.<span class="hljs-number">2</span><br></code></pre></td></tr></table></figure>
+
+<div class="note note-info">
+            <p>For your information, here is the (outdated) official Lean 3 <code>mathlib</code> installation guide: <a target="_blank" rel="noopener" href="https://leanprover-community.github.io/lean3/install/windows.html#installing-mathlib-supporting-tools"><u>Installing mathlib supporting tools</u></a>.</p>
+          </div>
+
+<h3 id="7-2-Create-a-new-Lean-3-project"><a href="#7-2-Create-a-new-Lean-3-project" class="headerlink" title="7.2. Create a new Lean 3 project"></a>7.2. Create a new Lean 3 project</h3><p>Features such as importation is only available in Lean 3 projects. To create a new Lean 3 project, run <code>leanproject new &lt;project-name&gt;</code> in a command prompt or PowerShell.</p>
+<p>Now go to a desired directory to create a new Lean 3 project. I will use <code>E:\Code\Lean</code> as an example. If you cannot get results similar to the following, proceed to <a href="#7-3-Troubleshooting">7.3. Troubleshooting</a>.</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs PowerShell"><span class="hljs-built_in">PS</span> E:\Code\Lean&gt; leanproject new proj<br>&gt; <span class="hljs-built_in">cd</span> proj<br>&gt; git init <span class="hljs-literal">-q</span><br>&gt; git checkout <span class="hljs-literal">-b</span> lean<span class="hljs-literal">-3</span>.<span class="hljs-number">51.1</span><br>Switched to a new branch <span class="hljs-string">&#x27;lean-3.51.1&#x27;</span><br>configuring proj <span class="hljs-number">0.1</span><br>Adding mathlib<br>mathlib: cloning https://github.com/leanprover<span class="hljs-literal">-community</span>/mathlib to _target/deps/mathlib<br>&gt; git clone https://github.com/leanprover<span class="hljs-literal">-community</span>/mathlib _target/deps/mathlib<br>Cloning into <span class="hljs-string">&#x27;_target/deps/mathlib&#x27;</span>...<br>remote: Enumerating objects: <span class="hljs-number">397855</span>, done.<br>remote: Counting objects: <span class="hljs-number">100</span>% (<span class="hljs-number">1072</span>/<span class="hljs-number">1072</span>), done.<br>remote: Compressing objects: <span class="hljs-number">100</span>% (<span class="hljs-number">333</span>/<span class="hljs-number">333</span>), done.<br>remote: Total <span class="hljs-number">397855</span> (delta <span class="hljs-number">898</span>), reused <span class="hljs-number">818</span> (delta <span class="hljs-number">736</span>), pack<span class="hljs-literal">-reused</span> <span class="hljs-number">396783</span><br>Receiving objects: <span class="hljs-number">100</span>% (<span class="hljs-number">397855</span>/<span class="hljs-number">397855</span>), <span class="hljs-number">221.91</span> MiB | <span class="hljs-number">13.97</span> MiB/s, done.<br>Resolving deltas: <span class="hljs-number">100</span>% (<span class="hljs-number">319147</span>/<span class="hljs-number">319147</span>), done.<br>Updating files: <span class="hljs-number">100</span>% (<span class="hljs-number">3572</span>/<span class="hljs-number">3572</span>), done.<br>&gt; git checkout <span class="hljs-literal">--detach</span> <span class="hljs-number">4</span>e976107aa81b41822bd5bb2b15c90b1c8a2aa15    <span class="hljs-comment"># in directory _target/deps/mathlib</span><br>HEAD is now at <span class="hljs-number">4</span>e976107aa feat(measure_theory/order/upper_lower): Order<span class="hljs-literal">-connected</span> sets <span class="hljs-keyword">in</span> `ℝⁿ` are measurable (<span class="hljs-comment">#16976)</span><br>configuring proj <span class="hljs-number">0.1</span><br>mathlib: trying to update _target/deps/mathlib to revision <span class="hljs-number">4</span>e976107aa81b41822bd5bb2b15c90b1c8a2aa15<br>&gt; git checkout <span class="hljs-literal">--detach</span> <span class="hljs-number">4</span>e976107aa81b41822bd5bb2b15c90b1c8a2aa15    <span class="hljs-comment"># in directory _target/deps/mathlib</span><br>HEAD is now at <span class="hljs-number">4</span>e976107aa feat(measure_theory/order/upper_lower): Order<span class="hljs-literal">-connected</span> sets <span class="hljs-keyword">in</span> `ℝⁿ` are measurable (<span class="hljs-comment">#16976)</span><br>Looking <span class="hljs-keyword">for</span> mathlib oleans <span class="hljs-keyword">for</span> <span class="hljs-number">4</span>e976107aa<br>  locally...<br>  Found local mathlib oleans<br>Located matching cache<br>Applying cache<br>  files extracted: <span class="hljs-number">3220</span> [<span class="hljs-number">00</span>:<span class="hljs-number">08</span>, <span class="hljs-number">379.06</span>/<span class="hljs-type">s</span>]<br></code></pre></td></tr></table></figure>
+
+<p>From this output, we can see a few things:</p>
+<ol>
+<li>Initialized a new Lean project with <code>git</code>;</li>
+<li>Cloned the whole <code>mathlib</code> repository;</li>
+<li>Added <code>mathlib</code> as a dependency;</li>
+<li>Load specified version pre-compiled <code>mathlib</code> (<code>olean</code> files);</li>
+</ol>
+<p>If every thing looks fine, we can now open the project in VS Code and start enjoying full-powered Lean 3.</p>
+<p><img src="/../images/lean/lean-done-full.png" srcset="/img/loading.gif" lazyload alt="Importing &lt;code&gt;tactic&lt;/code&gt; in Lean 3"></p>
+<h3 id="7-3-Troubleshooting"><a href="#7-3-Troubleshooting" class="headerlink" title="7.3. Troubleshooting"></a>7.3. Troubleshooting</h3><p>In most cases, things won’t go so smoothly. If you failed to get the above output, for example:</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs PowerShell"><span class="hljs-built_in">PS</span> E:\Code\Lean&gt; leanproject new proj<br>FileNotFoundError: [<span class="hljs-type">WinError</span> <span class="hljs-number">2</span>] The system cannot find the file specified<br></code></pre></td></tr></table></figure>
+
+<p>Here we directly head to resolve the issue, some thoughts over it could be found at <a href="#8-Appendix">8. Appendix</a>.</p>
+<p>In side the <code>leanproject</code>, <code>leanpkg</code> is actually called for help, so we first verify that <code>leanpkg</code> is installed correctly. Run <code>leanpkg --version</code>:</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs PowerShell">PowerShell <span class="hljs-number">7.3</span>.<span class="hljs-number">9</span><br><span class="hljs-built_in">PS</span> C:\Users\Lingkang&gt; leanpkg <span class="hljs-literal">--version</span><br>Lean package manager, version <span class="hljs-number">3.51</span>.<span class="hljs-number">1</span><br><br>Usage: leanpkg &lt;command&gt;<br><br>...<br></code></pre></td></tr></table></figure>
+
+<p>This should be runnable no matter what version of Lean 3 you are using, e.g., <code>v3.4.2</code> or <code>v3.51.1</code>. If not, double check your footprint from <a href="#1-Download-the-latest-release">step 1</a> to <a href="#3-Add-the-path-to-the-environment-variables">step 3</a>.</p>
+<p>Navigate to the <code>bin</code> folder of <code>lean</code> (here it is <code>D:\lean\bin</code>), create a new file named <code>leanpkg.c</code> with the following content:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span> *argv[])</span><br>&#123;<br>    <span class="hljs-type">char</span> command[<span class="hljs-number">500</span>];<br>    <span class="hljs-built_in">strcpy</span>(command, <span class="hljs-string">&quot;leanpkg.bat&quot;</span>);<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt; argc; i++)<br>    &#123;<br>        <span class="hljs-built_in">strcat</span>(command, <span class="hljs-string">&quot; &quot;</span>);<br>        <span class="hljs-built_in">strcat</span>(command, argv[i]);<br>    &#125;<br>    system(command);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>Compile it with output <code>leanpkg.exe</code>:</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs PowerShell">gcc leanpkg.c <span class="hljs-literal">-o</span> leanpkg.exe<br></code></pre></td></tr></table></figure>
+
+<p>Now retry <a href="#7-2-Create-a-new-Lean-3-project">7.2. Create a new Lean 3 project</a> and it should work.</p>
+<p>Here, we are basically <em>cheating</em> the python interpreter, see below for more details.</p>
+<h2 id="8-Appendix"><a href="#8-Appendix" class="headerlink" title="8. Appendix"></a>8. Appendix</h2><p>Here are short explanations and some thoughts over the installation process.</p>
+<h3 id="8-1-Causes"><a href="#8-1-Causes" class="headerlink" title="8.1. Causes"></a>8.1. Causes</h3><p>If we run <code>leanproject</code> with debug flag, the error stack is quite horrifying:</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs PowerShell"><span class="hljs-built_in">PS</span> E:\Code\Lean&gt; leanproject <span class="hljs-literal">--debug</span> new proj<br>Traceback (most recent call last):<br>  File <span class="hljs-string">&quot;D:\Python3.10\lib\runpy.py&quot;</span>, line <span class="hljs-number">196</span>, <span class="hljs-keyword">in</span> _run_module_as_main<br>    <span class="hljs-keyword">return</span> _run_code(code, main_globals, None,<br>  File <span class="hljs-string">&quot;D:\Python3.10\lib\runpy.py&quot;</span>, line <span class="hljs-number">86</span>, <span class="hljs-keyword">in</span> _run_code<br>    exec(code, run_globals)<br>  File <span class="hljs-string">&quot;D:\Python3.10\Scripts\leanproject.exe\__main__.py&quot;</span>, line <span class="hljs-number">7</span>, <span class="hljs-keyword">in</span> &lt;<br>  File <span class="hljs-string">&quot;D:\Python3.10\lib\site-packages\mathlibtools\leanproject.py&quot;</span>, li<br>    handle_exception(err, str(err))<br>  File <span class="hljs-string">&quot;D:\Python3.10\lib\site-packages\mathlibtools\leanproject.py&quot;</span>, li<br>    raise exc<br>  File <span class="hljs-string">&quot;D:\Python3.10\lib\site-packages\mathlibtools\leanproject.py&quot;</span>, li<br>    <span class="hljs-built_in">cli</span>() <span class="hljs-comment"># pylint: disable=no-value-for-parameter</span><br>  File <span class="hljs-string">&quot;D:\Python3.10\lib\site-packages\click\core.py&quot;</span>, line <span class="hljs-number">716</span>, <span class="hljs-keyword">in</span> __c<br>    <span class="hljs-keyword">return</span> self.main(*args, **kwargs)<br>  File <span class="hljs-string">&quot;D:\Python3.10\lib\site-packages\click\core.py&quot;</span>, line <span class="hljs-number">696</span>, <span class="hljs-keyword">in</span> mai<br>    <span class="hljs-built_in">rv</span> = self.invoke(ctx)<br>  File <span class="hljs-string">&quot;D:\Python3.10\lib\site-packages\click\core.py&quot;</span>, line <span class="hljs-number">1060</span>, <span class="hljs-keyword">in</span> <span class="hljs-keyword">in</span><br>    <span class="hljs-keyword">return</span> _process_result(sub_ctx.command.invoke(sub_ctx))<br>  File <span class="hljs-string">&quot;D:\Python3.10\lib\site-packages\click\core.py&quot;</span>, line <span class="hljs-number">889</span>, <span class="hljs-keyword">in</span> inv<br>    <span class="hljs-keyword">return</span> ctx.invoke(self.callback, **ctx.params)<br>  File <span class="hljs-string">&quot;D:\Python3.10\lib\site-packages\click\core.py&quot;</span>, line <span class="hljs-number">534</span>, <span class="hljs-keyword">in</span> inv<br>  File <span class="hljs-string">&quot;D:\Python3.10\lib\site-packages\mathlibtools\lib.py&quot;</span>, line <span class="hljs-number">700</span>, <span class="hljs-keyword">in</span> new<br>    subprocess.run([<span class="hljs-string">&#x27;leanpkg&#x27;</span>, <span class="hljs-string">&#x27;new&#x27;</span>, <span class="hljs-type">str</span>(<span class="hljs-type">path</span>)], check=True)<br>  File <span class="hljs-string">&quot;D:\Python3.10\lib\subprocess.py&quot;</span>, line <span class="hljs-number">501</span>, <span class="hljs-keyword">in</span> run<br>    with Popen(*popenargs, **kwargs) as <span class="hljs-keyword">process</span>:<br>  File <span class="hljs-string">&quot;D:\Python3.10\lib\subprocess.py&quot;</span>, line <span class="hljs-number">966</span>, <span class="hljs-keyword">in</span> __init__<br>    self._execute_child(args, executable, preexec_fn, close_fds,<br>  File <span class="hljs-string">&quot;D:\Python3.10\lib\subprocess.py&quot;</span>, line <span class="hljs-number">1435</span>, <span class="hljs-keyword">in</span> _execute_child<br>    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,<br>FileNotFoundError: [<span class="hljs-type">WinError</span> <span class="hljs-number">2</span>] The system cannot find the file specified<br></code></pre></td></tr></table></figure>
+
+<p>We can see that the error is caused by <code>subprocess.run([&#39;leanpkg&#39;, &#39;new&#39;, str(path)], check=True)</code> in <code>mathlibtools/lib.py</code>, and almost everywhere calling <code>leanpkg</code> will cause the same error.</p>
+<p>Source: <a target="_blank" rel="noopener" href="https://github.com/leanprover-community/mathlib-tools/blob/master/mathlibtools/lib.py">mathlib-tools&#x2F;mathlibtools&#x2F;lib.py at master · leanprover-community&#x2F;mathlib-tools</a></p>
+<p>To abstract away irrelevant details, we can simplify the code to: </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs Python"><span class="hljs-keyword">import</span> subprocess<br><span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> <span class="hljs-type">List</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">run</span>(<span class="hljs-params">args: <span class="hljs-type">List</span>[<span class="hljs-built_in">str</span>]</span>) -&gt; <span class="hljs-built_in">str</span>:<br>    <span class="hljs-keyword">return</span> subprocess.run(<br>        args, stdout=subprocess.PIPE, check=<span class="hljs-literal">False</span><br>    ).stdout.decode()<br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    <span class="hljs-built_in">print</span>(run([<span class="hljs-string">&quot;leanpkg&quot;</span>, <span class="hljs-string">&quot;--version&quot;</span>]))<br>    <span class="hljs-comment"># print(run([&quot;leanpkg.bat&quot;, &quot;--version&quot;]))</span><br></code></pre></td></tr></table></figure>
+
+<p>Running it will cause the same error that we got from <code>leanproject</code>:</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs stata">Traceback (most recent call last):<br>  <span class="hljs-keyword">File</span> <span class="hljs-string">&quot;E:\Code\Lean\test.py&quot;</span>, <span class="hljs-keyword">line</span> 13, <span class="hljs-keyword">in</span> &lt;module&gt;<br>    <span class="hljs-keyword">print</span>(<span class="hljs-keyword">run</span>([<span class="hljs-string">&quot;leanpkg&quot;</span>, <span class="hljs-string">&quot;--version&quot;</span>]))<br>  <span class="hljs-keyword">File</span> <span class="hljs-string">&quot;E:\Code\Lean\test.py&quot;</span>, <span class="hljs-keyword">line</span> 6, <span class="hljs-keyword">in</span> <span class="hljs-keyword">run</span><br>    <span class="hljs-keyword">return</span> subprocess.<span class="hljs-keyword">run</span>(<br>  <span class="hljs-keyword">File</span> <span class="hljs-string">&quot;D:\Python3.10\lib\subprocess.py&quot;</span>, <span class="hljs-keyword">line</span> 501, <span class="hljs-keyword">in</span> <span class="hljs-keyword">run</span><br>    with Popen(*popenargs, **kwargs) <span class="hljs-keyword">as</span> process:<br>  <span class="hljs-keyword">File</span> <span class="hljs-string">&quot;D:\Python3.10\lib\subprocess.py&quot;</span>, <span class="hljs-keyword">line</span> 966, <span class="hljs-keyword">in</span> __init__<br>    self._execute_child(<span class="hljs-keyword">args</span>, executable, preexec_fn, close_fds,<br>  <span class="hljs-keyword">File</span> <span class="hljs-string">&quot;D:\Python3.10\lib\subprocess.py&quot;</span>, <span class="hljs-keyword">line</span> 1435, <span class="hljs-keyword">in</span> _execute_child<br>    hp, ht, pid, tid = _winapi.CreateProcess(executable, <span class="hljs-keyword">args</span>,<br>FileNotFoundError: [WinError 2] The system cannot find the <span class="hljs-keyword">file</span> specified<br></code></pre></td></tr></table></figure>
+
+<p>And if we change it from <code>leanpkg</code> to <code>leanpkg.bat</code>, the snippet will work:</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">Lean package manager, <span class="hljs-keyword">version</span> 3.51.1<br><br>Usage: leanpkg &lt;<span class="hljs-keyword">command</span>&gt;<br><br><span class="hljs-string">...</span><br></code></pre></td></tr></table></figure>
+
+<p>This is what happened: under the <code>bin</code> folder of <code>lean</code>, we can see that there are two <code>leanpkg</code> files: <code>leanpkg</code> and <code>leanpkg.bat</code>. The first one is a shell script (not sure why put a shell script in a Windows release), and the second one is CMD batch script. When we run <code>leanpkg --version</code> on the command prompt or PowerShell, Windows is smart enough to run the batch script. This can be verified by running <code>Get-Command leanpkg</code> in PowerShell, and the output will specify which file is used for the command.</p>
+<div style="margin: 0 auto; width: fit-content;">
+
+<table>
+<thead>
+<tr>
+<th align="center">CommandType</th>
+<th align="center">Name</th>
+<th align="center">Version</th>
+<th align="center">Source</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Application</td>
+<td align="center">leanpkg.bat</td>
+<td align="center">0.0.0.0</td>
+<td align="center">D:\lean\bin\leanpkg.bat</td>
+</tr>
+</tbody></table>
+</div>
+
+<div class="note note-info">
+            <p>Both <code>Get-Command leanpkg</code> and <code>Get-Command leanpkg.bat</code> will return the same result.</p>
+          </div>
+
+<p>However, when we run it in Python, it will try to find an executable exactly named as <code>leanpkg</code>, and it will fail. It can only success to it when we specify the extension <code>leanpkg.bat</code>.</p>
+<h3 id="8-2-Solutions"><a href="#8-2-Solutions" class="headerlink" title="8.2. Solutions"></a>8.2. Solutions</h3><p>So the solution is quite simple, we can either:</p>
+<ol>
+<li>Change the Python source code to use <code>leanpkg.bat</code> instead of <code>leanpkg</code>;</li>
+<li>Make a kind of mapping or alias that maps <code>leanpkg</code> to <code>leanpkg.bat</code>;</li>
+<li>Create a new executable named <code>leanpkg</code> that calls <code>leanpkg.bat</code> under the hood;</li>
+</ol>
+<p>The first solution is quite straightforward, but modifying the source code might cause unexpected issues, and there are many places to modify.</p>
+<p>The second solution may work, but in real experiment, techniques such as symbolic link or hard link do not help.</p>
+<p>The Third solution, as what we did in <a href="#7-3-Troubleshooting">7.3. Troubleshooting</a>, is to create a new executable named <code>leanpkg.exe</code> that passes everything to <code>leanpkg.bat</code>. A little bit tricky.</p>
+<h3 id="8-3-Questions"><a href="#8-3-Questions" class="headerlink" title="8.3. Questions"></a>8.3. Questions</h3><p>Even though this is a feasible way, I still not sure why the procedure would go so painful.</p>
+<p>The <code>leanproject</code> (or <code>mathlibtools</code>) was marked obsolete just on August this year, and its CI tested on all major platforms, including Windows, with different Python versions from 3.7 to 3.11. There is no reason that it would be broken so soon.</p>
+<p>And also, the transition from Lean 3 to Lean 4 sucks. The official site becomes a mixture of them, and toolchains’ documentation nearly not exist.</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://leanprover-community.github.io/install/windows.html">Installing Lean 4 on Windows</a></li>
+<li><a target="_blank" rel="noopener" href="https://leanprover-community.github.io/lean3/install/windows.html">Installing Lean 3 and mathlib on Windows</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/leanprover-community/lean">leanprover-community&#x2F;lean: Lean Theorem Prover</a></li>
+<li><a target="_blank" rel="noopener" href="https://leanprover-community.github.io/">Lean community</a></li>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/previous-versions/office/developer/sharepoint-2010/ee537574%28v=office.14%29#to-add-a-path-to-the-path-environment-variable">How to: Add Tool Locations to the PATH Environment Variable | Microsoft Learn</a></li>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=jroesch.lean">lean - Visual Studio Marketplace</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/leanprover/vscode-lean">leanprover&#x2F;vscode-lean: Extension for VS Code that provides support for the older Lean 3 language. Succeeded by vscode-lean4 (‘lean4’ in the extensions menu) for the Lean 4 language.</a></li>
+<li><a target="_blank" rel="noopener" href="https://lean-lang.org/reference/using_lean.html#using-the-package-manager">1. Using Lean — The Lean Reference Manual 3.3.0 documentation</a></li>
+<li><a target="_blank" rel="noopener" href="https://leanprover-community.github.io/lean3/toolchain.html">The Lean tool chain</a></li>
+<li><a target="_blank" rel="noopener" href="https://leanprover-community.github.io/lean3/leanproject.html">Using leanproject</a></li>
+<li><a target="_blank" rel="noopener" href="https://pypi.org/project/mathlibtools/">mathlibtools · PyPI</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/leanprover-community/mathlib-tools">leanprover-community&#x2F;mathlib-tools: Development tools for https://github.com/leanprover-community/mathlib</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/leanprover-community/mathlib">leanprover-community&#x2F;mathlib: Lean 3’s obsolete mathematical components library: please use mathlib4</a></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/DevOps/" class="category-chain-item">DevOps</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/VS-Code/" class="print-no-link">#VS Code</a>
+      
+        <a href="/tags/Lean/" class="print-no-link">#Lean</a>
+      
+        <a href="/tags/Windows/" class="print-no-link">#Windows</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Install Lean 3 on Windows</div>
+      <div>https://lingkang.dev/2023/10/05/lean-inst-win/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Lingkang</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>October 4, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/11/01/osc-lab-task5/" title="OSC Lab Task 5 Reasoning">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">OSC Lab Task 5 Reasoning</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/31/migrate-gitlab/" title="Migrate GitLab from CentOS to Ubuntu on ECS">
+                        <span class="hidden-mobile">Migrate GitLab from CentOS to Ubuntu on ECS</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

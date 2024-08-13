@@ -1,0 +1,734 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/profile_img.png">
+  <link rel="icon" href="/images/profile_img.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Lingkang">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Implementing linked list with python built-in data type - list">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linked List with Python Built-in List">
+<meta property="og:url" content="https://lingkang.dev/2022/08/18/Linked-List-with-Python-Built-in-List/index.html">
+<meta property="og:site_name" content="Lingkang&#39;s Blog">
+<meta property="og:description" content="Implementing linked list with python built-in data type - list">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-08-18T14:25:00.000Z">
+<meta property="article:modified_time" content="2022-08-19T18:10:22.000Z">
+<meta property="article:author" content="Lingkang">
+<meta property="article:tag" content="Linked List">
+<meta property="article:tag" content="Python">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+    <meta name="google-site-verification" content="_Z4a0qEOBfzKcSi9b2FxvxEvBcSQPH0SDX8XFGBut9M">
+  
+  <title>Linked List with Python Built-in List - Lingkang&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"lingkang.dev","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":"G-S9PGLW5JVZ"},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Lingkang's Blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Lingkang&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>Links</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/images/bg_img/bg_post.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Linked List with Python Built-in List"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-08-18 15:25" pubdate>
+          August 18, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          412 words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          4 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Linked List with Python Built-in List</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    Last updated on August 19, 2022 pm
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Linked-List-with-Python-Built-in-List"><a href="#Linked-List-with-Python-Built-in-List" class="headerlink" title="Linked List with Python Built-in List"></a>Linked List with Python Built-in List</h1><h2 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h2><p>I was currently reading the <a target="_blank" rel="noopener" href="http://composingprograms.com/">Composing Programs</a>, which amazed me over and over again. </p>
+<p>In section <a target="_blank" rel="noopener" href="http://composingprograms.com/pages/23-sequences.html#linked-lists">2.3.7 Linked Lists</a>, a definition of linked list was introduced by using the python built-in type <code>list</code> only. It used <code>empty = &#39;empty&#39;</code> to suggest the end of the linked list, whereas I plan to use <code>NoneType</code> to standardize the code. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">link0 = [<span class="hljs-number">1</span>, [<span class="hljs-number">2</span>, [<span class="hljs-number">3</span>, [<span class="hljs-number">4</span>, <span class="hljs-string">&#x27;empty&#x27;</span>]]]]  <span class="hljs-comment"># Linked list from book</span><br>link1 = [<span class="hljs-number">1</span>, [<span class="hljs-number">2</span>, [<span class="hljs-number">3</span>, [<span class="hljs-number">4</span>, <span class="hljs-literal">None</span>]]]]     <span class="hljs-comment"># Linked list with NoneType</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="Construct"><a href="#Construct" class="headerlink" title="Construct"></a>Construct</h2><p>Firstly, we need a function to check a given list is a linked list or not: </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">is_link</span>(<span class="hljs-params">s</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;return True if formal parameter s is a linked list. &quot;&quot;&quot;</span><br>    <span class="hljs-keyword">return</span> s == <span class="hljs-literal">None</span> <span class="hljs-keyword">or</span> (<span class="hljs-built_in">len</span>(s) == <span class="hljs-number">2</span> <span class="hljs-keyword">and</span> is_link(s[<span class="hljs-number">1</span>]))<br></code></pre></td></tr></table></figure>
+
+<p>And naturally, the function <code>link()</code> can help us wrap up the <code>head</code> and <code>rest</code> two part into a new list whose length is 2. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">link</span>(<span class="hljs-params">head, rest=<span class="hljs-literal">None</span></span>):<br>    <span class="hljs-keyword">assert</span> is_link(rest), <span class="hljs-string">&quot;The rest part must be a linked list. &quot;</span><br>    <span class="hljs-keyword">return</span> [head, rest]<br></code></pre></td></tr></table></figure>
+
+<p>Different from the definition I written in <a target="_blank" rel="noopener" href="https://lingkkang.github.io/2022/05/16/Linked-List-in-Python/">my previous post</a>, this definition generates a linked list from tail side to head. But nothing changed actually. Let’s take a closer look at it. </p>
+<div class="note note-success">
+            <p>Notice:</p><p>According to this definition, <code>None</code> is a legal linked list, whereas <code>[None]</code> is illegal. </p><p>This detail could be helpful to the functions coming ahead. </p>
+          </div>
+
+<h2 id="Implementation"><a href="#Implementation" class="headerlink" title="Implementation"></a>Implementation</h2><p>We need some useful functions to manipulate our new data type. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">head</span>(<span class="hljs-params">s</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;Get value of current node. &quot;&quot;&quot;</span><br>    <span class="hljs-keyword">assert</span> is_link(s), <span class="hljs-string">&quot;The function must be applied to a linked list. &quot;</span><br>    <span class="hljs-keyword">assert</span> s != <span class="hljs-literal">None</span>, <span class="hljs-string">&quot;No empty linked list. &quot;</span><br>    <span class="hljs-keyword">return</span> s[<span class="hljs-number">0</span>]<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">rest</span>(<span class="hljs-params">s</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;Move onto next node. &quot;&quot;&quot;</span><br>    <span class="hljs-keyword">assert</span> is_link(s), <span class="hljs-string">&quot;The function must be applied to a linked list. &quot;</span><br>    <span class="hljs-keyword">assert</span> s != <span class="hljs-literal">None</span>, <span class="hljs-string">&quot;No empty linked list. &quot;</span><br>    <span class="hljs-keyword">return</span> s[<span class="hljs-number">1</span>]<br></code></pre></td></tr></table></figure>
+
+<p>Except these functions unwrapping the linked list, we also need to measure it’s length and evaluate the value of arbitrary node. </p>
+<h3 id="Iterative"><a href="#Iterative" class="headerlink" title="Iterative"></a>Iterative</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">len_link</span>(<span class="hljs-params">s</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;Return the length of the linked list. &quot;&quot;&quot;</span><br>    length = <span class="hljs-number">0</span><br>    <span class="hljs-keyword">while</span> s:<br>        s, length = rest(s), length + <span class="hljs-number">1</span><br>    <span class="hljs-keyword">return</span> length<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">get_item_link</span>(<span class="hljs-params">s, i</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;Return the i-th term value of given linked list s. &quot;&quot;&quot;</span><br>    <span class="hljs-keyword">assert</span> i &gt;= <span class="hljs-number">0</span>, <span class="hljs-string">&quot;item&#x27;s index should bigger than or equal to zero. &quot;</span><br>    <span class="hljs-keyword">assert</span> i &lt;= len_link(s)-<span class="hljs-number">1</span>, <span class="hljs-string">&quot;Given index exceeds the length of list. &quot;</span><br>    <span class="hljs-comment"># First item&#x27;s index is zero. </span><br>    <span class="hljs-keyword">while</span> i &gt; <span class="hljs-number">0</span>:<br>        s, i = rest(s), i - <span class="hljs-number">1</span><br>    <span class="hljs-keyword">return</span> head(s)<br></code></pre></td></tr></table></figure>
+
+<p>Based on these fuctions, we can preliminarily manipulate our linked list. </p>
+<h3 id="Recursive"><a href="#Recursive" class="headerlink" title="Recursive"></a>Recursive</h3><p>We can also rewrite our <code>len_link()</code> and <code>get_item_link()</code> functions in a recursive manner. This concept will emerge again later and is quite significant. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">len_link_recursive</span>(<span class="hljs-params">s</span>): <br>    <span class="hljs-string">&quot;&quot;&quot;Return the length of the linked list. Recursive version. &quot;&quot;&quot;</span><br>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> s:<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">1</span> + len_link_recursive(rest(s))<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">get_item_link_recursive</span>(<span class="hljs-params">s, i</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;Return the i-th term value of given linked list s. Recursive version. &quot;&quot;&quot;</span><br>    <span class="hljs-keyword">assert</span> i &gt;= <span class="hljs-number">0</span>, <span class="hljs-string">&quot;item&#x27;s index should bigger than or equal to zero. &quot;</span><br>    <span class="hljs-keyword">assert</span> i &lt;= len_link_recursive(s)-<span class="hljs-number">1</span>, <span class="hljs-string">&quot;Given index exceeds the length of list. &quot;</span><br>    <span class="hljs-comment"># First item&#x27;s index is zero. </span><br>    <span class="hljs-keyword">if</span> i == <span class="hljs-number">0</span>: <br>        <span class="hljs-keyword">return</span> head(s)<br>    <span class="hljs-keyword">return</span> get_item_link_recursive(rest(s), i-<span class="hljs-number">1</span>)<br></code></pre></td></tr></table></figure>
+
+<h2 id="Abstraction"><a href="#Abstraction" class="headerlink" title="Abstraction"></a>Abstraction</h2><h3 id="Append"><a href="#Append" class="headerlink" title="Append"></a>Append</h3><p>Next step, we need to append the linked list. It seems that extending a <em>node-form</em> linked list - by simply altering it’s <code>Next</code> attribute - is handy, while appending the <em>list-form</em> linked list sounds not so intuitive. Well, partially true. </p>
+<p>Here is the function from Composing Programs.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">extend_link</span>(<span class="hljs-params">s, t</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;Return a list with the elements of s followed by those of t.&quot;&quot;&quot;</span><br>    <span class="hljs-keyword">assert</span> is_link(s) <span class="hljs-keyword">and</span> is_link(t)<br>    <span class="hljs-keyword">if</span> s == <span class="hljs-literal">None</span>:<br>        <span class="hljs-keyword">return</span> t<br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-keyword">return</span> link(first(s), extend_link(rest(s), t))<br></code></pre></td></tr></table></figure>
+
+<p>This is a quite standard recursive function.  And here is the function I typed when I was first conceiving it. To make life much easier, I prefer writing them separately.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">append_link</span>(<span class="hljs-params">s, item</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;Return a new linked list which was appended with &#x27;item&#x27; from s. &quot;&quot;&quot;</span><br>    <span class="hljs-keyword">assert</span> is_link(s) <span class="hljs-keyword">and</span> is_link(item), <span class="hljs-string">&quot;Input should be linked list. &quot;</span><br>    i = len_link_recursive(s)<br>    <span class="hljs-keyword">if</span> i == <span class="hljs-number">0</span>:<br>        <span class="hljs-comment"># Special case for empty list</span><br>        <span class="hljs-keyword">return</span> link(item)<br>    <span class="hljs-keyword">elif</span> i == <span class="hljs-number">1</span>:<br>        <span class="hljs-keyword">return</span> link(head(s), item)<br>    <span class="hljs-keyword">else</span>:<br>        lk =  append_link(rest(s), item)<br>    <span class="hljs-keyword">return</span> link(head(s), lk)<br></code></pre></td></tr></table></figure>
+
+<p>Similarly, we can manage any other function with the concepts of <strong>higher-order function</strong> and <strong>recursion</strong>. </p>
+<p>For example, apply a function to all entries in a linked list. </p>
+<h3 id="Apply-to-all"><a href="#Apply-to-all" class="headerlink" title="Apply to all"></a>Apply to all</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">apply_to_all_link</span>(<span class="hljs-params">f, s</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;Apply function f to all elements of s. &quot;&quot;&quot;</span><br>    <span class="hljs-keyword">assert</span> is_link(s), <span class="hljs-string">&quot;Only apply to a linked list. &quot;</span><br>    <span class="hljs-keyword">if</span> s == <span class="hljs-literal">None</span>:<br>        <span class="hljs-keyword">return</span> s<br>    <span class="hljs-keyword">return</span> link(f(first(s)), apply_to_all_link(f, rest(s)))<br></code></pre></td></tr></table></figure>
+
+<h2 id="Conversion"><a href="#Conversion" class="headerlink" title="Conversion"></a>Conversion</h2><p>So how to convert a linked list into a normal list? And vice versa? </p>
+<p>Inherited from methods above, answers may not be very complicated. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">link_to_list</span>(<span class="hljs-params">s</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;Convert a linked list into a normal list. &quot;&quot;&quot;</span><br>    <span class="hljs-keyword">assert</span> is_link(s), <span class="hljs-string">&quot;Should be a linked list. &quot;</span><br>    <span class="hljs-keyword">if</span> rest(s) <span class="hljs-keyword">and</span> s:<br>        <span class="hljs-keyword">return</span> [head(s)] + link_to_list(rest(s))<br>    <span class="hljs-keyword">return</span> [head(s)]<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">list_to_link</span>(<span class="hljs-params">s</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;Convert a normal list into a linked list. &quot;&quot;&quot;</span><br>    <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(s) == <span class="hljs-number">1</span>:<br>        <span class="hljs-keyword">return</span> link(s[<span class="hljs-number">0</span>])<br>    <span class="hljs-keyword">return</span> link(s[<span class="hljs-number">0</span>], list_to_link(s[<span class="hljs-number">1</span>:]))<br></code></pre></td></tr></table></figure>
+
+<h2 id="Note"><a href="#Note" class="headerlink" title="Note"></a>Note</h2><p>Using python built-in list to form a linked list, this probably is not a vary popular approach, and its efficiency is open to discussion. </p>
+<p>However, what truly intriguing here is that even only one data type can be realized in various way. Also, every function in this post can be achieved in diverse manners. The possibilities in programming are always charming and charismatic. </p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ol>
+<li><a target="_blank" rel="noopener" href="http://composingprograms.com/pages/23-sequences.html">Composing Programs</a> by John DeNero;</li>
+<li><a target="_blank" rel="noopener" href="https://pythontutor.com/composingprograms.html">Online Python Tutor</a>;</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Algorithms-Data-Structures/" class="category-chain-item">Algorithms &amp; Data Structures</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Linked-List/" class="print-no-link">#Linked List</a>
+      
+        <a href="/tags/Python/" class="print-no-link">#Python</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Linked List with Python Built-in List</div>
+      <div>https://lingkang.dev/2022/08/18/Linked-List-with-Python-Built-in-List/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Lingkang</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>August 18, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/08/25/Hujan/" title="Bumi mana yang tak ditimpa hujan">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Bumi mana yang tak ditimpa hujan</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/08/17/Prism-Plugin-ERROR/" title="Prism Plugin ERROR">
+                        <span class="hidden-mobile">Prism Plugin ERROR</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

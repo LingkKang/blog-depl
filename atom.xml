@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Lingkang&#39;s Blog</title>
+  
+  <subtitle>Hi there! This is Lingkang :)</subtitle>
+  <link href="https://lingkang.dev/atom.xml" rel="self"/>
+  
+  <link href="https://lingkang.dev/"/>
+  <updated>2024-08-13T01:20:32.380Z</updated>
+  <id>https://lingkang.dev/</id>
+  
+  <author>
+    <name>Lingkang</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="https://lingkang.dev/2024/08/13/hello-world/"/>
+    <id>https://lingkang.dev/2024/08/13/hello-world/</id>
+    <published>2024-08-13T01:20:32.380Z</published>
+    <updated>2024-08-13T01:20:32.380Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Uncategorized" scheme="https://lingkang.dev/categories/Uncategorized/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Paper Notes: PeeK - Pruning for K-th Shortest Paths</title>
+    <link href="https://lingkang.dev/2024/08/09/read-paper-peek/"/>
+    <id>https://lingkang.dev/2024/08/09/read-paper-peek/</id>
+    <published>2024-08-08T18:49:41.000Z</published>
+    <updated>2024-08-13T01:20:32.382Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Paper Notes" scheme="https://lingkang.dev/categories/Paper-Notes/"/>
+    
+    
+    <category term="Python" scheme="https://lingkang.dev/tags/Python/"/>
+    
+    <category term="Sparsity" scheme="https://lingkang.dev/tags/Sparsity/"/>
+    
+    <category term="Graph" scheme="https://lingkang.dev/tags/Graph/"/>
+    
+    <category term="KSP" scheme="https://lingkang.dev/tags/KSP/"/>
+    
+    <category term="Pruning" scheme="https://lingkang.dev/tags/Pruning/"/>
+    
+    <category term="CSR" scheme="https://lingkang.dev/tags/CSR/"/>
+    
+    <category term="C++" scheme="https://lingkang.dev/tags/C/"/>
+    
+    <category term="Sparse Graph" scheme="https://lingkang.dev/tags/Sparse-Graph/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Implement RPC demo from scratch</title>
+    <link href="https://lingkang.dev/2024/01/08/rpc/"/>
+    <id>https://lingkang.dev/2024/01/08/rpc/</id>
+    <published>2024-01-08T15:55:00.000Z</published>
+    <updated>2024-01-09T09:10:00.000Z</updated>
+    
+    
+    <summary type="html">A simple RPC demo implemented in Go (server) and Rust (client).</summary>
+    
+    
+    
+    <category term="Operating System &amp; Architecture" scheme="https://lingkang.dev/categories/Operating-System-Architecture/"/>
+    
+    
+    <category term="Distributed System" scheme="https://lingkang.dev/tags/Distributed-System/"/>
+    
+    <category term="RPC" scheme="https://lingkang.dev/tags/RPC/"/>
+    
+    <category term="TCP" scheme="https://lingkang.dev/tags/TCP/"/>
+    
+    <category term="Rust" scheme="https://lingkang.dev/tags/Rust/"/>
+    
+    <category term="Go" scheme="https://lingkang.dev/tags/Go/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Post-Mortem Analysis for Multiprocessing Program in C</title>
+    <link href="https://lingkang.dev/2023/12/03/core-dump/"/>
+    <id>https://lingkang.dev/2023/12/03/core-dump/</id>
+    <published>2023-12-02T21:26:24.000Z</published>
+    <updated>2023-12-24T20:34:24.000Z</updated>
+    
+    
+    <summary type="html">When a program crashes, core dump is a useful asset to analyze reasons.</summary>
+    
+    
+    
+    <category term="Programming Language" scheme="https://lingkang.dev/categories/Programming-Language/"/>
+    
+    
+    <category term="C" scheme="https://lingkang.dev/tags/C/"/>
+    
+    <category term="CentOS" scheme="https://lingkang.dev/tags/CentOS/"/>
+    
+    <category term="Core Dump" scheme="https://lingkang.dev/tags/Core-Dump/"/>
+    
+    <category term="GDB" scheme="https://lingkang.dev/tags/GDB/"/>
+    
+    <category term="Debug" scheme="https://lingkang.dev/tags/Debug/"/>
+    
+    <category term="Deadlock" scheme="https://lingkang.dev/tags/Deadlock/"/>
+    
+    <category term="Mutex" scheme="https://lingkang.dev/tags/Mutex/"/>
+    
+    <category term="Condition Variable" scheme="https://lingkang.dev/tags/Condition-Variable/"/>
+    
+    <category term="Pthread" scheme="https://lingkang.dev/tags/Pthread/"/>
+    
+    <category term="POSIX" scheme="https://lingkang.dev/tags/POSIX/"/>
+    
+    <category term="WSL2" scheme="https://lingkang.dev/tags/WSL2/"/>
+    
+    <category term="Docker" scheme="https://lingkang.dev/tags/Docker/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>OSC Lab Task 5 Reasoning</title>
+    <link href="https://lingkang.dev/2023/11/01/osc-lab-task5/"/>
+    <id>https://lingkang.dev/2023/11/01/osc-lab-task5/</id>
+    <published>2023-10-31T18:29:32.000Z</published>
+    <updated>2023-10-31T19:29:32.000Z</updated>
+    
+    
+    <summary type="html">My version of analysis of OSC lab task 5</summary>
+    
+    
+    
+    <category term="Operating System &amp; Architecture" scheme="https://lingkang.dev/categories/Operating-System-Architecture/"/>
+    
+    
+    <category term="Python" scheme="https://lingkang.dev/tags/Python/"/>
+    
+    <category term="Linux" scheme="https://lingkang.dev/tags/Linux/"/>
+    
+    <category term="C" scheme="https://lingkang.dev/tags/C/"/>
+    
+    <category term="task scheduling" scheme="https://lingkang.dev/tags/task-scheduling/"/>
+    
+    <category term="Visualization" scheme="https://lingkang.dev/tags/Visualization/"/>
+    
+    <category term="Round Robin" scheme="https://lingkang.dev/tags/Round-Robin/"/>
+    
+  </entry>
+  
+</feed>

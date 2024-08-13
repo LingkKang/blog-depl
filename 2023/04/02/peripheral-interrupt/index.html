@@ -1,0 +1,788 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/profile_img.png">
+  <link rel="icon" href="/images/profile_img.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Lingkang">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Some notes on PLIC and external interrupt in machine mode.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Peripheral Interrupt Procedure in RISC-V">
+<meta property="og:url" content="https://lingkang.dev/2023/04/02/peripheral-interrupt/index.html">
+<meta property="og:site_name" content="Lingkang&#39;s Blog">
+<meta property="og:description" content="Some notes on PLIC and external interrupt in machine mode.">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-04-02T14:06:05.000Z">
+<meta property="article:modified_time" content="2023-04-02T16:40:14.000Z">
+<meta property="article:author" content="Lingkang">
+<meta property="article:tag" content="RISC-V">
+<meta property="article:tag" content="QEMU">
+<meta property="article:tag" content="Emulation">
+<meta property="article:tag" content="Interrupt">
+<meta property="article:tag" content="Peripheral">
+<meta property="article:tag" content="PLIC">
+<meta property="article:tag" content="FDT">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+    <meta name="google-site-verification" content="_Z4a0qEOBfzKcSi9b2FxvxEvBcSQPH0SDX8XFGBut9M">
+  
+  <title>Peripheral Interrupt Procedure in RISC-V - Lingkang&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"lingkang.dev","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":"G-S9PGLW5JVZ"},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Lingkang's Blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Lingkang&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>Links</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/images/bg_img/bg_post.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Peripheral Interrupt Procedure in RISC-V"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-04-02 15:06" pubdate>
+          April 2, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          169 words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          2 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Peripheral Interrupt Procedure in RISC-V</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    Last updated on April 2, 2023 pm
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Peripheral-Interrupt-Procedure-in-RISC-V"><a href="#Peripheral-Interrupt-Procedure-in-RISC-V" class="headerlink" title="Peripheral Interrupt Procedure in RISC-V"></a>Peripheral Interrupt Procedure in RISC-V</h1><p>The procedure of peripheral interrupt in RISC-V is quite complicated and multi-layered.</p>
+<p>Basically, all peripheral interrupts are reported to <strong>platform-level interrupt controller</strong> or <strong>PLIC</strong>, which is similar to PIC (programmable interrupt controller) in x86 architecture.</p>
+<p>The memory mapped from PLIC varied by platforms. Chapter 3 of official <a target="_blank" rel="noopener" href="https://github.com/riscv/riscv-plic-spec">PLIC Specification</a> gives a sample. In QEMU, it could be found under <a target="_blank" rel="noopener" href="https://github.com/qemu/qemu/tree/master/include/hw/riscv"><code>qemu/include/hw/riscv</code></a> folder.</p>
+<h2 id="Registers"><a href="#Registers" class="headerlink" title="Registers"></a>Registers</h2><p>There are (five types of) registers for PLIC:</p>
+<ul>
+<li><code>priority</code></li>
+<li><code>pending</code></li>
+<li><code>enable</code></li>
+<li><code>threshold</code></li>
+<li><code>claim</code>&#x2F;<code>complete</code></li>
+</ul>
+<h3 id="Priorities"><a href="#Priorities" class="headerlink" title="Priorities"></a>Priorities</h3><p>The priorities of external interrupts are defined in <code>priority</code> registers, whose ranges from <code>1</code> to <code>1023</code> (1023 sources in total, also known as <em>interrupt identifiers</em>, ID). Note that <code>0</code> is reserved for no interrupt occurring.</p>
+<p>1 interrupt source maps to 1 register. For example, </p>
+<table>
+<thead>
+<tr>
+<th>Address</th>
+<th>Mapping</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>base</code> + <code>0x0000</code></td>
+<td><strong>Reserved</strong></td>
+</tr>
+<tr>
+<td><code>base</code> + <code>0x0004</code></td>
+<td>priority value of Interrupt source 1</td>
+</tr>
+<tr>
+<td><code>base</code> + <code>0x0008</code></td>
+<td>priority value of Interrupt source 2</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr>
+<td><code>base</code> + <code>0x0FFC</code></td>
+<td>priority value of Interrupt source 1023</td>
+</tr>
+</tbody></table>
+<p>The value in the <code>priority</code> is the priority level of mapped resource. <code>0</code> is representing <em>never interrupt</em>, and the larger the higher priority.</p>
+<p>If two interrupt resources have the same priority level, PLIC will get the smallest ID first and give the interrupt to Hart to handle.</p>
+<h4 id="QEMU-Specific"><a href="#QEMU-Specific" class="headerlink" title="QEMU Specific"></a>QEMU Specific</h4><p>QEMU’s RISC-V virtual machine <a target="_blank" rel="noopener" href="https://github.com/qemu/qemu/blob/master/hw/riscv/virt.c"><code>virt</code></a> supports 7 levels of priority.</p>
+<p>In its <code>create_pcie_irq_map</code> function, it set that</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C">qemu_fdt_setprop_cells(fdt, nodename, <span class="hljs-string">&quot;interrupt-map-mask&quot;</span>,<br>                           <span class="hljs-number">0x1800</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0x7</span>);<br></code></pre></td></tr></table></figure>
+
+<p><code>qemu_fdt_setprop_cells</code> is a function-like macro defined in <code>qemu/include/sysemu/device_tree.h</code>, helping set up. <code>fdt</code> stands for <em>flattened device tree</em> and represents the device tree blob pointer. And <code>prop</code> means properties. It treats <code>interrupt-map-mask</code> as a property whit smallest value <code>0</code> and biggest value <code>7</code>.</p>
+<h3 id="Pending"><a href="#Pending" class="headerlink" title="Pending"></a>Pending</h3><p>Each bit of <code>pending</code> corresponds to one interrupt source, <code>1</code> for interrupt happening.  </p>
+<h2 id="Interrupt-Flow"><a href="#Interrupt-Flow" class="headerlink" title="Interrupt Flow"></a>Interrupt Flow</h2><p>When external interrupts come in:</p>
+<ol>
+<li><strong>PLIC</strong> checks their <code>priority</code><ul>
+<li>if same, get the one with the smallest interrupt source ID</li>
+</ul>
+</li>
+<li><strong>PLIC</strong> checks <code>enable</code></li>
+<li><strong>PLIC</strong> checks is the <code>priority</code> bigger than <code>threshold</code></li>
+<li><strong>PLIC</strong> sets corresponding <code>pending</code><ul>
+<li>HART’s running is interrupted and starts to handle the interrupt</li>
+</ul>
+</li>
+<li><strong>HART</strong> reads value from <code>claim</code> to know interrupt source ID</li>
+<li><strong>HART</strong> calls corresponding functions</li>
+<li><strong>HART</strong> writes back to <code>complete</code></li>
+<li><strong>HART</strong> returns to normal running</li>
+<li><strong>PLIC</strong> cleans the <code>pending</code></li>
+</ol>
+<h2 id="Initialization"><a href="#Initialization" class="headerlink" title="Initialization"></a>Initialization</h2><ol>
+<li>Define interrupt source ID</li>
+<li>Set <code>priority</code></li>
+<li>Set <code>enable</code></li>
+<li>Set <code>threshold</code></li>
+<li>Set <code>MIE</code> bit in <code>mstatus</code>, M-mode global interrupt-enable bit (for M-mode)</li>
+<li>Set <code>MEIE</code> bit in <code>mie</code>, machine-level external interrupts enable bit in machine interrupt enable register.</li>
+</ol>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://github.com/riscv/riscv-plic-spec">riscv&#x2F;riscv-plic-spec: PLIC Specification</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Q5411w7z5/?p=21">[完结] 循序渐进，学习开发一个RISC-V上的操作系统 - 汪辰 - 2021春：第11章-外部设备中断_哔哩哔哩_bilibili</a></li>
+<li><a target="_blank" rel="noopener" href="https://picguides.com/beginner/interrupts.php">Interrupts - Beginner’s Guide to PIC Programming - picguides.com</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/cccriscv/mini-riscv-os/blob/master/doc/tw/07-ExterInterrupt.md">mini-riscv-os&#x2F;07-ExterInterrupt.md at master · cccriscv&#x2F;mini-riscv-os</a></li>
+<li><a target="_blank" rel="noopener" href="https://wiki.osdev.org/PLIC">PLIC - OSDev Wiki</a></li>
+<li><a target="_blank" rel="noopener" href="https://wiki.osdev.org/PIC">8259 PIC - OSDev Wiki</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ianchen0119/AwesomeCS/wiki/2-4-RISC-V::%E4%B8%AD%E6%96%B7%E8%88%87%E7%95%B0%E5%B8%B8%E8%99%95%E7%90%86----%E4%B8%AD%E6%96%B7%E7%AF%87">2 4 RISC V::中斷與異常處理 中斷篇 · ianchen0119&#x2F;AwesomeCS Wiki</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ianchen0119/AwesomeCS/wiki/2-5-RISC-V::%E4%B8%AD%E6%96%B7%E8%88%87%E7%95%B0%E5%B8%B8%E8%99%95%E7%90%86----PLIC-%E4%BB%8B%E7%B4%B9">2 5 RISC V::中斷與異常處理 PLIC 介紹 · ianchen0119&#x2F;AwesomeCS Wiki</a></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Operating-System-Architecture/" class="category-chain-item">Operating System &amp; Architecture</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/RISC-V/" class="print-no-link">#RISC-V</a>
+      
+        <a href="/tags/QEMU/" class="print-no-link">#QEMU</a>
+      
+        <a href="/tags/Emulation/" class="print-no-link">#Emulation</a>
+      
+        <a href="/tags/Interrupt/" class="print-no-link">#Interrupt</a>
+      
+        <a href="/tags/Peripheral/" class="print-no-link">#Peripheral</a>
+      
+        <a href="/tags/PLIC/" class="print-no-link">#PLIC</a>
+      
+        <a href="/tags/FDT/" class="print-no-link">#FDT</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Peripheral Interrupt Procedure in RISC-V</div>
+      <div>https://lingkang.dev/2023/04/02/peripheral-interrupt/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Lingkang</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>April 2, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/04/16/64bit-val-in-32/" title="Manipulate 64-bit value with 32-bit registers">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Manipulate 64-bit value with 32-bit registers</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/03/12/align/" title="Align Number to Multiple">
+                        <span class="hidden-mobile">Align Number to Multiple</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,765 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/profile_img.png">
+  <link rel="icon" href="/images/profile_img.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Lingkang">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Basic boot process of a RISC-V hardware, with sample bootstrap assembly code explained.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RISC-V Machine Boot Code">
+<meta property="og:url" content="https://lingkang.dev/2023/02/23/boot-risc-v/index.html">
+<meta property="og:site_name" content="Lingkang&#39;s Blog">
+<meta property="og:description" content="Basic boot process of a RISC-V hardware, with sample bootstrap assembly code explained.">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-02-23T00:05:26.000Z">
+<meta property="article:modified_time" content="2023-02-24T19:52:04.000Z">
+<meta property="article:author" content="Lingkang">
+<meta property="article:tag" content="RISC-V">
+<meta property="article:tag" content="Register">
+<meta property="article:tag" content="xv6">
+<meta property="article:tag" content="Memory">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="Bootstrap">
+<meta property="article:tag" content="Assembly">
+<meta property="article:tag" content="Stack">
+<meta property="article:tag" content="QEMU">
+<meta property="article:tag" content="Emulation">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+    <meta name="google-site-verification" content="_Z4a0qEOBfzKcSi9b2FxvxEvBcSQPH0SDX8XFGBut9M">
+  
+  <title>RISC-V Machine Boot Code - Lingkang&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"lingkang.dev","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":"G-S9PGLW5JVZ"},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Lingkang's Blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Lingkang&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>Links</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/images/bg_img/bg_post.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="RISC-V Machine Boot Code"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-02-23 00:05" pubdate>
+          February 23, 2023 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          312 words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          3 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">RISC-V Machine Boot Code</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    Last updated on February 24, 2023 pm
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="RISC-V-Machine-Boot-Code"><a href="#RISC-V-Machine-Boot-Code" class="headerlink" title="RISC-V Machine Boot Code"></a>RISC-V Machine Boot Code</h1><p>Basically, when a RISC-V machine powers on, the bootloader built in hardware or emulator will go to memory address <a href="#Loading-Address"><code>0x8000_0000</code></a> to load an OS.</p>
+<p>At this time, the computer works in <strong>machine</strong> mode, and our <code>boot.S</code> needs to do something that can only be done in this privilege level. And here is a line-by-line explanation.</p>
+<h2 id="Some-Definitions"><a href="#Some-Definitions" class="headerlink" title="Some Definitions"></a>Some Definitions</h2><p>If you want, you can take a glance at <a href="#Code">code</a> first, and come back when encountering any problems.</p>
+<h3 id="Directives"><a href="#Directives" class="headerlink" title="Directives"></a>Directives</h3><p>All keywords begin with a period are called <a target="_blank" rel="noopener" href="https://sourceware.org/binutils/docs-2.40/as/Pseudo-Ops.html"><strong>directives</strong></a>. They are not defined in RISC-V specification, but in assembler’s side, to give some hints to assembler. Its syntax may be different from assembler to assembler, and it’s not corresponding to any specific instruction.</p>
+<h3 id="Pseudoinstructions"><a href="#Pseudoinstructions" class="headerlink" title="Pseudoinstructions"></a>Pseudoinstructions</h3><p>Technically, <a target="_blank" rel="noopener" href="https://github.com/riscv-non-isa/riscv-asm-manual/blob/master/riscv-asm.md#-a-listing-of-standard-risc-v-pseudoinstructions"><strong>pseudoinstructions</strong></a> are not instruction. They resemble common instructions and are used to improve programming efficiency. One line of pseudo instruction may correspond to more than one instruction when assembled by assembler.</p>
+<p>For example, <code>li</code> (<a target="_blank" rel="noopener" href="https://github.com/riscv-non-isa/riscv-asm-manual/blob/master/riscv-asm.md#load-immediate">load immediate</a>) is a common pseudoinstruction.</p>
+<h3 id="ABI"><a href="#ABI" class="headerlink" title="ABI"></a>ABI</h3><p>ABI stands for <strong>application binary interface</strong>. Instead of naming registers’ absolute location, say, <code>x0</code>, <code>x1</code> and so on, it is highly recommended to refer them with their <a target="_blank" rel="noopener" href="https://github.com/riscv-non-isa/riscv-asm-manual/blob/master/riscv-asm.md#general-registers">ABI</a>, such as <code>zero</code>, <code>ra</code> and so on.</p>
+<h3 id="CSR-and-Zicsr"><a href="#CSR-and-Zicsr" class="headerlink" title="CSR and Zicsr"></a>CSR and Zicsr</h3><p><strong>Control and status registers</strong> (CSR) are used to control and monitor the operation of various hardware components. They are part of privileged component in architechure, and thus, accessible by using different opcodes. These opcodes for CSRs are differently categorized and named as <strong>Zicsr</strong>.</p>
+<h2 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs RISCV">.globl _start<br><br>.equ STACK_SIZE, 1024<br>.equ CPU_NUM, 8<br><br>.section .text<br><br>_start:<br>    csrr t0, mhartid<br>    bnez t0, pend<br><br>    slli t0, t0, 10<br>    la sp, stacks + STACK_SIZE<br>    add sp, sp, t0<br><br>    j enter<br><br>stacks:<br>    .space STACK_SIZE * CPU_NUM<br><br>pend:<br>    wfi<br>    j pend<br><br>.end<br></code></pre></td></tr></table></figure>
+
+<h2 id="Branching-out-Other-Harts"><a href="#Branching-out-Other-Harts" class="headerlink" title="Branching out Other Harts"></a>Branching out Other Harts</h2><p><strong>Hart</strong> is a conventional name for a <strong>Hardware Thread</strong>. </p>
+<p>In <em>line 9</em>, <code>csrr</code> is a <a href="#Pseudoinstructions">pseudoinstruction</a> meaning ‘read CSR’. You can simply understand it as ‘read <code>mhartid</code> and save into <code>t0</code>‘, but since <code>mhartid</code> is a <a href="#CSR-and-Zicsr">CSR</a>, it requires using <code>csrr</code>, which is also in Zicsr, to read it.</p>
+<p><code>mhartid</code> can be understood as ‘machine mode hart id’. When hardware boots, all its harts are activated and run this assembly code, whereas this snippet is only intended to use one hart.</p>
+<p><code>t0</code> is the first <a href="#ABI"><strong>temporary register</strong></a>, mapping to register <code>x5</code>.</p>
+<p>In <em>line 10</em>, <code>bnez</code> is also a pseudoinstruction, standing for ‘branch if not equal to zero’.</p>
+<p>So this two lines are trying to figure out which hart is running, and then lead it to the <code>pend</code> label, unless it is the first hart.</p>
+<p>Let a hart jump endlessly is a common way to pend it. And in <em>line 22</em>, we added an instruction called <code>wfi</code>, meaning ‘wait for interrupt’. It could be seen as entering sleep mode for this hart.</p>
+<h2 id="Setting-up-Stacks"><a href="#Setting-up-Stacks" class="headerlink" title="Setting up Stacks"></a>Setting up Stacks</h2><p>The layout of stacks is quite baffling and took me a lot of time to figure out.</p>
+<p>In general, we assign a bunch of memory, let <code>sp</code> points to the end of first hart’s stack, and move <code>sp</code> to its corresponding hart’s stack, with respect to label <code>stacks</code>(<em>line 18-19</em>), <em>line 13</em> and <em>line 14</em> accordingly.</p>
+<p>The stacks have a gross size of <code>STACK_SIZE * CPU_NUM</code> in bytes. The <a href="#Directives">directive</a> <code>.space</code> means fill these size with zeros automatically, the same as <code>.skip</code>. When <em>line 13</em> refers to <code>stacks</code>, it refers to the beginning, or in other words, smallest address of this assigned memory. By adding exactly one <code>STACK_SIZE</code>, the sum should be the end address of first hart’s stack.</p>
+<p>Always remember these rules when trying to understand this part:</p>
+<ol>
+<li>The low address is the start of the stack, whereas the high address is its end.</li>
+<li>The stack pointer <code>sp</code> always points to the end of the stack.</li>
+<li>Hart id starts at 0.</li>
+</ol>
+<p>Since we designed the size of the stack to be 1024 bytes, which is 2<sup>10</sup>, we can left shift the hart ID 10 bits and add it to location of the first stack to find its own stack. <em>Line 12</em> is the instruction that exactly does this. The opcode <code>slli</code> instructs the hart to logical shift <code>t0</code> left, which also means multiplying it by 1024.</p>
+<h2 id="Going-to-C"><a href="#Going-to-C" class="headerlink" title="Going to C"></a>Going to C</h2><p>In <em>line 16</em>, the program jumps to <code>enter</code> which is declared in C language. Calling a C function is just like calling an assembly function since they are both converted to binary and located in <code>text</code> section. When booting, quickly switching to high-level programming language can be helpful.</p>
+<p>Initializing stacks can also be done in C. Referring to <a target="_blank" rel="noopener" href="https://github.com/mit-pdos/xv6-riscv/blob/riscv/kernel/start.c"><code>xv6-riscv/kernel/start.c</code></a>, it is written as: </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">// entry.S needs one stack per CPU.</span><br>__attribute__ ((aligned (<span class="hljs-number">16</span>))) <span class="hljs-type">char</span> stack0[<span class="hljs-number">4096</span> * NCPU];<br></code></pre></td></tr></table></figure>
+
+<p>Here <code>__attribute__</code> is a GNU GCC feature used to provide additional information to the compiler. In this case, it ensures that <code>stack0</code> is aligned on a 16-byte boundary. It gives each hart 4096 bytes and <code>NCPU</code> stands for the number of harts.</p>
+<h2 id="Loading-Address"><a href="#Loading-Address" class="headerlink" title="Loading Address"></a>Loading Address</h2><p>Note that address <code>0x8000_0000</code> is different from so-called <em>magic number</em>, which is <code>0xAA55</code>, in x86. The latter is defined as the end of boot sector. BIOS would go through all storage devices and try to boot from this section.</p>
+<p>Thus, when linking objects together, we need to add flag <code>-Ttext=0x80000000</code> to make sure the <code>.text</code> section is located at where we want. From the <a target="_blank" rel="noopener" href="https://sourceware.org/binutils/docs-2.40/ld/Options.html#index-_002d_002dsection_002dstart_003dsectionname_003dorg">doc</a>, <code>-Ttext</code> here is a short hand for <code>--section-start=.text</code>.</p>
+<p>This <code>8000_0000</code> is not standardized, but conventionally, it should be this location, as you can find out in QEMU source code. For example, in <a target="_blank" rel="noopener" href="https://github.com/qemu/qemu/blob/master/hw/riscv/virt.c"><code>qemu/hw/riscv/virt.c</code></a>, in the array of memory map <code>virt_memap</code>, the last one is <code>VIRT_DRAM</code> and starts at <code>0x8000_0000</code>.</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.828/2022/xv6/book-riscv-rev3.pdf">xv6: a simple, Unix-like teaching operating system</a>, Russ Cox, Frans Kaashoek, Robert Morris, MIT, 5 September 2022, <em>2.6 Code: starting xv6, the first process and system call</em> (P27 - 28)</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/mit-pdos/xv6-riscv/blob/riscv/kernel/entry.S">xv6-riscv&#x2F;entry.S at riscv · mit-pdos&#x2F;xv6-riscv</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cs.bham.ac.uk/~exr/lectures/opsys/10_11/lectures/os-dev.pdf">Writing a Simple Operating System – from Scratch</a>, Nick Blundell, University of Birmingham, 2 December 2010, <em>Chapter 2 Computer Architecture and the Boot Process</em> (P3 - 7)</li>
+<li><a target="_blank" rel="noopener" href="https://medium.com/@iotapioneer/55-and-aa-8c06b8719c1">55 and AA. What’s special about 55 and AA? Or more… | by Larry K. | Medium</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/riscv-non-isa/riscv-asm-manual/blob/master/riscv-asm.md">riscv-asm-manual&#x2F;riscv-asm.md at master · riscv-non-isa&#x2F;riscv-asm-manual</a></li>
+<li><a target="_blank" rel="noopener" href="https://sourceware.org/binutils/docs-2.40/as/Pseudo-Ops.html">Pseudo Ops (Using as)</a></li>
+<li><a target="_blank" rel="noopener" href="https://sourceware.org/binutils/docs-2.40/ld/Options.html">Options (LD)</a></li>
+<li><a target="_blank" rel="noopener" href="https://sourceware.org/binutils/docs-2.40/">Documentation for binutils 2.40</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Q5411w7z5?p=16">[完结] 循序渐进，学习开发一个RISC-V上的操作系统 - 汪辰 - 第7章（上）-Hello RVOS_哔哩哔哩_bilibili</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/plctlab/riscv-operating-system-mooc/blob/main/code/os/01-helloRVOS/start.S">riscv-operating-system-mooc&#x2F;start.S at main · plctlab&#x2F;riscv-operating-system-mooc</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.qemu.org/docs/master/system/target-riscv.html">RISC-V System emulator — QEMU documentation</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/qemu/qemu/blob/master/hw/riscv/virt.c">qemu&#x2F;virt.c at master · qemu&#x2F;qemu</a></li>
+<li><a target="_blank" rel="noopener" href="https://riscv.org/technical/specifications/">Specifications - RISC-V International</a></li>
+<li><a target="_blank" rel="noopener" href="https://five-embeddev.com/riscv-isa-manual/latest/csr.html">RISC-V Instruction Set Manual, Volume I: RISC-V User-Level ISA | Five EmbedDev</a></li>
+<li><a target="_blank" rel="noopener" href="https://osblog.stephenmarz.com/ch1.html">Taking control of RISC-V: RISCV OS in Rust</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/sgmarz/osblog/blob/master/risc_v/chapters/ch1/src/asm/boot.S">osblog&#x2F;boot.S at master · sgmarz&#x2F;osblog</a></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Operating-System-Architecture/" class="category-chain-item">Operating System &amp; Architecture</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/RISC-V/" class="print-no-link">#RISC-V</a>
+      
+        <a href="/tags/Register/" class="print-no-link">#Register</a>
+      
+        <a href="/tags/xv6/" class="print-no-link">#xv6</a>
+      
+        <a href="/tags/Memory/" class="print-no-link">#Memory</a>
+      
+        <a href="/tags/C/" class="print-no-link">#C</a>
+      
+        <a href="/tags/Bootstrap/" class="print-no-link">#Bootstrap</a>
+      
+        <a href="/tags/Assembly/" class="print-no-link">#Assembly</a>
+      
+        <a href="/tags/Stack/" class="print-no-link">#Stack</a>
+      
+        <a href="/tags/QEMU/" class="print-no-link">#QEMU</a>
+      
+        <a href="/tags/Emulation/" class="print-no-link">#Emulation</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>RISC-V Machine Boot Code</div>
+      <div>https://lingkang.dev/2023/02/23/boot-risc-v/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Lingkang</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>February 23, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/02/28/polling-read-write/" title="Read and Write by Polling with UART">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Read and Write by Polling with UART</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/02/22/prose01/" title="随想两则">
+                        <span class="hidden-mobile">随想两则</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

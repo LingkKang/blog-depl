@@ -1,0 +1,1 @@
+So again you see how frustrating this is. It's like a simple operation but you can do it in a bunch of different ways in all these different database systems. It sucks. 

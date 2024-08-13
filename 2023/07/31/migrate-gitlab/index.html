@@ -1,0 +1,757 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/profile_img.png">
+  <link rel="icon" href="/images/profile_img.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Lingkang">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="In this post, we migrate GitLab from CentOS to Ubuntu on Alibaba Cloud ECS, with GitLab backup and restore.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Migrate GitLab from CentOS to Ubuntu on ECS">
+<meta property="og:url" content="https://lingkang.dev/2023/07/31/migrate-gitlab/index.html">
+<meta property="og:site_name" content="Lingkang&#39;s Blog">
+<meta property="og:description" content="In this post, we migrate GitLab from CentOS to Ubuntu on Alibaba Cloud ECS, with GitLab backup and restore.">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-07-31T12:04:06.000Z">
+<meta property="article:modified_time" content="2023-07-31T14:05:06.000Z">
+<meta property="article:author" content="Lingkang">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Server">
+<meta property="article:tag" content="Cloud">
+<meta property="article:tag" content="ECS">
+<meta property="article:tag" content="CentOS">
+<meta property="article:tag" content="GitLab">
+<meta property="article:tag" content="Ubuntu">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+    <meta name="google-site-verification" content="_Z4a0qEOBfzKcSi9b2FxvxEvBcSQPH0SDX8XFGBut9M">
+  
+  <title>Migrate GitLab from CentOS to Ubuntu on ECS - Lingkang&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"lingkang.dev","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":"G-S9PGLW5JVZ"},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Lingkang's Blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Lingkang&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>Links</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/images/bg_img/bg_post.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Migrate GitLab from CentOS to Ubuntu on ECS"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-07-31 13:04" pubdate>
+          July 31, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          252 words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          3 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Migrate GitLab from CentOS to Ubuntu on ECS</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    Last updated on July 31, 2023 pm
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Migrate-GitLab-from-CentOS-to-Ubuntu-on-ECS"><a href="#Migrate-GitLab-from-CentOS-to-Ubuntu-on-ECS" class="headerlink" title="Migrate GitLab from CentOS to Ubuntu on ECS"></a>Migrate GitLab from CentOS to Ubuntu on ECS</h1><p>In this post, we will migrate <a target="_blank" rel="noopener" href="https://about.gitlab.com/">GitLab</a> from  <a target="_blank" rel="noopener" href="https://wiki.centos.org/Manuals/ReleaseNotes/CentOS7.2009">CentOS <code>7.9</code></a> to <a target="_blank" rel="noopener" href="https://wiki.ubuntu.com/FocalFossa/ReleaseNotes">Ubuntu <code>20.04</code> LTS</a> on Alibaba Cloud ECS (Elastic Compute Service), as <a target="_blank" rel="noopener" href="https://www.centos.org/centos-linux-eol/">CentOS is EOL</a> and Ubuntu is more popular.</p>
+<h2 id="Check-GitLab-Version"><a href="#Check-GitLab-Version" class="headerlink" title="Check GitLab Version"></a>Check GitLab Version</h2><p>As restore GitLab backup requires the same version of GitLab, we need to check current GitLab version. </p>
+<p class="note note-info">
+You can only restore a backup to <strong>exactly the same version and type (CE/EE)</strong> of GitLab on which it was created (for example CE 15.1.4).
+</p>
+
+<p>See <a target="_blank" rel="noopener" href="https://docs.gitlab.com/ee/administration/backup_restore/restore_gitlab.html">Restore GitLab | GitLab</a>.</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs Console"><span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">cat</span> /opt/gitlab/embedded/service/gitlab-rails/VERSION</span><br>15.9.0-ee<br></code></pre></td></tr></table></figure>
+
+<p>Here we have <a target="_blank" rel="noopener" href="https://about.gitlab.com/releases/2023/02/22/gitlab-15-9-released/">GitLab 15.9</a> Enterprise Edition installed, and on new server we will also install this version.</p>
+<h2 id="Backup-GitLab"><a href="#Backup-GitLab" class="headerlink" title="Backup GitLab"></a>Backup GitLab</h2><p>By default, our GitLab Backup package is located at <code>/var/opt/gitlab/backups/</code>, this could be checked by <code>cat /etc/gitlab/gitlab.rb | grep backup</code>.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Bash">gitlab-rake gitlab:backup:create<br></code></pre></td></tr></table></figure>
+
+<p>This command will automatically pack up all non-sensitive GitLab data, including repositories, database, configuration, etc. The backup package will be located at the directory mentioned before, with name such as <code>1690438526_2023_07_27_15.9.0-ee_gitlab_backup.tar</code>.</p>
+<p>The file name contains the <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Unix_time">UNIX timestamp</a> and GitLab version.</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs Console"><span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">date</span> -d @1690438526</span><br>Thu Jul 27 14:15:26 CST 2023<br></code></pre></td></tr></table></figure>
+
+<p>Additionally, we also need to pack up some sensitive data, <code>gitlab.rb</code> and <code>gitlab-secrets.json</code>, which are all located at <code>/etc/gitlab/</code>.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Bash">sudo tar cvf gitlab-secrets.tar /etc/gitlab/gitlab.rb /etc/gitlab/gitlab-secrets.json<br></code></pre></td></tr></table></figure>
+
+<p>This will create a tar file <code>gitlab-secrets.tar</code> in current directory.</p>
+<p>Now we have all data needed to restore GitLab on new server. Here we only have one cloud server, so we simply download the backup packages via FTP to our local machine. It can also be transferred to new server via <code>scp</code>, secure copy.</p>
+<h2 id="Install-GitLab-on-Ubuntu"><a href="#Install-GitLab-on-Ubuntu" class="headerlink" title="Install GitLab on Ubuntu"></a>Install GitLab on Ubuntu</h2><p>Simply follow the GitLab official installation guide on Ubuntu, but only first few steps. See <a target="_blank" rel="noopener" href="https://about.gitlab.com/install/#ubuntu">Download and install GitLab | GitLab</a>.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs Bash">sudo apt update<br>sudo apt install -y curl openssh-server ca-certificates tzdata perl<br>sudo apt install -y postfix<br>curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh | sudo bash<br>sudo EXTERNAL_URL=<span class="hljs-string">&quot;121.XXX.XXX.XXX&quot;</span> apt install gitlab-ee=15.9.0-ee.0<br></code></pre></td></tr></table></figure>
+
+<p>Note that we specify the GitLab version to install, the version is just the same as the <a target="_blank" rel="noopener" href="https://hub.docker.com/r/gitlab/gitlab-ee/tags">GitLab Docker image tag</a>, which is <a target="_blank" rel="noopener" href="https://hub.docker.com/layers/gitlab/gitlab-ee/15.9.0-ee.0/images/sha256-267c6feedcdbd3c7c03e5bde335bc5033d53de8d6287553fac5b73ae2eb5db4c?context=explore">15.9.0-ee.0</a> here.</p>
+<p>The <code>EXTERNAL_URL</code> is the public IP address or domain name of the server, which is used to access GitLab.</p>
+<p>Also, remember to select <code>Internet Site</code> for postfix configuration, with value same as <code>EXTERNAL_URL</code> as the system mail name.</p>
+<p>And now when we access to <code>EXTERNAL_URL</code>, we will see the GitLab login page.</p>
+<h2 id="Restore-GitLab"><a href="#Restore-GitLab" class="headerlink" title="Restore GitLab"></a>Restore GitLab</h2><h3 id="Stop-GitLab-Service"><a href="#Stop-GitLab-Service" class="headerlink" title="Stop GitLab Service"></a>Stop GitLab Service</h3><p>Stop services that will read &#x2F; write to database, such as <code>sidekiq</code> and <code>puma</code>, and we can check its status by <code>gitlab-ctl status</code>.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs Bash">gitlab-ctl stop sidekiq<br>gitlab-ctl stop puma<br>gitlab-ctl status<br></code></pre></td></tr></table></figure>
+
+<p>New version of GitLab migrates from <code>unicorn</code> to <code>puma</code>, so there is no need to stop <code>unicorn</code> service any more.</p>
+<h3 id="Place-Backup-Files"><a href="#Place-Backup-Files" class="headerlink" title="Place Backup Files"></a>Place Backup Files</h3><p>We need to upload our backup packages to new server, and organize them correctly.</p>
+<p>Here we also use FTP to upload files from our local machine.</p>
+<p>The <code>[TIMESTAMP]_gitlab_backup.tar</code> should be placed at <code>/var/opt/gitlab/backups/</code> as before, and <code>gitlab.rb</code> and <code>gitlab-secrets.json</code> extracted from <code>gitlab-secrets.tar</code> should be placed at <code>/etc/gitlab/</code>, replacing the original files.</p>
+<h3 id="Restore-the-Backup"><a href="#Restore-the-Backup" class="headerlink" title="Restore the Backup"></a>Restore the Backup</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs Bash"><span class="hljs-built_in">cd</span> /var/opt/gitlab/backups/<br>gitlab-rake gitlab:backup:restore BACKUP=1690438526_2023_07_27_15.9.0-ee<br></code></pre></td></tr></table></figure>
+
+<p>The <code>BACKUP</code> parameter is the file name of backup package, without <code>_gitlab_backup.tar</code> suffix.</p>
+<h3 id="Restart-GitLab-Service"><a href="#Restart-GitLab-Service" class="headerlink" title="Restart GitLab Service"></a>Restart GitLab Service</h3><p>Restart the services we stopped before and check their status.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs Bash">gitlab-ctl start<br>gitlab-ctl status<br>gitlab-rake gitlab:check SANITIZE=<span class="hljs-literal">true</span><br></code></pre></td></tr></table></figure>
+
+<p>Now all services should be running, and we can access to GitLab just as before, with all user data and repositories are restored.</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://docs.gitlab.com/ee/administration/backup_restore/">Back up and restore GitLab | GitLab</a></li>
+<li><a target="_blank" rel="noopener" href="https://about.gitlab.com/install/">Download and install GitLab | GitLab</a></li>
+<li><a target="_blank" rel="noopener" href="https://forum.gitlab.com/t/installing-older-versions-of-gitlab-on-ununtu/29507">Installing Older Versions of Gitlab on Ununtu - How to Use GitLab - GitLab Forum</a></li>
+<li><a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/52857.html">部署和使用GitLab</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/346715">Gitlab备份和恢复操作记录-阿里云开发者社区</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.alibabacloud.com/product/ecs">Elastic Compute Service (ECS): Elastic &amp; Secure Cloud Servers - Alibaba Cloud</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.aliyun.com/product/ecs">云服务器ECS_云主机_服务器托管_弹性计算-阿里云</a></li>
+<li><a target="_blank" rel="noopener" href="https://wiki.centos.org/About/Product">About&#x2F;Product - CentOS Wiki</a></li>
+<li><a target="_blank" rel="noopener" href="https://about.gitlab.com/blog/2020/07/08/migrating-to-puma-on-gitlab/">How we migrated application servers from Unicorn to Puma | GitLab</a></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/DevOps/" class="category-chain-item">DevOps</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Linux/" class="print-no-link">#Linux</a>
+      
+        <a href="/tags/Server/" class="print-no-link">#Server</a>
+      
+        <a href="/tags/Cloud/" class="print-no-link">#Cloud</a>
+      
+        <a href="/tags/ECS/" class="print-no-link">#ECS</a>
+      
+        <a href="/tags/CentOS/" class="print-no-link">#CentOS</a>
+      
+        <a href="/tags/GitLab/" class="print-no-link">#GitLab</a>
+      
+        <a href="/tags/Ubuntu/" class="print-no-link">#Ubuntu</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Migrate GitLab from CentOS to Ubuntu on ECS</div>
+      <div>https://lingkang.dev/2023/07/31/migrate-gitlab/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Lingkang</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>July 31, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/10/05/lean-inst-win/" title="Install Lean 3 on Windows">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Install Lean 3 on Windows</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/27/align-test/" title="Performance Issue of Memory Alignment">
+                        <span class="hidden-mobile">Performance Issue of Memory Alignment</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

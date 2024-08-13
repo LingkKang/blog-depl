@@ -1,0 +1,745 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/profile_img.png">
+  <link rel="icon" href="/images/profile_img.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Lingkang">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Some dirty works.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Partition and Mount TF Card on Linux">
+<meta property="og:url" content="https://lingkang.dev/2023/06/13/access-tf/index.html">
+<meta property="og:site_name" content="Lingkang&#39;s Blog">
+<meta property="og:description" content="Some dirty works.">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-06-13T10:55:40.000Z">
+<meta property="article:modified_time" content="2023-06-15T10:58:00.000Z">
+<meta property="article:author" content="Lingkang">
+<meta property="article:tag" content="TF Card">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Mount">
+<meta property="article:tag" content="Partition">
+<meta property="article:tag" content="SBC">
+<meta property="article:tag" content="Huashan-pi">
+<meta property="article:tag" content="Disk">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+    <meta name="google-site-verification" content="_Z4a0qEOBfzKcSi9b2FxvxEvBcSQPH0SDX8XFGBut9M">
+  
+  <title>Partition and Mount TF Card on Linux - Lingkang&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"lingkang.dev","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":"G-S9PGLW5JVZ"},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Lingkang's Blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Lingkang&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>Links</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/images/bg_img/bg_post.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Partition and Mount TF Card on Linux"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-13 11:55" pubdate>
+          June 13, 2023 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          304 words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          3 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Partition and Mount TF Card on Linux</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    Last updated on June 15, 2023 am
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Partition-and-Mount-TF-Card-on-Linux"><a href="#Partition-and-Mount-TF-Card-on-Linux" class="headerlink" title="Partition and Mount TF Card on Linux"></a>Partition and Mount TF Card on Linux</h1><p>Simply plugging in a TF Card to the board may not work even with built-in drivers.</p>
+<p>This blog takes an 16 GB micro SD card and a single board computer (SBC) Huashan-pi CV1812H as an example of how to do partitioning and mounting to let our Linux system recognize the card.</p>
+<h2 id="Basic-Commands"><a href="#Basic-Commands" class="headerlink" title="Basic Commands"></a>Basic Commands</h2><h3 id="df"><a href="#df" class="headerlink" title="df"></a><code>df</code></h3><p>Running the bash command <code>df -h</code> allows you to see all mounted disk devices.</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs console">Filesystem                Size      Used Available Use% Mounted on<br>/dev/root                13.6M     13.6M         0 100% /<br>devtmpfs                 33.3M         0     33.3M   0% /dev<br>tmpfs                    33.3M         0     33.3M   0% /dev/shm<br>tmpfs                     2.9G     80.0K      2.7G   0% /tmp<br>tmpfs                    33.3M     12.0K     33.3M   0% /run<br>tmpfs                    33.3M     12.0K     33.3M   0% /run<br>tmpfs                     2.9G     80.0K      2.7G   0% /tmp<br>tmpfs                    33.3M         0     33.3M   0% /var/empty<br>/dev/mmcblk0p6            5.5M      5.5M         0 100% /mnt/cfg<br>/dev/mmcblk0p7            2.9G     80.0K      2.7G   0% /mnt/data<br>/dev/mmcblk0p7            2.9G     80.0K      2.7G   0% /tmp<br></code></pre></td></tr></table></figure>
+
+<p>It is clear that our 16 GB micro SD card is not listed.</p>
+<h3 id="fdisk"><a href="#fdisk" class="headerlink" title="fdisk"></a><code>fdisk</code></h3><p>Running teh command <code>fdisk -l</code> shows all of hardware disk drives:</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs console">Disk /dev/mmcblk0: 7456 MB, 7818182656 bytes, 15269888 sectors<br>238592 cylinders, 4 heads, 16 sectors/track<br>Units: sectors of 1 * 512 = 512 bytes<br><br>Disk /dev/mmcblk0 doesn&#x27;t contain a valid partition table<br>Disk /dev/mmcblk0p1: 8 MB, 8388608 bytes, 16384 sectors<br>256 cylinders, 4 heads, 16 sectors/track<br>Units: sectors of 1 * 512 = 512 bytes<br><br>Disk /dev/mmcblk0p1 doesn&#x27;t contain a valid partition table<br>Disk /dev/mmcblk1: 15 GB, 15931539456 bytes, 31116288 sectors<br>1936 cylinders, 255 heads, 63 sectors/track<br>Units: sectors of 1 * 512 = 512 bytes<br><br>Device       Boot StartCHS    EndCHS        StartLBA     EndLBA    Sectors  Size Id Type<br>/dev/mmcblk1p1    0,130,3     1023,254,63       8192   31116287   31108096 14.8G  c Win95 FAT32 (LBA)<br></code></pre></td></tr></table></figure>
+
+<p><em>Line 11</em> is exactly what we are looking for. This 15 GB is the size of our TF card. There is always <a target="_blank" rel="noopener" href="https://www.integralmemory.com/faq1/why-does-my-usb-drive-show-less-capacity-than-stated-on-my-pc-or-mac/">a discrepancy between the labeled size and the actual available size on OS</a>, which can be quite annoying.</p>
+<p>Our card is located at the path <code>/dev/mmcblk1</code></p>
+<h2 id="Partitioning"><a href="#Partitioning" class="headerlink" title="Partitioning"></a>Partitioning</h2><p>The next step is going to partition the disk. This can be done by using the <code>fdisk</code> command. For more details, you can refer to <code>man fdisk</code> or <code>tldr fdisk</code>.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">fdisk /dev/mmcblk1<br></code></pre></td></tr></table></figure>
+
+<p>This command will allow us to perform the partitioning.</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs console">The number of cylinders for this disk is set to 1936.<br>There is nothing wrong with that, but this is larger than 1024,<br>and could in certain setups cause problems with:<br>1) software that runs at boot time (e.g., old versions of LILO)<br>2) booting and partitioning software from other OSs<br>   (e.g., DOS FDISK, OS/2 FDISK)<br><br>Command (m for help): p<br>Disk /dev/mmcblk1: 15 GB, 15931539456 bytes, 31116288 sectors<br>1936 cylinders, 255 heads, 63 sectors/track<br>Units: sectors of 1 * 512 = 512 bytes<br><br>Device       Boot StartCHS    EndCHS        StartLBA     EndLBA    Sectors  Size Id Type<br>/dev/mmcblk1p1    0,130,3     1023,254,63       8192   31116287   31108096 14.8G  c Win95 FAT32 (LBA)<br><br>Command (m for help): n<br>Partition type<br>   p   primary partition (1-4)<br>   e   extended<br>e<br>Partition number (1-4): 4<br>First sector (63-31116287, default 63):<br>Using default value 63<br>Last sector or +size&#123;,K,M,G,T&#125; (63-8191, default 8191):<br>Using default value 8191<br><br>Command (m for help): w<br>The partition table has been altered.<br>Calling ioctl() to re-read partition table<br></code></pre></td></tr></table></figure>
+
+<p>press <code>Enter</code> to use default values for the first and last sector.</p>
+<p>These values represent disk location references that map to specific locations on the disk. </p>
+<h2 id="Mounting"><a href="#Mounting" class="headerlink" title="Mounting"></a>Mounting</h2><p>The last step is to mount the drive to a directory path. If the path <code>/mnt/sd</code> does not exist, create it using the <code>mkdir</code> command.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">mount /dev/mmcblk1p1 /mnt/sd<br></code></pre></td></tr></table></figure>
+
+<h2 id="Done"><a href="#Done" class="headerlink" title="Done"></a>Done</h2><p>We are all set now. Running the command <code>df -Th</code> will verify that our TF card is mounted with <code>vfat</code> type, which corresponds to the <code>FAT32</code> file system.</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs console">Filesystem           Type            Size      Used Available Use% Mounted on<br>/dev/mmcblk1p1       vfat           14.8G    672.0K     14.8G   0% /mnt/sd<br></code></pre></td></tr></table></figure>
+
+<h2 id="On-Removal"><a href="#On-Removal" class="headerlink" title="On Removal"></a>On Removal</h2><p>Simply unmount the device so that the card can be removed safely.</p>
+<ol>
+<li>Do not use the resource inside the mounted device, e.g., reading from or writing to it, and remember navigate outside the directory <code>/mnt/sd</code>.</li>
+<li>Run command <code>umount /mnt/sd</code> (unmount by mounted directory path) or <code>umount /dev/mmcblk1p1</code> (unmount by device name), they are equivalent.</li>
+</ol>
+<h2 id="Next-Time"><a href="#Next-Time" class="headerlink" title="Next Time"></a>Next Time</h2><p>Next time when you restart the board or plugged in the micro SD card again, running command <code>mount /dev/mmcblk1p1 /mnt/sd</code> is needed, otherwise the system still do not have a path to access the file in the card.</p>
+<p>Alternatively, you can put the following lines into shell script to automate the procedure.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs sh"><span class="hljs-meta">#!/bin/sh</span><br><br><span class="hljs-comment"># Check if the TF card device exists</span><br><span class="hljs-keyword">if</span> [ -e <span class="hljs-string">&quot;/dev/mmcblk1&quot;</span> ]; <span class="hljs-keyword">then</span><br>    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;TF card is detected. Mounting...&quot;</span><br>    mount /dev/mmcblk1p1 /mnt/sd   <span class="hljs-comment"># Replace /mnt/sd with your desired mount point</span><br>    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;TF card mounted successfully.&quot;</span><br><span class="hljs-keyword">else</span><br>    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;TF card is not detected.&quot;</span><br><span class="hljs-keyword">fi</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://doc-en.rvspace.org/VisionFive2/Quick_Start_Guide/VisionFive2_QSG/extend_partition.html">Extend Partition on SD Card or eMMC</a></li>
+<li><a target="_blank" rel="noopener" href="http://blog.itpub.net/20674423/viewspace-722812">Linux下分区详解之–Fdisk_ITPUB博客</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/sophgo/sophpi-huashan/wiki/4.%E5%BC%80%E5%8F%91%E6%9D%BF%E7%A1%AC%E4%BB%B6%E5%BF%AB%E9%80%9F%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97#1%E5%8D%8E%E5%B1%B1%E6%B4%BE-cv181%E7%B3%BB%E5%88%97%E5%BC%80%E5%8F%91%E6%9D%BF%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D">4.1. 华山派-CV181系列开发板基本介绍 · sophgo&#x2F;sophpi-huashan Wiki</a></li>
+<li><a target="_blank" rel="noopener" href="https://tldp.org/HOWTO/Partition/requirements.html">4. Partitioning requirements</a></li>
+<li><a target="_blank" rel="noopener" href="https://tldp.org/HOWTO/Partition/fdisk_partitioning.html#mixed">5. Partitioning with fdisk - 5.3. Mixed primary and logical partitions</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.integralmemory.com/faq1/why-does-my-usb-drive-show-less-capacity-than-stated-on-my-pc-or-mac/">Why does my USB drive show less capacity than stated on my PC or MAC | Integral Memory</a></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/DevOps/" class="category-chain-item">DevOps</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/TF-Card/" class="print-no-link">#TF Card</a>
+      
+        <a href="/tags/Linux/" class="print-no-link">#Linux</a>
+      
+        <a href="/tags/Mount/" class="print-no-link">#Mount</a>
+      
+        <a href="/tags/Partition/" class="print-no-link">#Partition</a>
+      
+        <a href="/tags/SBC/" class="print-no-link">#SBC</a>
+      
+        <a href="/tags/Huashan-pi/" class="print-no-link">#Huashan-pi</a>
+      
+        <a href="/tags/Disk/" class="print-no-link">#Disk</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Partition and Mount TF Card on Linux</div>
+      <div>https://lingkang.dev/2023/06/13/access-tf/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Lingkang</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>June 13, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/16/share-file-host-and-vm-hyper-v/" title="Share Files Between Host and Linux Virtual Machine over Hyper-V">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Share Files Between Host and Linux Virtual Machine over Hyper-V</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/code-server-cn/" title="在云服务器部署 VS Code Server">
+                        <span class="hidden-mobile">在云服务器部署 VS Code Server</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

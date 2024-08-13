@@ -1,0 +1,725 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/profile_img.png">
+  <link rel="icon" href="/images/profile_img.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Lingkang">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Do advanced CONCAT by powerful SQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Advanced Concatenate with Sqlite3">
+<meta property="og:url" content="https://lingkang.dev/2022/10/28/concat/index.html">
+<meta property="og:site_name" content="Lingkang&#39;s Blog">
+<meta property="og:description" content="Do advanced CONCAT by powerful SQL">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-10-27T17:24:32.000Z">
+<meta property="article:modified_time" content="2022-10-28T11:34:56.000Z">
+<meta property="article:author" content="Lingkang">
+<meta property="article:tag" content="SQL">
+<meta property="article:tag" content="SQLite">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+    <meta name="google-site-verification" content="_Z4a0qEOBfzKcSi9b2FxvxEvBcSQPH0SDX8XFGBut9M">
+  
+  <title>Advanced Concatenate with Sqlite3 - Lingkang&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"lingkang.dev","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":"G-S9PGLW5JVZ"},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Lingkang's Blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Lingkang&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>Links</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/images/bg_img/bg_post.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Advanced Concatenate with Sqlite3"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-10-27 18:24" pubdate>
+          October 27, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          224 words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          2 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Advanced Concatenate with Sqlite3</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    Last updated on October 28, 2022 pm
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Advanced-Concatenate-with-Sqlite3"><a href="#Advanced-Concatenate-with-Sqlite3" class="headerlink" title="Advanced Concatenate with Sqlite3"></a>Advanced Concatenate with Sqlite3</h1><p><code>CONCATENATE()</code> is a useful function which can be found in <code>Excel</code>, <code>numpy</code>, etc. It could be simply interpreted as <strong>adding</strong> two or more strings together. The concatenate operator <code>||</code> could be used to add strings in SQL, but only use <code>||</code> can not satisfy us in much complicated context, i.e., string separated across columns. But as a powerful database manage system, Sqlite3 (and probably other DBMS) allows us to do this advanced <code>CONCATENATE</code>, even though there is no keyword or function written as <strong>CONCATENATE</strong> in SQL. </p>
+<h2 id="Quick-Sample"><a href="#Quick-Sample" class="headerlink" title="Quick Sample"></a>Quick Sample</h2><h3 id="Create-Sample-Table"><a href="#Create-Sample-Table" class="headerlink" title="Create Sample Table"></a>Create Sample Table</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs SQL"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> IF <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">EXISTS</span> Alphabet (<br>    ID <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    Letter <span class="hljs-type">CHAR</span> <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span><br>);<br></code></pre></td></tr></table></figure>
+
+<p>And insert values as follows: </p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs SQL"><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> Alphabet (Letter)<br><span class="hljs-keyword">VALUES</span> <br>    (<span class="hljs-string">&#x27;A&#x27;</span>), (<span class="hljs-string">&#x27;B&#x27;</span>), (<span class="hljs-string">&#x27;C&#x27;</span>), (<span class="hljs-string">&#x27;D&#x27;</span>), (<span class="hljs-string">&#x27;E&#x27;</span>),<br>    (<span class="hljs-string">&#x27;F&#x27;</span>), (<span class="hljs-string">&#x27;G&#x27;</span>), (<span class="hljs-string">&#x27;H&#x27;</span>), (<span class="hljs-string">&#x27;I&#x27;</span>), (<span class="hljs-string">&#x27;J&#x27;</span>);<br></code></pre></td></tr></table></figure>
+
+<p>So if now we select all entries from <code>Alphabet</code>, </p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs SQL">.head <span class="hljs-keyword">on</span><br><br>.mode <span class="hljs-keyword">column</span> <span class="hljs-comment">-- make output more readable</span><br><br><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> Alphabet;<br></code></pre></td></tr></table></figure>
+
+<p>the output should look like this: </p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs txt">ID  Letter<br>--  ------<br>1   A     <br>2   B     <br>3   C     <br>4   D     <br>5   E     <br>6   F     <br>7   G     <br>8   H     <br>9   I     <br>10  J     <br></code></pre></td></tr></table></figure>
+
+<h3 id="Requirement"><a href="#Requirement" class="headerlink" title="Requirement"></a>Requirement</h3><p>Print a single string containing all the letters in ascending order, and letters are separated by one comma and one space.   </p>
+<h3 id="Implement"><a href="#Implement" class="headerlink" title="Implement"></a>Implement</h3><p>So by means of <strong>CONCATENATE</strong>, we want to output some stuff like <code>A, B, C, D, E, F, G, H, I, J</code>. Since <code>Letter</code>s are stored in column, it does not work if we only use concatenate operator <code>||</code>. </p>
+<p>The requirement sounds difficult, but if you see codes below, there is nothing too mysterious actually. </p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs SQL"><span class="hljs-keyword">WITH</span> CTE <span class="hljs-keyword">AS</span> (<br>    <span class="hljs-keyword">SELECT</span><br>        ID,<br>        Letter<br>    <span class="hljs-keyword">FROM</span><br>        Alphabet<br>    <span class="hljs-keyword">WHERE</span><br>        ID <span class="hljs-operator">=</span> <span class="hljs-number">1</span><br>    <br>    <span class="hljs-keyword">UNION</span><br><br>    <span class="hljs-keyword">SELECT</span><br>        Alphabet.ID,<br>        CTE.Letter <span class="hljs-operator">||</span> <span class="hljs-string">&#x27;, &#x27;</span> <span class="hljs-operator">||</span> Alphabet.Letter<br>    <span class="hljs-keyword">FROM</span><br>        Alphabet<br>    <span class="hljs-keyword">JOIN</span><br>        CTE <span class="hljs-keyword">ON</span> Alphabet.ID <span class="hljs-operator">=</span> CTE.ID <span class="hljs-operator">+</span> <span class="hljs-number">1</span><br>)<br><br><span class="hljs-keyword">SELECT</span><br>    Letter<br><span class="hljs-keyword">FROM</span><br>    CTE<br><span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span><br>    ID <span class="hljs-keyword">DESC</span><br>LIMIT <span class="hljs-number">1</span>;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Explanation"><a href="#Explanation" class="headerlink" title="Explanation"></a>Explanation</h3><p>Firstly, we need to create a helper table <code>CTE</code>, which stands for <em>Common Table Expression</em>. The first row of <code>CTE</code> is the first row of <code>Alphabet</code>, this is where our story begins. </p>
+<p>Next step is simple, we just need to add new lines into it, and for each line, it’s <code>Letter</code> is the concat of previous line (in <code>CTE</code>) and previous letter (in <code>Alphabet</code>). </p>
+<p>In <em>line 17</em>, it seems like we <code>JOIN</code> the <code>CTE</code> to itself, and here is explanation. We actually <code>JOIN</code> the newly generated line to the previous line, and you don’t need to worry about <code>ID</code> exceeding boundary. Don’t confuse it with <a target="_blank" rel="noopener" href="https://www.sqlitetutorial.net/sqlite-self-join/">Self-Join</a>. It is another topic and out of scope of this blog. </p>
+<p>Note that in <em>line 18</em>, it’s <code>Alphabet.ID = CTE.ID + 1</code>, and this <code>+ 1</code> is very important. Without it, the query goes infinitely, and actually generate something like <code>A, A, A, A, A, A, ...</code> endlessly. </p>
+<p>And we use <code>UNION</code> to combine two selected table. </p>
+<p>So if you check what <code>CTE</code> really generate, execute query: </p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs SQL"><span class="hljs-keyword">WITH</span> CTE <span class="hljs-keyword">AS</span> (<br>    ...<br>    <span class="hljs-comment">-- same as above</span><br>)<br><br><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> CTE;<br></code></pre></td></tr></table></figure>
+
+<p>And the output is surprisingly clear. </p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs txt">ID  Letter                      <br>--  ----------------------------<br>1   A                           <br>2   A, B                        <br>3   A, B, C                     <br>4   A, B, C, D                  <br>5   A, B, C, D, E               <br>6   A, B, C, D, E, F            <br>7   A, B, C, D, E, F, G         <br>8   A, B, C, D, E, F, G, H      <br>9   A, B, C, D, E, F, G, H, I   <br>10  A, B, C, D, E, F, G, H, I, J<br></code></pre></td></tr></table></figure>
+
+<p>This output may to large extent help you understand how this query works. </p>
+<p>The final step is just to sort them and output the line we want. </p>
+<h2 id="Remark"><a href="#Remark" class="headerlink" title="Remark"></a>Remark</h2><p>This is just like doing query recursivly, and Sqlite3 started supporting <code>RECURSIVE</code> keyword since version 3.34.0. <a target="_blank" rel="noopener" href="https://sqlite.org/lang_with.html">Read more</a>. </p>
+<p>In real implementation, probably there is no consecutive <code>ID</code> and you may think of using a window function <code>ROW_NUMBER()</code> to help you. </p>
+<p>Furthermore, this piece of SQL could be re-used every time you want to concatenate items cross different rows. It can be used as a fixed pattern only with minor modification. </p>
+<h2 id="Much-More-Complicated-Ones"><a href="#Much-More-Complicated-Ones" class="headerlink" title="Much More Complicated Ones"></a>Much More Complicated Ones</h2><p>There are some more complex questions from <a target="_blank" rel="noopener" href="https://15445.courses.cs.cmu.edu/">CMU 15-445&#x2F;645 :: Intro to Database Systems</a>. In its homework 1, many questions are quite demanding, and <strong>Q10</strong> is always linked to this blog’s topic. </p>
+<h3 id="2022-Fall-Q10"><a href="#2022-Fall-Q10" class="headerlink" title="2022 Fall Q10"></a>2022 Fall Q10</h3><p><a target="_blank" rel="noopener" href="https://15445.courses.cs.cmu.edu/fall2022/homework1/">Homework #1 - SQL</a> <strong>Question 10</strong> with <a target="_blank" rel="noopener" href="https://15445.courses.cs.cmu.edu/fall2022/files/hw1-sols.zip">official solution</a>, and my code can be found <a target="_blank" rel="noopener" href="https://github.com/LingkKang/CMU15-445_fa22/blob/master/hw1_SQL/q10_house_of_the_dragon.sql">here</a>. </p>
+<h3 id="2021-Fall-Q10"><a href="#2021-Fall-Q10" class="headerlink" title="2021 Fall Q10"></a>2021 Fall Q10</h3><p><a target="_blank" rel="noopener" href="https://15445.courses.cs.cmu.edu/fall2021/homework1/">Homework #1 - SQL</a> <strong>Question 10</strong> with <a target="_blank" rel="noopener" href="https://15445.courses.cs.cmu.edu/fall2021/files/hw1_sol.zip">official solution</a>, and my code can be found <a target="_blank" rel="noopener" href="https://github.com/LingkKang/CMU15-445_fa22/blob/master/history_hw/fa21_hw1_SQL/q10_christmas.sql">here</a>. </p>
+<p>Although added many other requirements and combined with other concepts, the essence never got changed. </p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Database/" class="category-chain-item">Database</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/SQL/" class="print-no-link">#SQL</a>
+      
+        <a href="/tags/SQLite/" class="print-no-link">#SQLite</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Advanced Concatenate with Sqlite3</div>
+      <div>https://lingkang.dev/2022/10/28/concat/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Lingkang</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>October 27, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/12/08/test-malloc-failure/" title="Test Malloc Failure with Macros in C">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Test Malloc Failure with Macros in C</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/10/24/100miles/" title="University 100 Miles Relay Competition 2022 Fall">
+                        <span class="hidden-mobile">University 100 Miles Relay Competition 2022 Fall</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

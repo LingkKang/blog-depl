@@ -1,0 +1,776 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/profile_img.png">
+  <link rel="icon" href="/images/profile_img.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Lingkang">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Paper Notes: PeeK - Pruning for K-th Shortest Paths Wang Feng, Shiyang Chen, Hang Liu, and Yuede Ji. PeeK: A Prune-Centric Approach for K Shortest Path Computation. International Conference for High P">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Paper Notes: PeeK - Pruning for K-th Shortest Paths">
+<meta property="og:url" content="https://lingkang.dev/2024/08/09/read-paper-peek/index.html">
+<meta property="og:site_name" content="Lingkang&#39;s Blog">
+<meta property="og:description" content="Paper Notes: PeeK - Pruning for K-th Shortest Paths Wang Feng, Shiyang Chen, Hang Liu, and Yuede Ji. PeeK: A Prune-Centric Approach for K Shortest Path Computation. International Conference for High P">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://lingkang.dev/images/peek/pruning.png">
+<meta property="og:image" content="https://lingkang.dev/images/peek/csr_creation_time_weight.png">
+<meta property="article:published_time" content="2024-08-08T18:49:41.000Z">
+<meta property="article:modified_time" content="2024-08-13T01:20:32.382Z">
+<meta property="article:author" content="Lingkang">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Sparsity">
+<meta property="article:tag" content="Graph">
+<meta property="article:tag" content="KSP">
+<meta property="article:tag" content="Pruning">
+<meta property="article:tag" content="CSR">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Sparse Graph">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://lingkang.dev/images/peek/pruning.png">
+  
+  
+  
+    <meta name="google-site-verification" content="_Z4a0qEOBfzKcSi9b2FxvxEvBcSQPH0SDX8XFGBut9M">
+  
+  <title>Paper Notes: PeeK - Pruning for K-th Shortest Paths - Lingkang&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"lingkang.dev","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":"G-S9PGLW5JVZ"},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Lingkang's Blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Lingkang&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>Links</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/images/bg_img/bg_post.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Paper Notes: PeeK - Pruning for K-th Shortest Paths"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-08-08 19:49" pubdate>
+          August 8, 2024 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          908 words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          8 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Paper Notes: PeeK - Pruning for K-th Shortest Paths</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    Last updated on August 13, 2024 am
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Paper-Notes-PeeK-Pruning-for-K-th-Shortest-Paths"><a href="#Paper-Notes-PeeK-Pruning-for-K-th-Shortest-Paths" class="headerlink" title="Paper Notes: PeeK - Pruning for K-th Shortest Paths"></a>Paper Notes: PeeK - Pruning for K-th Shortest Paths</h1><blockquote>
+<p>Wang Feng, Shiyang Chen, Hang Liu, and Yuede Ji. PeeK: A Prune-Centric Approach for K Shortest Path Computation. <em>International Conference for High Performance Computing, Networking, Storage, and Analysis</em>, 2023. <a target="_blank" rel="noopener" href="https://doi.org/10.1145/3581784.3607110">https://doi.org/10.1145/3581784.3607110</a></p>
+</blockquote>
+<h2 id="Observation"><a href="#Observation" class="headerlink" title="Observation"></a>Observation</h2><p>The solution of KSP (K Shortest Paths) problem is typically a small sub set of all available paths, even though the <em>K</em> is very large in a very large graph.</p>
+<h2 id="K-Upper-Bound-Pruning"><a href="#K-Upper-Bound-Pruning" class="headerlink" title="K Upper Bound Pruning"></a>K Upper Bound Pruning</h2><p>Based on the observation, the authors propose a <em>prune-centric</em> approach to KSP computation. The key idea is to prune the search space.</p>
+<p><img src="/images/peek/pruning.png" srcset="/img/loading.gif" lazyload alt="K Upper Bound Pruning"></p>
+<blockquote>
+<p>SSSP: Single Source Shortest Path</p>
+<p>Start from the source node, get the shortest path to each node in the graph. Its result can basically represented as a tree, with the source node as the root. See figure <em>(b)</em>.</p>
+</blockquote>
+<blockquote>
+<p>Reverse SSSP:</p>
+<p>Start from the target node, get the shortest path from each node in the directed graph. Its result can basically represented as a tree, with the target node as the root, but in opposite direction. See figure <em>(c)</em>.</p>
+</blockquote>
+<p>By combining the SSSP tree and the reverse SSSP tree, we can get all possible paths from the source to the target. It can be divided into two cases:</p>
+<ol>
+<li>The vertices is not reachable from the source or to the target. For example, the vertex <code>a</code> can reach to the target <code>t</code> via <code>a -&gt; s -&gt; f -&gt; j -&gt; t</code>, but is not reachable from the source <code>s</code>.<ul>
+<li>The distance sum is basically denoted as <em>infinity</em>.</li>
+<li>This is common for a sparse directed graph, as the observation above.</li>
+</ul>
+</li>
+<li>The vertices is reachable from the source and to the target. For example, the vertex <code>o</code> can reach to the target <code>t</code> via <code>o -&gt; r -&gt; l -&gt; t</code>, and is reachable from the source <code>s</code> by <code>s -&gt; g -&gt; l -&gt; o</code>.</li>
+</ol>
+<p>Marked as reachable, this situation can be further divided into two parts. For example, the path obtained from <code>o</code> is <code>s -&gt; g -&gt; l -&gt; o -&gt; r -&gt; l -&gt; t</code>, and is can be clearly simplified as <code>s -&gt; g -&gt; l -&gt; t</code>.</p>
+<p>So the reachable paths are sorted by the distance sum, and only the top <em>K</em> paths are kept. The rest are <strong>pruned</strong>. For the illustration, the <em>K</em> &#x3D; 3 and paths with distance sum <code>11</code>, <code>12</code>, <code>14</code> are kept as potential search space. See figure <em>(d)</em>.</p>
+<div class="note note-success">
+            <p>In actual implementation, vertices and edges that not presented in the first SSSP result can be <strong>pruned immediately</strong>, which helps to speed up the next SSSP computation.</p><p>This also applies to the second (reversed) SSSP, which can speed up the CSR format conversion.</p>
+          </div>
+
+<h2 id="CSR-Representation-of-Sparse-Graph"><a href="#CSR-Representation-of-Sparse-Graph" class="headerlink" title="CSR Representation of Sparse Graph"></a>CSR Representation of Sparse Graph</h2><p><strong>CSR</strong> (Compressed Sparse Row) is also used to represent the graph. The CSR representation is a common way to store a sparse matrix, whereas a graph can be viewed as an adjacency matrix.</p>
+<h2 id="Hand-on-Experiment-Some-Thoughts"><a href="#Hand-on-Experiment-Some-Thoughts" class="headerlink" title="Hand-on Experiment &amp; Some Thoughts"></a>Hand-on Experiment &amp; Some Thoughts</h2><p>I tried to run the provided code on my own machine, the testing script can be found at the <a href="#Appendix">appendix</a>.</p>
+<p>The testing script includes:</p>
+<ol>
+<li>Graph generation with <code>PaRMAT</code></li>
+<li>Graph conversion to CSR format (<code>make_csr</code>)</li>
+<li>Reachable pairs generation (<code>make_reachable_src_dest</code>)</li>
+<li>Running the <code>PeeK</code> algorithm with different threads</li>
+</ol>
+<p><img src="/images/peek/csr_creation_time_weight.png" srcset="/img/loading.gif" lazyload></p>
+<p>The above figure shows the percentage of the CSR conversion time over the total time. It is clear that, for a single threaded <code>PeeK</code> implementation, the CSR conversion time takes a significant part. Moreover, this part increases as the graph grows more dense. (Note that the fist point have sparsity rate of <em>97.98%</em>, and the last point have <em>1.01%</em>.) And actually, the running time of the <code>PeeK</code> algorithm is growing exponentially as the sparsity rate drops.</p>
+<div class="note note-info">
+            <p><strong>Understanding 1</strong></p><p>The <code>PeeK</code> algorithm works better on a sparse graph. This also matches the behavior of <a href="#K-Upper-Bound-Pruning"><em>K upper bound pruning</em></a> – the more sparse the graph is, the more vertices and edges can be pruned.</p>
+          </div>
+
+<p>Additionally, running <code>make_csr</code> would consume extreme large memory, and it can be observed that the memory consumption will grow to a peak and gradually decrease. For such memory-bound computation, memory size and access are also potential bottlenecks.</p>
+<div class="note note-info">
+            <p><strong>Understanding 2</strong></p><p>The CSR conversion time is potentially a bottleneck for the <code>PeeK</code> algorithm. However, converting a graph to CSR format is also difficult to be parallelized. </p>
+          </div>
+
+<p>For the multi-threaded <code>PeeK</code> implementation, CSR conversion time is relatively less weighted, which looks good. However, the running time is actually 50 to 300 times slower than the single threaded implementation. This is not expected, and I think it is due to the overhead of the multi-threading. Probably thread-wise communication and synchronization are the main reasons.</p>
+<div class="note note-info">
+            <p><strong>Understanding 3</strong></p><p>The overhead of the multi-threading is not negligible for relatively smaller graph. The multi-threading is not always the best choice.</p>
+          </div>
+
+<p>For the experiment and comparison section in the paper, it seems that the <code>make_csr</code> part is not counted in its running time. This is a potential issue, as the CSR representation of graph is significant for the <code>PeeK</code> algorithm, and its running time is not negligible.</p>
+<div class="note note-warning">
+            <p><strong>Bug found</strong></p><p>For a graph without enough paths to meet the <em>K</em> requirement, current implementation will fall into an infinite loop at <code>make_reachable_src_dest</code>. For example, a graph with 100 vertices and 100 edges, the <code>PeeK</code> algorithm try to meet <code>K = 128</code> and loop forever.</p><p>Although the number of edges can not represent the number of possible paths, it still demonstrates the potential bug in the implementation.</p>
+          </div>
+
+<h2 id="Appendix"><a href="#Appendix" class="headerlink" title="Appendix"></a>Appendix</h2><p>Source code of the testing script:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br></pre></td><td class="code"><pre><code class="hljs Python"><span class="hljs-keyword">import</span> subprocess<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><br>LOG_FILE = <span class="hljs-string">&quot;test.log&quot;</span><br>MAX_VERTICES_NUM = <span class="hljs-number">100000</span><br><br>MAKE_CSR_COMMAND = [<br>    <span class="hljs-string">&quot;pwsh.exe&quot;</span>,<br>    <span class="hljs-string">&quot;-Command&quot;</span>,<br>    <span class="hljs-string">&quot;g++&quot;</span>,<br>    <span class="hljs-string">&quot;-O3&quot;</span>,<br>    <span class="hljs-string">&quot;-o&quot;</span>,<br>    <span class="hljs-string">&quot;make_csr.exe&quot;</span>,<br>    <span class="hljs-string">&quot;make_csr.cpp&quot;</span>,<br>]<br><br>REACHABLE_COMMAND = [<br>    <span class="hljs-string">&quot;pwsh.exe&quot;</span>,<br>    <span class="hljs-string">&quot;-Command&quot;</span>,<br>    <span class="hljs-string">&quot;g++&quot;</span>,<br>    <span class="hljs-string">&quot;-O3&quot;</span>,<br>    <span class="hljs-string">&quot;-I../includes&quot;</span>,<br>    <span class="hljs-string">&quot;-fopenmp&quot;</span>,<br>    <span class="hljs-string">&quot;-o&quot;</span>,<br>    <span class="hljs-string">&quot;make_reachable_src_dest.exe&quot;</span>,<br>    <span class="hljs-string">&quot;make_reachable_src_dest.cpp&quot;</span>,<br>]<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">get_max_edges_num</span>(<span class="hljs-params">vertices_num: <span class="hljs-built_in">int</span></span>) -&gt; <span class="hljs-built_in">int</span>:<br>    <span class="hljs-keyword">return</span> vertices_num * (vertices_num - <span class="hljs-number">1</span>)<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">calc_graph_sparsity</span>(<span class="hljs-params">vertices_num: <span class="hljs-built_in">int</span>, edges_num: <span class="hljs-built_in">int</span></span>) -&gt; <span class="hljs-built_in">float</span>:<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">1</span> - edges_num / get_max_edges_num(vertices_num)<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">compile_util</span>(<span class="hljs-params">command: <span class="hljs-built_in">list</span>[<span class="hljs-built_in">str</span>], cwd: <span class="hljs-built_in">str</span></span>):<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    Compile a cpp file.</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(LOG_FILE, <span class="hljs-string">&quot;a&quot;</span>) <span class="hljs-keyword">as</span> f:<br>        f.write(<span class="hljs-string">f&quot;@compile <span class="hljs-subst">&#123;command[-<span class="hljs-number">1</span>]&#125;</span>\n&quot;</span>)<br>        process = subprocess.run(<br>            command, shell=<span class="hljs-literal">True</span>, stdout=subprocess.PIPE, text=<span class="hljs-literal">True</span>, cwd=cwd<br>        )<br>        f.write(process.stdout)<br>        <span class="hljs-keyword">if</span> process.returncode != <span class="hljs-number">0</span>:<br>            f.write(<span class="hljs-string">&quot; &quot;</span>.join(command) + <span class="hljs-string">&quot;\n&quot;</span>)<br>            <span class="hljs-keyword">raise</span> Exception(<span class="hljs-string">f&quot;compile failed for <span class="hljs-subst">&#123;command[-<span class="hljs-number">1</span>]&#125;</span>&quot;</span>)<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">gen_vertex_edge_pair</span>(<span class="hljs-params">v: <span class="hljs-built_in">int</span>, e: <span class="hljs-built_in">int</span></span>) -&gt; <span class="hljs-built_in">str</span>:<br>    <span class="hljs-keyword">assert</span> get_max_edges_num(v) &gt;= e<br>    graph_file = <span class="hljs-string">f&quot;./out/edge_list_v<span class="hljs-subst">&#123;v&#125;</span>_e<span class="hljs-subst">&#123;e&#125;</span>.txt&quot;</span><br>    <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(LOG_FILE, <span class="hljs-string">&quot;a&quot;</span>) <span class="hljs-keyword">as</span> f:<br>        f.write(<span class="hljs-string">&quot;================================\n&quot;</span>)<br>        f.write(<span class="hljs-string">f&quot;vertices: <span class="hljs-subst">&#123;v&#125;</span> \t edges: <span class="hljs-subst">&#123;e&#125;</span> -&gt; <span class="hljs-subst">&#123;graph_file&#125;</span>\n&quot;</span>)<br>        f.write(<span class="hljs-string">f&quot;sparsity: <span class="hljs-subst">&#123;calc_graph_sparsity(vertices_num, e) * <span class="hljs-number">100</span>:<span class="hljs-number">.2</span>f&#125;</span>%\n&quot;</span>)<br>        f.write(<span class="hljs-string">&quot;@generate the graph (vertex edge pair)\n&quot;</span>)<br>        command = [<br>            <span class="hljs-string">&quot;pwsh.exe&quot;</span>,<br>            <span class="hljs-string">&quot;-Command&quot;</span>,<br>            <span class="hljs-string">&quot;./tools/PaRMAT/Release/PaRMAT.exe&quot;</span>,<br>            <span class="hljs-string">&quot;-nVertices&quot;</span>,<br>            <span class="hljs-built_in">str</span>(v),<br>            <span class="hljs-string">&quot;-nEdges&quot;</span>,<br>            <span class="hljs-built_in">str</span>(e),<br>            <span class="hljs-string">&quot;-a&quot;</span>,<br>            <span class="hljs-string">&quot;0.45&quot;</span>,<br>            <span class="hljs-string">&quot;-b&quot;</span>,<br>            <span class="hljs-string">&quot;0.22&quot;</span>,<br>            <span class="hljs-string">&quot;-c&quot;</span>,<br>            <span class="hljs-string">&quot;0.22&quot;</span>,<br>            <span class="hljs-string">&quot;-sorted&quot;</span>,<br>            <span class="hljs-string">&quot;-noEdgeToSelf&quot;</span>,<br>            <span class="hljs-string">&quot;-noDuplicateEdges&quot;</span>,<br>            <span class="hljs-string">&quot;-output&quot;</span>,<br>            graph_file,<br>        ]<br>        process = subprocess.run(<br>            command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=<span class="hljs-literal">True</span><br>        )<br>        <span class="hljs-keyword">if</span> process.returncode != <span class="hljs-number">0</span>:<br>            f.write(<span class="hljs-string">&quot; &quot;</span>.join(command) + <span class="hljs-string">&quot;\n&quot;</span>)<br>            f.write(process.stdout)<br>            f.write(process.stderr)<br>            <span class="hljs-keyword">raise</span> Exception(<span class="hljs-string">f&quot;generate graph failed at v: <span class="hljs-subst">&#123;v&#125;</span>, e: <span class="hljs-subst">&#123;e&#125;</span>&quot;</span>)<br>    <span class="hljs-keyword">return</span> graph_file<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">convert_graph_to_csr</span>(<span class="hljs-params">graph_file: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-built_in">tuple</span>[<span class="hljs-built_in">str</span>, <span class="hljs-built_in">str</span>, <span class="hljs-built_in">str</span>]:<br>    prefix = graph_file.split(<span class="hljs-string">&quot;.&quot;</span>)[<span class="hljs-number">1</span>]<br>    begin_file = <span class="hljs-string">f&quot;.<span class="hljs-subst">&#123;prefix&#125;</span>.begin.bin&quot;</span><br>    csr_file = <span class="hljs-string">f&quot;.<span class="hljs-subst">&#123;prefix&#125;</span>.csr.bin&quot;</span><br>    val_file = <span class="hljs-string">f&quot;.<span class="hljs-subst">&#123;prefix&#125;</span>.val.bin&quot;</span><br>    <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(LOG_FILE, <span class="hljs-string">&quot;a&quot;</span>) <span class="hljs-keyword">as</span> f:<br>        f.write(<span class="hljs-string">f&quot;@convert graph to csr\n&quot;</span>)<br>        command = [<br>            <span class="hljs-string">&quot;pwsh.exe&quot;</span>,<br>            <span class="hljs-string">&quot;-Command&quot;</span>,<br>            <span class="hljs-string">&quot;./tools/make_csr.exe&quot;</span>,<br>            graph_file,<br>            begin_file,<br>            csr_file,<br>            val_file,<br>        ]<br>        process = subprocess.run(command, stdout=subprocess.PIPE, text=<span class="hljs-literal">True</span>)<br>        f.write(process.stdout)<br>        <span class="hljs-keyword">if</span> process.returncode != <span class="hljs-number">0</span>:<br>            f.write(<span class="hljs-string">&quot; &quot;</span>.join(command) + <span class="hljs-string">&quot;\n&quot;</span>)<br>            <span class="hljs-keyword">raise</span> Exception(<span class="hljs-string">f&quot;convert graph to csr failed at <span class="hljs-subst">&#123;graph_file&#125;</span>&quot;</span>)<br>    <span class="hljs-keyword">return</span> (begin_file, csr_file, val_file)<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">gen_reachable_pairs</span>(<span class="hljs-params">begin_file: <span class="hljs-built_in">str</span>, csr_file: <span class="hljs-built_in">str</span>, val_file: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-built_in">str</span>:<br>    prefix = csr_file.split(<span class="hljs-string">&quot;.&quot;</span>)[<span class="hljs-number">1</span>]<br>    reachable_file = <span class="hljs-string">f&quot;.<span class="hljs-subst">&#123;prefix&#125;</span>.reachable.txt&quot;</span><br>    <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(LOG_FILE, <span class="hljs-string">&quot;a&quot;</span>) <span class="hljs-keyword">as</span> f:<br>        f.write(<span class="hljs-string">f&quot;@gen reachable pairs\n&quot;</span>)<br>        command = [<br>            <span class="hljs-string">&quot;pwsh.exe&quot;</span>,<br>            <span class="hljs-string">&quot;-Command&quot;</span>,<br>            <span class="hljs-string">&quot;./tools/make_reachable_src_dest.exe&quot;</span>,<br>            begin_file,<br>            csr_file,<br>            val_file,<br>        ]<br>        process = subprocess.run(<br>            command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=<span class="hljs-literal">True</span><br>        )<br>        <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(reachable_file, <span class="hljs-string">&quot;w&quot;</span>) <span class="hljs-keyword">as</span> f2:<br>            f2.write(process.stdout)<br>        f.write(process.stderr)<br>        <span class="hljs-keyword">if</span> process.returncode != <span class="hljs-number">0</span>:<br>            f.write(<span class="hljs-string">&quot; &quot;</span>.join(command) + <span class="hljs-string">&quot;\n&quot;</span>)<br>            <span class="hljs-keyword">raise</span> Exception(<span class="hljs-string">f&quot;gen reachable pairs failed at <span class="hljs-subst">&#123;reachable_file&#125;</span>&quot;</span>)<br>    <span class="hljs-keyword">return</span> reachable_file<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">run_peek_with_threads</span>(<span class="hljs-params"></span><br><span class="hljs-params">    begin_file: <span class="hljs-built_in">str</span>, csr_file: <span class="hljs-built_in">str</span>, val_file: <span class="hljs-built_in">str</span>, reachable_file: <span class="hljs-built_in">str</span>, threads: <span class="hljs-built_in">int</span></span><br><span class="hljs-params"></span>):<br>    <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(LOG_FILE, <span class="hljs-string">&quot;a&quot;</span>) <span class="hljs-keyword">as</span> f:<br>        f.write(<span class="hljs-string">f&quot;@run peek with threads: <span class="hljs-subst">&#123;threads&#125;</span>\n&quot;</span>)<br>        command = [<br>            <span class="hljs-string">&quot;pwsh.exe&quot;</span>,<br>            <span class="hljs-string">&quot;-Command&quot;</span>,<br>            <span class="hljs-string">f&quot;./peek_adaptive_with_status_array_kbound_thread_<span class="hljs-subst">&#123;threads&#125;</span>.exe&quot;</span>,<br>            begin_file,<br>            csr_file,<br>            val_file,<br>            reachable_file,<br>        ]<br>        process = subprocess.run(<br>            command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=<span class="hljs-literal">True</span><br>        )<br>        f.write(process.stdout)<br>        <span class="hljs-keyword">if</span> process.returncode != <span class="hljs-number">0</span>:<br>            f.write(<span class="hljs-string">&quot; &quot;</span>.join(command) + <span class="hljs-string">&quot;\n&quot;</span>)<br>            f.write(process.stderr)<br>            <span class="hljs-keyword">raise</span> Exception(<br>                <span class="hljs-string">f&quot;run peek failed at <span class="hljs-subst">&#123;reachable_file&#125;</span> with <span class="hljs-subst">&#123;threads&#125;</span> threads&quot;</span><br>            )<br><br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(LOG_FILE, <span class="hljs-string">&quot;w&quot;</span>) <span class="hljs-keyword">as</span> f:<br>        f.write(<span class="hljs-string">&quot;test start\n&quot;</span>)<br><br>    <span class="hljs-comment"># compile_make_csr()</span><br>    <span class="hljs-comment"># compile_make_reachable_src_dest()</span><br>    compile_util(MAKE_CSR_COMMAND, <span class="hljs-string">&quot;./tools&quot;</span>)<br>    compile_util(REACHABLE_COMMAND, <span class="hljs-string">&quot;./tools&quot;</span>)<br><br>    vertices_num = <span class="hljs-number">100</span><br>    <span class="hljs-keyword">while</span> vertices_num &lt;= MAX_VERTICES_NUM:<br>        max_edges_num = get_max_edges_num(vertices_num)<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;<span class="hljs-subst">&#123;vertices_num&#125;</span>, <span class="hljs-subst">&#123;max_edges_num&#125;</span>&quot;</span>)<br>        <span class="hljs-keyword">for</span> edges_num <span class="hljs-keyword">in</span> np.linspace(vertices_num * <span class="hljs-number">2</span>, max_edges_num - vertices_num, <span class="hljs-number">10</span>):<br>            edges_num = <span class="hljs-built_in">int</span>(edges_num)<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;\t<span class="hljs-subst">&#123;vertices_num&#125;</span>, <span class="hljs-subst">&#123;edges_num&#125;</span>&quot;</span>)<br>            graph_file = gen_vertex_edge_pair(vertices_num, edges_num)<br>            begin_file, csr_file, val_file = convert_graph_to_csr(graph_file)<br>            reachable_file = gen_reachable_pairs(begin_file, csr_file, val_file)<br>            run_peek_with_threads(begin_file, csr_file, val_file, reachable_file, <span class="hljs-number">1</span>)<br>            run_peek_with_threads(begin_file, csr_file, val_file, reachable_file, <span class="hljs-number">16</span>)<br><br>        vertices_num *= <span class="hljs-number">10</span><br></code></pre></td></tr></table></figure>
+
+<!--
+
+https://lingkang.dev/2024/08/09/read-paper-peek/
+
+-->
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Paper-Notes/" class="category-chain-item">Paper Notes</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Python/" class="print-no-link">#Python</a>
+      
+        <a href="/tags/Sparsity/" class="print-no-link">#Sparsity</a>
+      
+        <a href="/tags/Graph/" class="print-no-link">#Graph</a>
+      
+        <a href="/tags/KSP/" class="print-no-link">#KSP</a>
+      
+        <a href="/tags/Pruning/" class="print-no-link">#Pruning</a>
+      
+        <a href="/tags/CSR/" class="print-no-link">#CSR</a>
+      
+        <a href="/tags/C/" class="print-no-link">#C++</a>
+      
+        <a href="/tags/Sparse-Graph/" class="print-no-link">#Sparse Graph</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Paper Notes: PeeK - Pruning for K-th Shortest Paths</div>
+      <div>https://lingkang.dev/2024/08/09/read-paper-peek/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Lingkang</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>August 8, 2024</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/08/13/hello-world/" title="Hello World">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Hello World</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/01/08/rpc/" title="Implement RPC demo from scratch">
+                        <span class="hidden-mobile">Implement RPC demo from scratch</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
