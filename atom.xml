@@ -6,7 +6,7 @@
   <link href="https://lingkang.dev/atom.xml" rel="self"/>
   
   <link href="https://lingkang.dev/"/>
-  <updated>2024-09-10T13:27:13.833Z</updated>
+  <updated>2024-09-15T03:38:49.065Z</updated>
   <id>https://lingkang.dev/</id>
   
   <author>
@@ -21,16 +21,10 @@
     <link href="https://lingkang.dev/2024/08/29/host-maybe/"/>
     <id>https://lingkang.dev/2024/08/29/host-maybe/</id>
     <published>2024-08-29T08:30:35.000Z</published>
-    <updated>2024-09-10T13:27:13.833Z</updated>
+    <updated>2024-09-15T03:38:49.065Z</updated>
     
     
-      
-      
-        
-        
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot;</summary>
-        
-      
+    <summary type="html">Look after the pennies, and the pounds will look after themselves.</summary>
     
     
     
@@ -51,9 +45,11 @@
     
     <category term="Self-Host" scheme="https://lingkang.dev/tags/Self-Host/"/>
     
-    <category term="WebApp" scheme="https://lingkang.dev/tags/WebApp/"/>
+    <category term="Web App" scheme="https://lingkang.dev/tags/Web-App/"/>
     
     <category term="SSL" scheme="https://lingkang.dev/tags/SSL/"/>
+    
+    <category term="Ruby" scheme="https://lingkang.dev/tags/Ruby/"/>
     
   </entry>
   
@@ -140,8 +136,6 @@
     
     <category term="C" scheme="https://lingkang.dev/tags/C/"/>
     
-    <category term="Docker" scheme="https://lingkang.dev/tags/Docker/"/>
-    
     <category term="CentOS" scheme="https://lingkang.dev/tags/CentOS/"/>
     
     <category term="Core Dump" scheme="https://lingkang.dev/tags/Core-Dump/"/>
@@ -161,6 +155,8 @@
     <category term="POSIX" scheme="https://lingkang.dev/tags/POSIX/"/>
     
     <category term="WSL2" scheme="https://lingkang.dev/tags/WSL2/"/>
+    
+    <category term="Docker" scheme="https://lingkang.dev/tags/Docker/"/>
     
   </entry>
   
