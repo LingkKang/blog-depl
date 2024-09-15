@@ -4,6 +4,47 @@
   
   
   <entry>
+    <title>Self-Host Maybe Finance Web App</title>
+    <link href="/2024/08/29/host-maybe/"/>
+    <url>/2024/08/29/host-maybe/</url>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="https://cdn.jsdelivr.net/npm/meting/dist/Meting.min.js"></script><h1 id="Self-Host-Maybe-Finance-Web-App"><a href="#Self-Host-Maybe-Finance-Web-App" class="headerlink" title="Self-Host Maybe Finance Web App"></a>Self-Host Maybe Finance Web App</h1><p><a href="https://maybe.co/">Maybe</a> is an open-source personal finance web app that helps you track your income, expenses, and investments. It is built with <em>Ruby on Rails</em>.</p><p>In this post, I will show you how to host Maybe on your own Linux server using <em>Docker</em> and <em>Nginx</em>.</p><h2 id="0-Environment"><a href="#0-Environment" class="headerlink" title="0. Environment"></a>0. Environment</h2><table><thead><tr><th>Software</th><th>Version</th></tr></thead><tbody><tr><td>Ubuntu</td><td>22.04.4 LTS</td></tr><tr><td>Nginx</td><td>1.18.0</td></tr><tr><td>Snap</td><td>2.63</td></tr><tr><td>Docker</td><td>27.2.0 (install later)</td></tr><tr><td>Certbot</td><td>2.11.0 (install later)</td></tr></tbody></table><h2 id="1-Install-Docker"><a href="#1-Install-Docker" class="headerlink" title="1. Install Docker"></a>1. Install Docker</h2><p>This section is cherry-picked from the official Docker documentation: <a href="https://docs.docker.com/engine/install/ubuntu/">Install Docker Engine on Ubuntu | Docker Docs</a></p><h3 id="1-1-Set-up-Docker-APT-repository"><a href="#1-1-Set-up-Docker-APT-repository" class="headerlink" title="1.1. Set up Docker APT repository:"></a>1.1. Set up Docker APT repository:</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo apt update<br>sudo apt install ca-certificates curl<br>sudo install -m 0755 -d /etc/apt/keyrings<br>sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc<br>sudo <span class="hljs-built_in">chmod</span> a+r /etc/apt/keyrings/docker.asc<br><br><span class="hljs-built_in">echo</span> \<br>  <span class="hljs-string">&quot;deb [arch=<span class="hljs-subst">$(dpkg --print-architecture)</span> signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \</span><br><span class="hljs-string">  <span class="hljs-subst">$(. /etc/os-release &amp;&amp; echo <span class="hljs-string">&quot;<span class="hljs-variable">$VERSION_CODENAME</span>&quot;</span>)</span> stable&quot;</span> | \<br>  sudo <span class="hljs-built_in">tee</span> /etc/apt/sources.list.d/docker.list &gt; /dev/null<br></code></pre></td></tr></table></figure><h3 id="1-2-Install-Docker"><a href="#1-2-Install-Docker" class="headerlink" title="1.2. Install Docker:"></a>1.2. Install Docker:</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo apt update<br>sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin<br></code></pre></td></tr></table></figure><h3 id="1-3-Check-the-installation"><a href="#1-3-Check-the-installation" class="headerlink" title="1.3. Check the installation:"></a>1.3. Check the installation:</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo docker run hello-world<br></code></pre></td></tr></table></figure><h2 id="2-Setup-Docker-Compose"><a href="#2-Setup-Docker-Compose" class="headerlink" title="2. Setup Docker Compose"></a>2. Setup Docker Compose</h2><p>The main doc is located at <a href="https://github.com/maybe-finance/maybe/blob/main/docs/hosting/docker.md"><code>maybe/docs/hosting/docker.md</code> at main</a> of Maybe’s GitHub repository, but some details are modified here.+</p><h3 id="2-1-One-click-Setup"><a href="#2-1-One-click-Setup" class="headerlink" title="2.1. One-click Setup"></a>2.1. One-click Setup</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> -p ~/app/maybe_bookkeeping<br><span class="hljs-built_in">cd</span> ~/app/maybe_bookkeeping<br>curl -o compose.yml https://raw.githubusercontent.com/maybe-finance/maybe/main/docker-compose.example.yml<br><span class="hljs-built_in">touch</span> .<span class="hljs-built_in">env</span><br>openssl rand -hex 64 &gt; .<span class="hljs-built_in">env</span><br></code></pre></td></tr></table></figure><p>Now the <code>.env</code> file is created with a random secret key. Update the <code>.env</code> file as follows:</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs conf">SECRET_KEY=&quot;your_secret_key&quot;<br>POSTGRES_PASSWORD=&quot;your_postgres_password&quot;<br></code></pre></td></tr></table></figure><h3 id="2-2-Optional-Configuration"><a href="#2-2-Optional-Configuration" class="headerlink" title="2.2. Optional Configuration"></a>2.2. Optional Configuration</h3><p>Update the <code>image</code> value of the <code>maybe</code> service in <code>compose.yml</code> to the stable version:</p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">services:</span><br>  <span class="hljs-attr">app:</span><br>    <span class="hljs-attr">image:</span> <span class="hljs-string">ghcr.io/maybe-finance/maybe:stable</span><br></code></pre></td></tr></table></figure><p>By default, docker compose will put the data in <code>/var/lib/docker/volumes/</code> directory on Linux. You can change it by updating the <code>volumes</code> section of each service in <code>compose.yml</code>, and comment out the top-level <code>volumes</code> section.</p><p>for example, to put the data in <code>/var/app/maybe/postgres-data/</code> directory:</p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">services:</span><br>  <span class="hljs-attr">postgres:</span><br>    <span class="hljs-string">...</span><br>    <span class="hljs-attr">volumes:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">/var/app/maybe/postgres-data:/var/lib/postgresql/data</span><br><br><span class="hljs-attr">volume:</span><br><span class="hljs-comment">#  postgres-data: # REMEMBER TO COMMENT OUT THIS LINE</span><br></code></pre></td></tr></table></figure><p>Similarly for <code>app</code> service:</p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">services:</span><br>  <span class="hljs-attr">app:</span><br>    <span class="hljs-string">...</span><br>    <span class="hljs-attr">volumes:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">/var/app/maybe/app-data:/rails/storage</span><br><br><span class="hljs-attr">volume:</span><br><span class="hljs-comment">#  app-data: # REMEMBER TO COMMENT OUT THIS LINE</span><br></code></pre></td></tr></table></figure><h3 id="2-3-Start-the-Services"><a href="#2-3-Start-the-Services" class="headerlink" title="2.3. Start the Services"></a>2.3. Start the Services</h3><p>Start the services in the background:</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker compose up -d<br></code></pre></td></tr></table></figure><p>Now it is available at <code>http://localhost:3000/</code> or <code>&lt;your_pub_ip&gt;:3000</code>. (Don’t forget to open the port of the server in the firewall.)</p><h2 id="3-Setup-SSL-Certificates"><a href="#3-Setup-SSL-Certificates" class="headerlink" title="3. Setup SSL Certificates"></a>3. Setup SSL Certificates</h2><p>At the moment, when you access to your bookkeeping app, the web browser will warn you that the connection is not secure. To fix this, we need to install SSL certificates.</p><h3 id="3-1-Install-Certbot"><a href="#3-1-Install-Certbot" class="headerlink" title="3.1. Install Certbot"></a>3.1. Install Certbot</h3><p><a href="https://certbot.eff.org/">Certbot</a> is a free, open-source software for manually-administrated websites to enable HTTPS by using <a href="https://letsencrypt.org/">Let’s Encrypt</a> certificates.</p><p>This section is mainly based on the official Certbot documentation: <a href="https://certbot.eff.org/instructions">Certbot Instructions | Certbot</a></p><p>The <code>snap</code> is pre-installed on Ubuntu 20.04.</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">snap --version<br></code></pre></td></tr></table></figure><p>Replace <code>yourdomain.com</code> with your actual domain name.</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo snap install --classic certbot<br>sudo <span class="hljs-built_in">ln</span> -s /snap/bin/certbot /usr/bin/certbot<br>sudo certbot certonly --nginx -d yourdomain.com<br></code></pre></td></tr></table></figure><p>The certificates are stored in <code>/etc/letsencrypt/live/yourdomain.com/</code>.</p><h3 id="3-2-Configure-nginx-to-use-the-certificates"><a href="#3-2-Configure-nginx-to-use-the-certificates" class="headerlink" title="3.2. Configure nginx to use the certificates"></a>3.2. Configure <code>nginx</code> to use the certificates</h3><p>Update <code>/etc/nginx/sites-available/yourdomain.com</code> as follows:</p><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-section">server</span> &#123;<br>    <span class="hljs-attribute">listen</span> <span class="hljs-number">80</span>;<br>    <span class="hljs-attribute">server_name</span> yourdomain.com;<br><br>    <span class="hljs-section">location</span> / &#123;<br>        <span class="hljs-attribute">return</span> <span class="hljs-number">301</span> https://<span class="hljs-variable">$host</span><span class="hljs-variable">$request_uri</span>;<br>    &#125;<br>&#125;<br><br><span class="hljs-section">server</span> &#123;<br>    <span class="hljs-attribute">listen</span> <span class="hljs-number">443</span> ssl;<br>    <span class="hljs-attribute">server_name</span> yourdomain.com;<br><br>    <span class="hljs-attribute">ssl_certificate</span> /etc/letsencrypt/live/yourdomain.com/fullchain.pem;<br>    <span class="hljs-attribute">ssl_certificate_key</span> /etc/letsencrypt/live/yourdomain.com/privkey.pem;<br>    <span class="hljs-attribute">include</span> /etc/letsencrypt/options-ssl-nginx.conf;<br>    <span class="hljs-attribute">ssl_dhparam</span> /etc/letsencrypt/ssl-dhparams.pem;<br><br>    <span class="hljs-section">location</span> / &#123;<br>        <span class="hljs-attribute">proxy_pass</span> http://localhost:3000;<br>        <span class="hljs-attribute">proxy_set_header</span> Host <span class="hljs-variable">$host</span>;<br>        <span class="hljs-attribute">proxy_set_header</span> X-Real-IP <span class="hljs-variable">$remote_addr</span>;<br>        <span class="hljs-attribute">proxy_set_header</span> X-Forwarded-For <span class="hljs-variable">$proxy_add_x_forwarded_for</span>;<br>        <span class="hljs-attribute">proxy_set_header</span> X-Forwarded-Proto <span class="hljs-variable">$scheme</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure><p>Then save and check the configuration:</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo <span class="hljs-built_in">ln</span> -s /etc/nginx/sites-available/yourdomain.com /etc/nginx/sites-enabled/<br>sudo nginx -t<br>sudo systemctl reload nginx<br></code></pre></td></tr></table></figure><p>Don’t forget to add respective <code>A</code> DNS records (Or <code>AAAA</code> for IPv6) on your domain registrar.</p><h2 id="4-Disable-default-nginx-site"><a href="#4-Disable-default-nginx-site" class="headerlink" title="4. Disable default nginx site"></a>4. Disable default <code>nginx</code> site</h2><p>At the moment, the default <code>nginx</code> site is still enabled on port 80 (accessible at <code>http://your_pub_ip/</code> or <code>http://your_pub_ip:80</code>) with default Nginx welcome page.</p><p>To disable it:</p><p>Update <code>/etc/nginx/sites-available/default</code> as follows:</p><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-section">server</span> &#123;<br>    <span class="hljs-attribute">listen</span> <span class="hljs-number">80</span> default_server;<br>    <span class="hljs-attribute">listen</span> [::]:<span class="hljs-number">80</span> default_server;<br><br>    <span class="hljs-section">location</span> / &#123;<br>        <span class="hljs-attribute">return</span> <span class="hljs-number">403</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo nginx -t<br>sudo systemctl reload nginx<br></code></pre></td></tr></table></figure><h2 id="5-Setup-Invitation-Registration"><a href="#5-Setup-Invitation-Registration" class="headerlink" title="5. Setup Invitation Registration"></a>5. Setup Invitation Registration</h2><p>For a self-hosted finance app, you may not want to allow anyone to register. Luckily, Maybe has an optional config to require an invite code to register.</p><p>Stop current services first:</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> ~/app/maybe_bookkeeping<br>docker compose stop<br></code></pre></td></tr></table></figure><p>Add <code>REQUIRE_INVITE_CODE: &quot;true&quot;</code> to the <code>app</code> service in <code>compose.yml</code>:</p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">services:</span><br>  <span class="hljs-attr">app:</span><br>    <span class="hljs-string">...</span><br>    <span class="hljs-attr">environment:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">REQUIRE_INVITE_CODE=&quot;true&quot;</span><br></code></pre></td></tr></table></figure><p>Restart the services:</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker compose up -d<br></code></pre></td></tr></table></figure><p>Now you can see that new gregistration will require an invite code.</p><p>You can run <code>rake invites:create</code> to create an invite code. <code>Rake</code> is a GNU Make-like program for Ruby-related tasks.</p><h2 id="6-References"><a href="#6-References" class="headerlink" title="6. References"></a>6. References</h2><ol><li><a href="https://maybe.co/">Maybe: The OS for your personal finances</a></li><li><a href="https://github.com/maybe-finance/maybe">maybe-finance&#x2F;maybe: The OS for your personal finances</a></li><li><a href="https://docs.docker.com/compose/">Docker Compose | Docker Docs</a></li><li><a href="https://certbot.eff.org/">Certbot</a></li><li><a href="https://nginx.org/en/">nginx</a></li><li><a href="https://github.com/maybe-finance/maybe/issues/1138">How to get invite codes? · Issue #1138 · maybe-finance&#x2F;maybe</a></li><li><a href="https://ruby.github.io/rake/">Rake – Ruby Make</a></li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>DevOps</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Server</tag>
+      
+      <tag>Cloud</tag>
+      
+      <tag>Nginx</tag>
+      
+      <tag>ECS</tag>
+      
+      <tag>Docker</tag>
+      
+      <tag>Finance</tag>
+      
+      <tag>Self-Host</tag>
+      
+      <tag>WebApp</tag>
+      
+      <tag>SSL</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Paper Notes: PeeK - Pruning for K-th Shortest Paths</title>
     <link href="/2024/08/09/read-paper-peek/"/>
     <url>/2024/08/09/read-paper-peek/</url>
@@ -94,6 +135,8 @@
       
       <tag>C</tag>
       
+      <tag>Docker</tag>
+      
       <tag>CentOS</tag>
       
       <tag>Core Dump</tag>
@@ -113,8 +156,6 @@
       <tag>POSIX</tag>
       
       <tag>WSL2</tag>
-      
-      <tag>Docker</tag>
       
     </tags>
     
@@ -277,19 +318,19 @@
       
       <tag>Linux</tag>
       
-      <tag>WSL2</tag>
-      
       <tag>SQL</tag>
       
-      <tag>Windows</tag>
+      <tag>WSL2</tag>
       
-      <tag>Hyper-V</tag>
+      <tag>Windows</tag>
       
       <tag>IP</tag>
       
       <tag>Routing</tag>
       
       <tag>IPv4</tag>
+      
+      <tag>Hyper-V</tag>
       
       <tag>MySQL</tag>
       
@@ -427,13 +468,13 @@
       
       <tag>Matrix</tag>
       
+      <tag>Polymorphism</tag>
+      
       <tag>Haskell</tag>
       
       <tag>Functional Programming</tag>
       
       <tag>Currying</tag>
-      
-      <tag>Polymorphism</tag>
       
     </tags>
     
@@ -458,13 +499,13 @@
     
     <tags>
       
-      <tag>Polymorphism</tag>
-      
       <tag>Java</tag>
       
       <tag>Inheritance</tag>
       
       <tag>Static</tag>
+      
+      <tag>Polymorphism</tag>
       
       <tag>Overriding</tag>
       
@@ -955,13 +996,13 @@
     
     <tags>
       
-      <tag>Python</tag>
-      
-      <tag>LeetCode</tag>
-      
       <tag>Tree</tag>
       
       <tag>Binary Tree</tag>
+      
+      <tag>Python</tag>
+      
+      <tag>LeetCode</tag>
       
     </tags>
     
@@ -1011,9 +1052,9 @@
     
     <tags>
       
-      <tag>Linked List</tag>
-      
       <tag>Python</tag>
+      
+      <tag>Linked List</tag>
       
     </tags>
     
@@ -1094,11 +1135,11 @@
     
     <tags>
       
-      <tag>Linked List</tag>
-      
       <tag>Python</tag>
       
       <tag>LeetCode</tag>
+      
+      <tag>Linked List</tag>
       
     </tags>
     

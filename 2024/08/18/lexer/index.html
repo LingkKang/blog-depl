@@ -19,23 +19,35 @@
   <meta name="author" content="Lingkang">
   <meta name="keywords" content="">
   
-    <meta property="og:type" content="website">
-<meta property="og:title" content="Archives">
-<meta property="og:url" content="https://lingkang.dev/archives/2024/index.html">
+    <meta name="description" content="Some Key Notes on Lexical AnalysisA Lexical Analyser (lexer or scanner) must do:  Partition the input string into lexemes (substrings). Identify the token calss of each lexmeme.  For example, for the">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Some Key Notes on Lexical Analysis">
+<meta property="og:url" content="https://lingkang.dev/2024/08/18/lexer/index.html">
 <meta property="og:site_name" content="Lingkang&#39;s Blog">
+<meta property="og:description" content="Some Key Notes on Lexical AnalysisA Lexical Analyser (lexer or scanner) must do:  Partition the input string into lexemes (substrings). Identify the token calss of each lexmeme.  For example, for the">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-08-18T11:47:28.000Z">
+<meta property="article:modified_time" content="2024-08-29T01:30:11.441Z">
 <meta property="article:author" content="Lingkang">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Lexical Analysis">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
     <meta name="google-site-verification" content="_Z4a0qEOBfzKcSi9b2FxvxEvBcSQPH0SDX8XFGBut9M">
   
-  <title>Archives - Lingkang&#39;s Blog</title>
+  <title>Some Key Notes on Lexical Analysis - Lingkang&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
 
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
 
 
 
@@ -101,7 +113,7 @@
   <header>
     
 
-<div class="header-inner" style="height: 60vh;">
+<div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
@@ -213,15 +225,55 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/images/bg_img/bg_archive.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('/images/bg_img/bg_post.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
-    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.4)">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Archives"></span>
+            <span id="subtitle" data-typed-text="Some Key Notes on Lexical Analysis"></span>
           
         </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-08-18 12:47" pubdate>
+          August 18, 2024 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          51 words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          1 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
 
         
       </div>
@@ -237,52 +289,194 @@
 
   <main>
     
-      <div class="container nopadding-x-md">
-        <div id="board"
-          >
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
-
-<div class="list-group">
-  <p class="h4">35 posts in total</p>
-  <hr>
-  
-  
-    
       
-      <p class="h5">2024</p>
-    
-    <a href="/2024/08/29/host-maybe/" class="list-group-item list-group-item-action">
-      <time>08-29</time>
-      <div class="list-group-item-title">Self-Host Maybe Finance Web App</div>
-    </a>
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Some Key Notes on Lexical Analysis</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    Last updated on August 29, 2024 am
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Some-Key-Notes-on-Lexical-Analysis"><a href="#Some-Key-Notes-on-Lexical-Analysis" class="headerlink" title="Some Key Notes on Lexical Analysis"></a>Some Key Notes on Lexical Analysis</h1><p>A Lexical Analyser (<em>lexer</em> or <em>scanner</em>) must do:</p>
+<ul>
+<li>Partition the input string into <em>lexemes</em> (substrings).</li>
+<li>Identify the token calss of each lexmeme.</li>
+</ul>
+<p>For example, for the following C snippet:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">int</span> my_int = <span class="hljs-number">42</span>;<br></code></pre></td></tr></table></figure>
+
+<p>The input of the lexer is the raw text <code>int my_int = 42;\n</code>, and the output is a sequence of tokens:</p>
+<ul>
+<li><code>&lt;Keyword, &#39;int&#39;&gt;</code></li>
+<li><code>&lt;Identifier, &#39;my_int&#39;&gt;</code></li>
+<li><code>&lt;Operator, &#39;=&#39;&gt;</code></li>
+<li><code>&lt;Number, &#39;42&#39;&gt;</code></li>
+<li><code>&lt;;, &#39;;&#39;</code></li>
+</ul>
+<p>With various whitespace tokens such as <code>&lt;Whitespace, &#39; &#39;&gt;</code> ignored.</p>
+<p>If doing left-to-right scanning, different levels of <em>lookahead</em> are needed to distinguish between different tokens.</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
   
     
-    <a href="/2024/08/09/read-paper-peek/" class="list-group-item list-group-item-action">
-      <time>08-08</time>
-      <div class="list-group-item-title">Paper Notes: PeeK - Pruning for K-th Shortest Paths</div>
-    </a>
+      <span class="category-chain">
+        
+  <a href="/categories/Compilers-Interpreters/" class="category-chain-item">Compilers &amp; Interpreters</a>
   
+  
+
+      </span>
     
-    <a href="/2024/01/08/rpc/" class="list-group-item list-group-item-action">
-      <time>01-08</time>
-      <div class="list-group-item-title">Implement RPC demo from scratch</div>
-    </a>
   
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Python/" class="print-no-link">#Python</a>
+      
+        <a href="/tags/Lexical-Analysis/" class="print-no-link">#Lexical Analysis</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Some Key Notes on Lexical Analysis</div>
+      <div>https://lingkang.dev/2024/08/18/lexer/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Lingkang</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>August 18, 2024</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
 </div>
 
 
 
 
 
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
     
 
     
@@ -375,6 +569,99 @@
 
 
 
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
 
   <script  src="/js/local-search.js" ></script>
 

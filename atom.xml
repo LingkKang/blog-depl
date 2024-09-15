@@ -6,7 +6,7 @@
   <link href="https://lingkang.dev/atom.xml" rel="self"/>
   
   <link href="https://lingkang.dev/"/>
-  <updated>2024-08-13T01:20:32.382Z</updated>
+  <updated>2024-09-10T13:27:13.833Z</updated>
   <id>https://lingkang.dev/</id>
   
   <author>
@@ -15,6 +15,47 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Self-Host Maybe Finance Web App</title>
+    <link href="https://lingkang.dev/2024/08/29/host-maybe/"/>
+    <id>https://lingkang.dev/2024/08/29/host-maybe/</id>
+    <published>2024-08-29T08:30:35.000Z</published>
+    <updated>2024-09-10T13:27:13.833Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="DevOps" scheme="https://lingkang.dev/categories/DevOps/"/>
+    
+    
+    <category term="Server" scheme="https://lingkang.dev/tags/Server/"/>
+    
+    <category term="Cloud" scheme="https://lingkang.dev/tags/Cloud/"/>
+    
+    <category term="Nginx" scheme="https://lingkang.dev/tags/Nginx/"/>
+    
+    <category term="ECS" scheme="https://lingkang.dev/tags/ECS/"/>
+    
+    <category term="Docker" scheme="https://lingkang.dev/tags/Docker/"/>
+    
+    <category term="Finance" scheme="https://lingkang.dev/tags/Finance/"/>
+    
+    <category term="Self-Host" scheme="https://lingkang.dev/tags/Self-Host/"/>
+    
+    <category term="WebApp" scheme="https://lingkang.dev/tags/WebApp/"/>
+    
+    <category term="SSL" scheme="https://lingkang.dev/tags/SSL/"/>
+    
+  </entry>
   
   <entry>
     <title>Paper Notes: PeeK - Pruning for K-th Shortest Paths</title>
@@ -99,6 +140,8 @@
     
     <category term="C" scheme="https://lingkang.dev/tags/C/"/>
     
+    <category term="Docker" scheme="https://lingkang.dev/tags/Docker/"/>
+    
     <category term="CentOS" scheme="https://lingkang.dev/tags/CentOS/"/>
     
     <category term="Core Dump" scheme="https://lingkang.dev/tags/Core-Dump/"/>
@@ -118,8 +161,6 @@
     <category term="POSIX" scheme="https://lingkang.dev/tags/POSIX/"/>
     
     <category term="WSL2" scheme="https://lingkang.dev/tags/WSL2/"/>
-    
-    <category term="Docker" scheme="https://lingkang.dev/tags/Docker/"/>
     
   </entry>
   
@@ -149,29 +190,6 @@
     <category term="Visualization" scheme="https://lingkang.dev/tags/Visualization/"/>
     
     <category term="Round Robin" scheme="https://lingkang.dev/tags/Round-Robin/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Install Lean 3 on Windows</title>
-    <link href="https://lingkang.dev/2023/10/05/lean-inst-win/"/>
-    <id>https://lingkang.dev/2023/10/05/lean-inst-win/</id>
-    <published>2023-10-04T21:23:32.000Z</published>
-    <updated>2023-11-12T13:21:32.000Z</updated>
-    
-    
-    <summary type="html">Quite annoying to get Lean 4 installed without noticing it.</summary>
-    
-    
-    
-    <category term="DevOps" scheme="https://lingkang.dev/categories/DevOps/"/>
-    
-    
-    <category term="VS Code" scheme="https://lingkang.dev/tags/VS-Code/"/>
-    
-    <category term="Lean" scheme="https://lingkang.dev/tags/Lean/"/>
-    
-    <category term="Windows" scheme="https://lingkang.dev/tags/Windows/"/>
     
   </entry>
   
