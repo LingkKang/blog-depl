@@ -58,7 +58,7 @@
     <link href="https://lingkang.dev/2024/08/09/read-paper-peek/"/>
     <id>https://lingkang.dev/2024/08/09/read-paper-peek/</id>
     <published>2024-08-08T18:49:41.000Z</published>
-    <updated>2024-08-13T01:20:32.382Z</updated>
+    <updated>2024-09-15T03:46:08.929Z</updated>
     
     
       
@@ -76,6 +76,8 @@
     
     <category term="Python" scheme="https://lingkang.dev/tags/Python/"/>
     
+    <category term="C Plus Plus" scheme="https://lingkang.dev/tags/C-Plus-Plus/"/>
+    
     <category term="Sparsity" scheme="https://lingkang.dev/tags/Sparsity/"/>
     
     <category term="Graph" scheme="https://lingkang.dev/tags/Graph/"/>
@@ -85,8 +87,6 @@
     <category term="Pruning" scheme="https://lingkang.dev/tags/Pruning/"/>
     
     <category term="CSR" scheme="https://lingkang.dev/tags/CSR/"/>
-    
-    <category term="C++" scheme="https://lingkang.dev/tags/C/"/>
     
     <category term="Sparse Graph" scheme="https://lingkang.dev/tags/Sparse-Graph/"/>
     

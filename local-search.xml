@@ -65,6 +65,8 @@
       
       <tag>Python</tag>
       
+      <tag>C Plus Plus</tag>
+      
       <tag>Sparsity</tag>
       
       <tag>Graph</tag>
@@ -74,8 +76,6 @@
       <tag>Pruning</tag>
       
       <tag>CSR</tag>
-      
-      <tag>C++</tag>
       
       <tag>Sparse Graph</tag>
       
@@ -285,7 +285,7 @@
       
       <tag>C</tag>
       
-      <tag>Cpp</tag>
+      <tag>C Plus Plus</tag>
       
       <tag>Optimization</tag>
       
@@ -571,13 +571,13 @@
       
       <tag>Optimization</tag>
       
+      <tag>Machine Learning</tag>
+      
       <tag>Artificial Intelligence</tag>
       
       <tag>Linear Perceptron</tag>
       
       <tag>Neural Network</tag>
-      
-      <tag>Machine Learning</tag>
       
       <tag>Deep Learning</tag>
       
@@ -606,11 +606,11 @@
       
       <tag>Optimization</tag>
       
-      <tag>Artificial Intelligence</tag>
+      <tag>MDP</tag>
       
       <tag>Machine Learning</tag>
       
-      <tag>MDP</tag>
+      <tag>Artificial Intelligence</tag>
       
       <tag>Bellman Equation</tag>
       
