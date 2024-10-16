@@ -6,7 +6,7 @@
   <link href="https://lingkang.dev/atom.xml" rel="self"/>
   
   <link href="https://lingkang.dev/"/>
-  <updated>2024-10-09T08:15:10.287Z</updated>
+  <updated>2024-10-16T06:29:14.731Z</updated>
   <id>https://lingkang.dev/</id>
   
   <author>
@@ -15,6 +15,25 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Paper Notes: Dynamic Inference of Convolutional Neural Networks</title>
+    <link href="https://lingkang.dev/2024/10/16/read-paper-dyn-cnn/"/>
+    <id>https://lingkang.dev/2024/10/16/read-paper-dyn-cnn/</id>
+    <published>2024-10-15T17:18:12.000Z</published>
+    <updated>2024-10-16T06:29:14.731Z</updated>
+    
+    
+    <summary type="html">Wenhan Xia, Hongxu Yin, Xiaoliang Dai and Niraj Kumar Jha. Fully Dynamic Inference With Deep Neural Networks. IEEE Transactions on Emerging Topics in Computing, 2020</summary>
+    
+    
+    
+    <category term="Paper Notes" scheme="https://lingkang.dev/categories/Paper-Notes/"/>
+    
+    
+    <category term="CNN" scheme="https://lingkang.dev/tags/CNN/"/>
+    
+  </entry>
   
   <entry>
     <title>Self-Host Maybe Finance Web App</title>
@@ -58,16 +77,10 @@
     <link href="https://lingkang.dev/2024/08/09/read-paper-peek/"/>
     <id>https://lingkang.dev/2024/08/09/read-paper-peek/</id>
     <published>2024-08-08T18:49:41.000Z</published>
-    <updated>2024-09-15T03:46:08.929Z</updated>
+    <updated>2024-10-15T10:29:25.753Z</updated>
     
     
-      
-      
-        
-        
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot;</summary>
-        
-      
+    <summary type="html">Wang Feng, Shiyang Chen, Hang Liu, and Yuede Ji. PeeK: A Prune-Centric Approach for K Shortest Path Computation. International Conference for High Performance Computing, Networking, Storage, and Analysis, 2023</summary>
     
     
     
@@ -157,35 +170,6 @@
     <category term="WSL2" scheme="https://lingkang.dev/tags/WSL2/"/>
     
     <category term="Docker" scheme="https://lingkang.dev/tags/Docker/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>OSC Lab Task 5 Reasoning</title>
-    <link href="https://lingkang.dev/2023/11/01/osc-lab-task5/"/>
-    <id>https://lingkang.dev/2023/11/01/osc-lab-task5/</id>
-    <published>2023-10-31T18:29:32.000Z</published>
-    <updated>2023-10-31T19:29:32.000Z</updated>
-    
-    
-    <summary type="html">My version of analysis of OSC lab task 5</summary>
-    
-    
-    
-    <category term="Operating System &amp; Architecture" scheme="https://lingkang.dev/categories/Operating-System-Architecture/"/>
-    
-    
-    <category term="Python" scheme="https://lingkang.dev/tags/Python/"/>
-    
-    <category term="Linux" scheme="https://lingkang.dev/tags/Linux/"/>
-    
-    <category term="C" scheme="https://lingkang.dev/tags/C/"/>
-    
-    <category term="task scheduling" scheme="https://lingkang.dev/tags/task-scheduling/"/>
-    
-    <category term="Visualization" scheme="https://lingkang.dev/tags/Visualization/"/>
-    
-    <category term="Round Robin" scheme="https://lingkang.dev/tags/Round-Robin/"/>
     
   </entry>
   

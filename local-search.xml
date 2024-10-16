@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>Paper Notes: Dynamic Inference of Convolutional Neural Networks</title>
+    <link href="/2024/10/16/read-paper-dyn-cnn/"/>
+    <url>/2024/10/16/read-paper-dyn-cnn/</url>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="https://cdn.jsdelivr.net/npm/meting/dist/Meting.min.js"></script><h1 id="Paper-Notes-Dynamic-Inference-of-Convolutional-Neural-Networks"><a href="#Paper-Notes-Dynamic-Inference-of-Convolutional-Neural-Networks" class="headerlink" title="Paper Notes: Dynamic Inference of Convolutional Neural Networks"></a>Paper Notes: Dynamic Inference of Convolutional Neural Networks</h1><blockquote><p>Wenhan Xia, Hongxu Yin, Xiaoliang Dai and Niraj Kumar Jha. Fully Dynamic Inference With Deep Neural Networks. <em>IEEE Transactions on Emerging Topics in Computing</em>, 2020. <a href="https://doi.org/10.1109/TETC.2021.3056031">https://doi.org/10.1109/TETC.2021.3056031</a></p></blockquote><h2 id="Observation"><a href="#Observation" class="headerlink" title="Observation"></a>Observation</h2><p>CNN layers and features have heavy <strong>input-dependence</strong>, which can be exploited to reduce (i.e., be ignored) the computational cost of inference.</p><p>Thus, only salient layers for current input (which was decided by Layer Net, <em>L-Net</em>) are computed, while others are skipped. This also applies to the feature maps&#x2F; channels (which was decided by Channel Net, <em>C-Net</em>) within a layer.</p><h2 id="Design"><a href="#Design" class="headerlink" title="Design"></a>Design</h2><h3 id="L-Net"><a href="#L-Net" class="headerlink" title="L-Net"></a>L-Net</h3><p>The L-Net is inspired by the concept of block-based residual learning.</p>    <div class="fold">      <div class="fold-title fold-info collapsed" data-toggle="collapse" href="#collapse-aea5ea90" role="button" aria-expanded="false" aria-controls="collapse-aea5ea90">        <div class="fold-arrow">▶</div>Side Note on Block-Based Learning (Click here to unfold/fold)      </div>      <div class="fold-collapse collapse" id="collapse-aea5ea90">        <div class="fold-content">          <h4 id="Side-Note-on-Block-Based-Learning"><a href="#Side-Note-on-Block-Based-Learning" class="headerlink" title="Side Note on Block-Based Learning"></a>Side Note on Block-Based Learning</h4><p>Introduced by He et al. in <a href="https://arxiv.org/abs/1512.03385">Deep Residual Learning for Image Recognition</a>, the block-based residual learning is a technique to improve the training of convolutional neural networks. The core idea is to add the output of a block with the input (i.e., residual), which is then passed through a non-linear activation function. This enables the network to grow deeper without the vanishing gradient problem.</p><p>For example, <code>ResNet</code> in PyTorch is constructed by several blocks.</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs Python"><span class="hljs-keyword">from</span> torchvision.models <span class="hljs-keyword">import</span> resnet18<br><br>model = resnet18()<br><span class="hljs-comment"># print(model._modules)</span><br><span class="hljs-built_in">print</span>(model._modules[<span class="hljs-string">&#x27;layer1&#x27;</span>])<br></code></pre></td></tr></table></figure><p>The output would be like:</p><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs TXT">Sequential(<br>  (0): BasicBlock(<br>    (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)<br>    (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)<br>    (relu): ReLU(inplace=True)<br>    (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)<br>    (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)<br>  )<br>  (1): BasicBlock(<br>    (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)<br>    (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)<br>    (relu): ReLU(inplace=True)<br>    (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)<br>    (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)<br>  )<br>)<br></code></pre></td></tr></table></figure><p>The generated <a href="https://pytorch.org/vision/main/models/generated/torchvision.models.resnet18.html"><code>resnet18</code></a> has 4 main layers (besides some initial layers and fully connected layers afterwards), each of which are constructed by two blocks <a href="https://pytorch.org/vision/main/_modules/torchvision/models/resnet.html#:~:text=%3DFalse%29-,class%20BasicBlock"><code>BasicBlock</code></a>. The <code>BasicBlock</code> is where the residual adding is performed.</p><p>Let’s see its <code>forward()</code> function:</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs Python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">BasicBlock</span>(nn.Module):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x: Tensor</span>) -&gt; Tensor:<br>        identity = x<br><br>        out = self.conv1(x)<br>        out = self.bn1(out)<br>        out = self.relu(out)<br><br>        out = self.conv2(out)<br>        out = self.bn2(out)<br><br>        <span class="hljs-keyword">if</span> self.downsample <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> <span class="hljs-literal">None</span>:<br>            identity = self.downsample(x)<br><br>        out += identity<br>        out = self.relu(out)<br><br>        <span class="hljs-keyword">return</span> out<br></code></pre></td></tr></table></figure><p>Note the <code>out += identity</code> line, which is the key to the residual learning. (<em>Downsampling</em> is simply a technique to match the dimensions of <code>identity</code> and <code>out</code>.)</p><p><a class="btn" href="#L-Net" title="Jump back to the main content."><strong>Jump back to the main content.</strong></a></p>        </div>      </div>    </div><p>It mainly have 3 components:</p><ol><li>a global average pooling layer over the input feature map;</li><li>a fully connected layer;</li><li>a ReLU-1 activation function.</li></ol><p>The output of L-Net layer would be the <em>block salience score</em>, ranging from 0 to 1. The higher the score, the more salient the block is. This score is applied to the block output as a scaling factor, and if the score is 9, meaning that the block is <em>skipped</em>.</p><p>The philosophy is to design the additional layers to be lightweight, so that no significant overhead is introduced.</p><p>The L-Net would be attached to each block in parallel.</p><p><img src="/./images/NeuralNetwork/L-Net.png" alt="L-Net Structure (in dashed blue box)"></p><div class="note note-warning">            <p>Unfinished</p>          </div><h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><!-- - [torchvision.models.resnet — Torchvision main documentation](https://pytorch.org/vision/main/_modules/torchvision/models/resnet.html) --><!-- - [[1512.03385] Deep Residual Learning for Image Recognition](https://arxiv.org/abs/1512.03385) --><!-- - [ResNet — Torchvision main documentation](https://pytorch.org/vision/main/models/resnet.html) -->]]></content>
+    
+    
+    <categories>
+      
+      <category>Paper Notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>CNN</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Self-Host Maybe Finance Web App</title>
     <link href="/2024/08/29/host-maybe/"/>
     <url>/2024/08/29/host-maybe/</url>
@@ -283,15 +308,15 @@
     
     <tags>
       
+      <tag>C</tag>
+      
+      <tag>C Plus Plus</tag>
+      
       <tag>Optimization</tag>
       
       <tag>Memory</tag>
       
       <tag>Alignment</tag>
-      
-      <tag>C</tag>
-      
-      <tag>C Plus Plus</tag>
       
       <tag>Padding</tag>
       
@@ -328,15 +353,15 @@
       
       <tag>Hyper-V</tag>
       
-      <tag>MySQL</tag>
-      
-      <tag>CRUD</tag>
-      
       <tag>IP</tag>
       
       <tag>Routing</tag>
       
       <tag>IPv4</tag>
+      
+      <tag>MySQL</tag>
+      
+      <tag>CRUD</tag>
       
       <tag>Privileged Access Management</tag>
       
@@ -470,13 +495,13 @@
       
       <tag>Matrix</tag>
       
-      <tag>Polymorphism</tag>
-      
       <tag>Haskell</tag>
       
       <tag>Functional Programming</tag>
       
       <tag>Currying</tag>
+      
+      <tag>Polymorphism</tag>
       
     </tags>
     
@@ -501,13 +526,13 @@
     
     <tags>
       
+      <tag>Polymorphism</tag>
+      
       <tag>Java</tag>
       
       <tag>Inheritance</tag>
       
       <tag>Static</tag>
-      
-      <tag>Polymorphism</tag>
       
       <tag>Overriding</tag>
       
@@ -540,11 +565,11 @@
       
       <tag>Routing</tag>
       
-      <tag>IPv4</tag>
-      
       <tag>Subnet</tag>
       
       <tag>Subnet Mask</tag>
+      
+      <tag>IPv4</tag>
       
     </tags>
     
@@ -701,15 +726,15 @@
     
     <tags>
       
-      <tag>Bitwise Operation</tag>
-      
       <tag>Optimization</tag>
-      
-      <tag>xv6</tag>
       
       <tag>Memory</tag>
       
       <tag>Alignment</tag>
+      
+      <tag>Bitwise Operation</tag>
+      
+      <tag>xv6</tag>
       
     </tags>
     
@@ -736,9 +761,9 @@
       
       <tag>Register</tag>
       
-      <tag>xv6</tag>
-      
       <tag>C</tag>
+      
+      <tag>xv6</tag>
       
       <tag>QEMU</tag>
       
@@ -779,11 +804,11 @@
       
       <tag>Register</tag>
       
-      <tag>xv6</tag>
+      <tag>C</tag>
       
       <tag>Memory</tag>
       
-      <tag>C</tag>
+      <tag>xv6</tag>
       
       <tag>Bootstrap</tag>
       
@@ -907,9 +932,9 @@
     
     <tags>
       
-      <tag>Memory</tag>
-      
       <tag>C</tag>
+      
+      <tag>Memory</tag>
       
       <tag>Debug</tag>
       
