@@ -20,11 +20,17 @@
     
     <tags>
       
+      <tag>Optimization</tag>
+      
+      <tag>Neural Network</tag>
+      
       <tag>CNN</tag>
       
       <tag>Residual Learning</tag>
       
       <tag>Dynamic Inference</tag>
+      
+      <tag>Pruning</tag>
       
     </tags>
     
@@ -98,11 +104,11 @@
       
       <tag>Sparsity</tag>
       
+      <tag>Pruning</tag>
+      
       <tag>Graph</tag>
       
       <tag>KSP</tag>
-      
-      <tag>Pruning</tag>
       
       <tag>CSR</tag>
       
@@ -349,23 +355,23 @@
       
       <tag>Linux</tag>
       
-      <tag>WSL2</tag>
-      
       <tag>SQL</tag>
+      
+      <tag>WSL2</tag>
       
       <tag>Windows</tag>
       
       <tag>Hyper-V</tag>
+      
+      <tag>MySQL</tag>
+      
+      <tag>CRUD</tag>
       
       <tag>IP</tag>
       
       <tag>Routing</tag>
       
       <tag>IPv4</tag>
-      
-      <tag>MySQL</tag>
-      
-      <tag>CRUD</tag>
       
       <tag>Privileged Access Management</tag>
       
@@ -499,13 +505,13 @@
       
       <tag>Matrix</tag>
       
-      <tag>Polymorphism</tag>
-      
       <tag>Haskell</tag>
       
       <tag>Functional Programming</tag>
       
       <tag>Currying</tag>
+      
+      <tag>Polymorphism</tag>
       
     </tags>
     
@@ -530,13 +536,13 @@
     
     <tags>
       
+      <tag>Polymorphism</tag>
+      
       <tag>Java</tag>
       
       <tag>Inheritance</tag>
       
       <tag>Static</tag>
-      
-      <tag>Polymorphism</tag>
       
       <tag>Overriding</tag>
       
@@ -569,11 +575,11 @@
       
       <tag>Routing</tag>
       
+      <tag>IPv4</tag>
+      
       <tag>Subnet</tag>
       
       <tag>Subnet Mask</tag>
-      
-      <tag>IPv4</tag>
       
     </tags>
     
@@ -1027,11 +1033,11 @@
     
     <tags>
       
+      <tag>Python</tag>
+      
       <tag>Tree</tag>
       
       <tag>Binary Tree</tag>
-      
-      <tag>Python</tag>
       
       <tag>LeetCode</tag>
       
@@ -1083,9 +1089,9 @@
     
     <tags>
       
-      <tag>Python</tag>
-      
       <tag>Linked List</tag>
+      
+      <tag>Python</tag>
       
     </tags>
     
@@ -1166,11 +1172,11 @@
     
     <tags>
       
+      <tag>Linked List</tag>
+      
       <tag>Python</tag>
       
       <tag>LeetCode</tag>
-      
-      <tag>Linked List</tag>
       
     </tags>
     
