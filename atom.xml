@@ -6,7 +6,7 @@
   <link href="https://lingkang.dev/atom.xml" rel="self"/>
   
   <link href="https://lingkang.dev/"/>
-  <updated>2024-10-16T12:20:22.493Z</updated>
+  <updated>2024-10-19T08:27:06.228Z</updated>
   <id>https://lingkang.dev/</id>
   
   <author>
@@ -15,6 +15,43 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Self-Host Vikunja To-Do List Web App</title>
+    <link href="https://lingkang.dev/2024/10/19/host-vikunja/"/>
+    <id>https://lingkang.dev/2024/10/19/host-vikunja/</id>
+    <published>2024-10-19T13:08:49.000Z</published>
+    <updated>2024-10-19T08:27:06.228Z</updated>
+    
+    
+    <summary type="html">Plan your work and work your plan.</summary>
+    
+    
+    
+    <category term="DevOps" scheme="https://lingkang.dev/categories/DevOps/"/>
+    
+    
+    <category term="Server" scheme="https://lingkang.dev/tags/Server/"/>
+    
+    <category term="Cloud" scheme="https://lingkang.dev/tags/Cloud/"/>
+    
+    <category term="Nginx" scheme="https://lingkang.dev/tags/Nginx/"/>
+    
+    <category term="Docker" scheme="https://lingkang.dev/tags/Docker/"/>
+    
+    <category term="Self-Host" scheme="https://lingkang.dev/tags/Self-Host/"/>
+    
+    <category term="Web App" scheme="https://lingkang.dev/tags/Web-App/"/>
+    
+    <category term="SSL" scheme="https://lingkang.dev/tags/SSL/"/>
+    
+    <category term="Go" scheme="https://lingkang.dev/tags/Go/"/>
+    
+    <category term="Vue" scheme="https://lingkang.dev/tags/Vue/"/>
+    
+    <category term="To-Do List" scheme="https://lingkang.dev/tags/To-Do-List/"/>
+    
+  </entry>
   
   <entry>
     <title>Paper Notes: Dynamic Inference of Convolutional Neural Networks</title>
@@ -37,11 +74,11 @@
     
     <category term="CNN" scheme="https://lingkang.dev/tags/CNN/"/>
     
+    <category term="Pruning" scheme="https://lingkang.dev/tags/Pruning/"/>
+    
     <category term="Residual Learning" scheme="https://lingkang.dev/tags/Residual-Learning/"/>
     
     <category term="Dynamic Inference" scheme="https://lingkang.dev/tags/Dynamic-Inference/"/>
-    
-    <category term="Pruning" scheme="https://lingkang.dev/tags/Pruning/"/>
     
   </entry>
   
@@ -103,11 +140,11 @@
     
     <category term="Sparsity" scheme="https://lingkang.dev/tags/Sparsity/"/>
     
-    <category term="Pruning" scheme="https://lingkang.dev/tags/Pruning/"/>
-    
     <category term="Graph" scheme="https://lingkang.dev/tags/Graph/"/>
     
     <category term="KSP" scheme="https://lingkang.dev/tags/KSP/"/>
+    
+    <category term="Pruning" scheme="https://lingkang.dev/tags/Pruning/"/>
     
     <category term="CSR" scheme="https://lingkang.dev/tags/CSR/"/>
     
@@ -130,6 +167,8 @@
     <category term="Operating System &amp; Architecture" scheme="https://lingkang.dev/categories/Operating-System-Architecture/"/>
     
     
+    <category term="Go" scheme="https://lingkang.dev/tags/Go/"/>
+    
     <category term="Distributed System" scheme="https://lingkang.dev/tags/Distributed-System/"/>
     
     <category term="RPC" scheme="https://lingkang.dev/tags/RPC/"/>
@@ -137,49 +176,6 @@
     <category term="TCP" scheme="https://lingkang.dev/tags/TCP/"/>
     
     <category term="Rust" scheme="https://lingkang.dev/tags/Rust/"/>
-    
-    <category term="Go" scheme="https://lingkang.dev/tags/Go/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Post-Mortem Analysis for Multiprocessing Program in C</title>
-    <link href="https://lingkang.dev/2023/12/03/core-dump/"/>
-    <id>https://lingkang.dev/2023/12/03/core-dump/</id>
-    <published>2023-12-02T21:26:24.000Z</published>
-    <updated>2023-12-24T20:34:24.000Z</updated>
-    
-    
-    <summary type="html">When a program crashes, core dump is a useful asset to analyze reasons.</summary>
-    
-    
-    
-    <category term="Programming Language" scheme="https://lingkang.dev/categories/Programming-Language/"/>
-    
-    
-    <category term="C" scheme="https://lingkang.dev/tags/C/"/>
-    
-    <category term="CentOS" scheme="https://lingkang.dev/tags/CentOS/"/>
-    
-    <category term="Core Dump" scheme="https://lingkang.dev/tags/Core-Dump/"/>
-    
-    <category term="GDB" scheme="https://lingkang.dev/tags/GDB/"/>
-    
-    <category term="Debug" scheme="https://lingkang.dev/tags/Debug/"/>
-    
-    <category term="Deadlock" scheme="https://lingkang.dev/tags/Deadlock/"/>
-    
-    <category term="Mutex" scheme="https://lingkang.dev/tags/Mutex/"/>
-    
-    <category term="Condition Variable" scheme="https://lingkang.dev/tags/Condition-Variable/"/>
-    
-    <category term="Pthread" scheme="https://lingkang.dev/tags/Pthread/"/>
-    
-    <category term="POSIX" scheme="https://lingkang.dev/tags/POSIX/"/>
-    
-    <category term="WSL2" scheme="https://lingkang.dev/tags/WSL2/"/>
-    
-    <category term="Docker" scheme="https://lingkang.dev/tags/Docker/"/>
     
   </entry>
   

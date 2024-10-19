@@ -4,6 +4,49 @@
   
   
   <entry>
+    <title>Self-Host Vikunja To-Do List Web App</title>
+    <link href="/2024/10/19/host-vikunja/"/>
+    <url>/2024/10/19/host-vikunja/</url>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="https://cdn.jsdelivr.net/npm/meting/dist/Meting.min.js"></script><h1 id="Self-Host-Vikunja-To-Do-List-Web-App"><a href="#Self-Host-Vikunja-To-Do-List-Web-App" class="headerlink" title="Self-Host Vikunja To-Do List Web App"></a>Self-Host Vikunja To-Do List Web App</h1><p><a href="https://vikunja.io/">Vikunja</a> is an open-source to-do list web app, which is developed with Go and Vue.</p><h2 id="0-Environment"><a href="#0-Environment" class="headerlink" title="0. Environment"></a>0. Environment</h2><table><thead><tr><th>Software</th><th>Version</th></tr></thead><tbody><tr><td>Ubuntu</td><td>24.04.1 LTS</td></tr><tr><td>OpenSSL</td><td>3.0.13</td></tr><tr><td>Snap</td><td>2.65</td></tr><tr><td>Nginx</td><td>1.24.0</td></tr><tr><td>Docker</td><td>27.3.1 (install later)</td></tr><tr><td>Certbot</td><td>2.11.0 (install later)</td></tr></tbody></table><h2 id="1-Install-Docker"><a href="#1-Install-Docker" class="headerlink" title="1. Install Docker"></a>1. Install Docker</h2><p>Please refer to the instructions in the <a href="https://lingkang.dev/2024/08/29/host-maybe/#1-Install-Docker">Self-Host Maybe Finance Web App - 1. Install Docker</a> section.</p><h2 id="2-Setup-Docker-Compose"><a href="#2-Setup-Docker-Compose" class="headerlink" title="2. Setup Docker Compose"></a>2. Setup Docker Compose</h2><p>Vikunja is available via many different methods. In this guide, we plan to use Docker Compose to manage the Vikunja service and its dependencies.</p><h3 id="2-1-Prepare-for-environment-variables"><a href="#2-1-Prepare-for-environment-variables" class="headerlink" title="2.1. Prepare for environment variables"></a>2.1. Prepare for environment variables</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs Bash"><span class="hljs-built_in">mkdir</span> -p ~/app/todolist<br><span class="hljs-built_in">cd</span> ~/app/todolist<br><span class="hljs-built_in">touch</span> .<span class="hljs-built_in">env</span><br>openssl rand -hex 64 &gt; .<span class="hljs-built_in">env</span><br></code></pre></td></tr></table></figure><p>The generated hexadecimal string will be used as the secret key of Vikunja service.</p><p>Update your <code>.env</code> file with the following content:</p><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs TXT">VIKUNJA_SERVICE_JWTSECRET=&quot;your_generated_very_long_hex_secret&quot;<br>VIKUNJA_DATABASE_PASSWORD=&quot;your_postgres_password&quot;<br></code></pre></td></tr></table></figure><h3 id="2-2-Configure-Docker-Compose-file"><a href="#2-2-Configure-Docker-Compose-file" class="headerlink" title="2.2. Configure Docker Compose file"></a>2.2. Configure Docker Compose file</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs Bash"><span class="hljs-built_in">cd</span> ~/app/todolist<br>sudo <span class="hljs-built_in">mkdir</span> -p /var/app/vikunja/app-data<br>sudo <span class="hljs-built_in">mkdir</span> -p /var/app/vikunja/postgres-data<br><br>sudo <span class="hljs-built_in">chown</span> -R 1000 /var/app/vikunja/app-data<br>sudo <span class="hljs-built_in">chown</span> -R 1000 /var/app/vikunja/postgres-data<br><br><span class="hljs-built_in">touch</span> compose.yml<br></code></pre></td></tr></table></figure><p>Update your <code>compose.yml</code> file with the following content:</p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs YAML"><span class="hljs-attr">services:</span><br>  <span class="hljs-attr">vikunja:</span><br>    <span class="hljs-attr">image:</span> <span class="hljs-string">vikunja/vikunja:latest</span><br>    <span class="hljs-attr">environment:</span><br>      <span class="hljs-attr">VIKUNJA_SERVICE_PUBLICURL:</span> <span class="hljs-string">&quot;Your_Public_IP_or_Domain&quot;</span><br>      <span class="hljs-attr">VIKUNJA_DATABASE_HOST:</span> <span class="hljs-string">db</span><br>      <span class="hljs-attr">VIKUNJA_DATABASE_PASSWORD:</span> <span class="hljs-string">$&#123;VIKUNJA_DATABASE_PASSWORD:?&#125;</span><br>      <span class="hljs-attr">VIKUNJA_DATABASE_TYPE:</span> <span class="hljs-string">postgres</span><br>      <span class="hljs-attr">VIKUNJA_DATABASE_USER:</span> <span class="hljs-string">vikunja</span><br>      <span class="hljs-attr">VIKUNJA_DATABASE_DATABASE:</span> <span class="hljs-string">vikunja</span><br>      <span class="hljs-attr">VIKUNJA_SERVICE_JWTSECRET:</span> <span class="hljs-string">$&#123;VIKUNJA_SERVICE_JWTSECRET:?&#125;</span><br>    <span class="hljs-attr">ports:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-number">3456</span><span class="hljs-string">:3456</span><br>    <span class="hljs-attr">volumes:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">/var/app/vikunja/app-data:/app/vikunja/files</span><br>    <span class="hljs-attr">depends_on:</span><br>      <span class="hljs-attr">db:</span><br>        <span class="hljs-attr">condition:</span> <span class="hljs-string">service_healthy</span><br>    <span class="hljs-attr">restart:</span> <span class="hljs-string">unless-stopped</span><br><br>  <span class="hljs-attr">db:</span><br>    <span class="hljs-attr">image:</span> <span class="hljs-string">postgres:16</span><br>    <span class="hljs-attr">environment:</span><br>      <span class="hljs-attr">POSTGRES_PASSWORD:</span> <span class="hljs-string">$&#123;VIKUNJA_DATABASE_PASSWORD:?&#125;</span><br>      <span class="hljs-attr">POSTGRES_USER:</span> <span class="hljs-string">vikunja</span><br>    <span class="hljs-attr">volumes:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">/var/app/vikunja/postgres-data:/var/lib/postgresql/data</span><br>    <span class="hljs-attr">restart:</span> <span class="hljs-string">unless-stopped</span><br>    <span class="hljs-attr">healthcheck:</span><br>      <span class="hljs-attr">test:</span> [<span class="hljs-string">&quot;CMD-SHELL&quot;</span>, <span class="hljs-string">&quot;pg_isready -h localhost -U $$POSTGRES_USER&quot;</span>]<br>      <span class="hljs-attr">interval:</span> <span class="hljs-string">30s</span><br>      <span class="hljs-attr">timeout:</span> <span class="hljs-string">5s</span><br>      <span class="hljs-attr">retries:</span> <span class="hljs-number">3</span><br>      <span class="hljs-attr">start_period:</span> <span class="hljs-string">60s</span><br></code></pre></td></tr></table></figure><h3 id="2-3-Start-the-Services"><a href="#2-3-Start-the-Services" class="headerlink" title="2.3. Start the Services"></a>2.3. Start the Services</h3><p>Start the services in the background:</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Bash">sudo docker compose up -d<br></code></pre></td></tr></table></figure><p>Now the app is available at <code>http://localhost:3456</code> or <code>&lt;your_pub_ip&gt;:3456</code>. (Don’t forget to open the port of the server in the firewall.)</p><p><img src="/./images/one_time/vikunja.png" alt="Successfully Hosted! 🎉"></p><h2 id="3-Setup-SSL-Certificates"><a href="#3-Setup-SSL-Certificates" class="headerlink" title="3. Setup SSL Certificates"></a>3. Setup SSL Certificates</h2><p>This part is same as the <a href="https://lingkang.dev/2024/08/29/host-maybe/#3-Setup-SSL-Certificates">Self-Host Maybe Finance Web App - 3. Setup SSL Certificates</a> section.</p><h2 id="4-Disable-Default-nginx-Site"><a href="#4-Disable-Default-nginx-Site" class="headerlink" title="4. Disable Default nginx Site"></a>4. Disable Default <code>nginx</code> Site</h2><p>This part is optional. This part is also same as the <a href="https://lingkang.dev/2024/08/29/host-maybe/#4-Disable-default-Nginx-site">Self-Host Maybe Finance Web App - 4. Disable default Nginx site</a> section.</p><h2 id="5-Disable-New-Registration"><a href="#5-Disable-New-Registration" class="headerlink" title="5. Disable New Registration"></a>5. Disable New Registration</h2><p>At the moment, the self-hosted Vikunja instance allows anyone to register. If you want to disable new registration, you can set the <code>VIKUNJA_SERVICE_ENABLEREGISTRATION</code> environment variable to <code>false</code> in <code>compose.yml</code>.</p><p>For example:</p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs YAML"><span class="hljs-attr">services:</span><br>  <span class="hljs-attr">vikunja:</span><br>    <span class="hljs-string">...</span><br>    <span class="hljs-attr">environment:</span><br>      <span class="hljs-string">...</span><br>      <span class="hljs-attr">VIKUNJA_SERVICE_ENABLEREGISTRATION:</span> <span class="hljs-literal">false</span><br>    <span class="hljs-string">...</span><br></code></pre></td></tr></table></figure><p>When new registration is disabled, the login page will not display the registration link.</p><h2 id="6-Update-for-New-Version"><a href="#6-Update-for-New-Version" class="headerlink" title="6. Update for New Version"></a>6. Update for New Version</h2><p>To update the Vikunja service to the latest version, you can pull the latest image and restart the service:</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs Bash"><span class="hljs-built_in">cd</span> ~/app/todolist<br>sudo docker compose stop<br>sudo docker compose pull<br>sudo docker compose up -d<br></code></pre></td></tr></table></figure><h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ol><li><a href="https://vikunja.io/">Vikunja: The open-source, self-hostable to-do app</a></li><li><a href="https://kolaente.dev/vikunja/vikunja">vikunja&#x2F;vikunja: The to-do app to organize your life. Public API Roadmap here: - vikunja - Gitea</a></li><li><a href="https://vikunja.io/docs/installing">Vikunja: Installing</a></li><li><a href="https://vikunja.io/docs/full-docker-example">Vikunja: Full docker example</a></li><li><a href="https://vikunja.io/docs/config-options">Vikunja: Configuration options</a></li><li><a href="https://lingkang.dev/2024/08/29/host-maybe/">Self-Host Maybe Finance Web App - Lingkang’s Blog</a></li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>DevOps</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Server</tag>
+      
+      <tag>Cloud</tag>
+      
+      <tag>Nginx</tag>
+      
+      <tag>Docker</tag>
+      
+      <tag>Self-Host</tag>
+      
+      <tag>Web App</tag>
+      
+      <tag>SSL</tag>
+      
+      <tag>Go</tag>
+      
+      <tag>Vue</tag>
+      
+      <tag>To-Do List</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Paper Notes: Dynamic Inference of Convolutional Neural Networks</title>
     <link href="/2024/10/16/read-paper-dyn-cnn/"/>
     <url>/2024/10/16/read-paper-dyn-cnn/</url>
@@ -26,11 +69,11 @@
       
       <tag>CNN</tag>
       
+      <tag>Pruning</tag>
+      
       <tag>Residual Learning</tag>
       
       <tag>Dynamic Inference</tag>
-      
-      <tag>Pruning</tag>
       
     </tags>
     
@@ -104,11 +147,11 @@
       
       <tag>Sparsity</tag>
       
-      <tag>Pruning</tag>
-      
       <tag>Graph</tag>
       
       <tag>KSP</tag>
+      
+      <tag>Pruning</tag>
       
       <tag>CSR</tag>
       
@@ -137,6 +180,8 @@
     
     <tags>
       
+      <tag>Go</tag>
+      
       <tag>Distributed System</tag>
       
       <tag>RPC</tag>
@@ -144,8 +189,6 @@
       <tag>TCP</tag>
       
       <tag>Rust</tag>
-      
-      <tag>Go</tag>
       
     </tags>
     
@@ -172,6 +215,8 @@
       
       <tag>C</tag>
       
+      <tag>Docker</tag>
+      
       <tag>CentOS</tag>
       
       <tag>Core Dump</tag>
@@ -191,8 +236,6 @@
       <tag>POSIX</tag>
       
       <tag>WSL2</tag>
-      
-      <tag>Docker</tag>
       
     </tags>
     
@@ -363,15 +406,15 @@
       
       <tag>Hyper-V</tag>
       
-      <tag>MySQL</tag>
-      
-      <tag>CRUD</tag>
-      
       <tag>IP</tag>
       
       <tag>Routing</tag>
       
       <tag>IPv4</tag>
+      
+      <tag>MySQL</tag>
+      
+      <tag>CRUD</tag>
       
       <tag>Privileged Access Management</tag>
       
@@ -503,6 +546,8 @@
     
     <tags>
       
+      <tag>Polymorphism</tag>
+      
       <tag>Matrix</tag>
       
       <tag>Haskell</tag>
@@ -510,8 +555,6 @@
       <tag>Functional Programming</tag>
       
       <tag>Currying</tag>
-      
-      <tag>Polymorphism</tag>
       
     </tags>
     
@@ -536,13 +579,13 @@
     
     <tags>
       
-      <tag>Polymorphism</tag>
-      
       <tag>Java</tag>
       
       <tag>Inheritance</tag>
       
       <tag>Static</tag>
+      
+      <tag>Polymorphism</tag>
       
       <tag>Overriding</tag>
       
@@ -575,11 +618,11 @@
       
       <tag>Routing</tag>
       
-      <tag>IPv4</tag>
-      
       <tag>Subnet</tag>
       
       <tag>Subnet Mask</tag>
+      
+      <tag>IPv4</tag>
       
     </tags>
     
@@ -606,13 +649,13 @@
       
       <tag>Optimization</tag>
       
-      <tag>Machine Learning</tag>
-      
       <tag>Artificial Intelligence</tag>
       
       <tag>Linear Perceptron</tag>
       
       <tag>Neural Network</tag>
+      
+      <tag>Machine Learning</tag>
       
       <tag>Deep Learning</tag>
       
@@ -641,11 +684,11 @@
       
       <tag>Optimization</tag>
       
-      <tag>MDP</tag>
+      <tag>Artificial Intelligence</tag>
       
       <tag>Machine Learning</tag>
       
-      <tag>Artificial Intelligence</tag>
+      <tag>MDP</tag>
       
       <tag>Bellman Equation</tag>
       
@@ -705,9 +748,9 @@
       
       <tag>Emulation</tag>
       
-      <tag>Interrupt</tag>
-      
       <tag>Peripheral</tag>
+      
+      <tag>Interrupt</tag>
       
       <tag>PLIC</tag>
       
@@ -779,13 +822,13 @@
       
       <tag>Emulation</tag>
       
-      <tag>Peripheral</tag>
-      
       <tag>UART</tag>
       
       <tag>Baud Rate</tag>
       
       <tag>Polling</tag>
+      
+      <tag>Peripheral</tag>
       
     </tags>
     
