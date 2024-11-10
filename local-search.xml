@@ -69,11 +69,11 @@
       
       <tag>CNN</tag>
       
-      <tag>Pruning</tag>
-      
       <tag>Residual Learning</tag>
       
       <tag>Dynamic Inference</tag>
+      
+      <tag>Pruning</tag>
       
     </tags>
     
@@ -108,13 +108,13 @@
       
       <tag>Docker</tag>
       
-      <tag>Finance</tag>
-      
       <tag>Self-Host</tag>
       
       <tag>Web App</tag>
       
       <tag>SSL</tag>
+      
+      <tag>Finance</tag>
       
       <tag>Ruby</tag>
       
@@ -147,11 +147,11 @@
       
       <tag>Sparsity</tag>
       
+      <tag>Pruning</tag>
+      
       <tag>Graph</tag>
       
       <tag>KSP</tag>
-      
-      <tag>Pruning</tag>
       
       <tag>CSR</tag>
       
@@ -215,8 +215,6 @@
       
       <tag>C</tag>
       
-      <tag>Docker</tag>
-      
       <tag>CentOS</tag>
       
       <tag>Core Dump</tag>
@@ -236,6 +234,8 @@
       <tag>POSIX</tag>
       
       <tag>WSL2</tag>
+      
+      <tag>Docker</tag>
       
     </tags>
     
@@ -546,9 +546,9 @@
     
     <tags>
       
-      <tag>Polymorphism</tag>
-      
       <tag>Matrix</tag>
+      
+      <tag>Polymorphism</tag>
       
       <tag>Haskell</tag>
       
@@ -649,13 +649,13 @@
       
       <tag>Optimization</tag>
       
+      <tag>Machine Learning</tag>
+      
       <tag>Artificial Intelligence</tag>
       
       <tag>Linear Perceptron</tag>
       
       <tag>Neural Network</tag>
-      
-      <tag>Machine Learning</tag>
       
       <tag>Deep Learning</tag>
       
@@ -684,11 +684,11 @@
       
       <tag>Optimization</tag>
       
-      <tag>Artificial Intelligence</tag>
+      <tag>MDP</tag>
       
       <tag>Machine Learning</tag>
       
-      <tag>MDP</tag>
+      <tag>Artificial Intelligence</tag>
       
       <tag>Bellman Equation</tag>
       
@@ -1076,11 +1076,11 @@
     
     <tags>
       
-      <tag>Python</tag>
-      
       <tag>Tree</tag>
       
       <tag>Binary Tree</tag>
+      
+      <tag>Python</tag>
       
       <tag>LeetCode</tag>
       
@@ -1132,9 +1132,9 @@
     
     <tags>
       
-      <tag>Linked List</tag>
-      
       <tag>Python</tag>
+      
+      <tag>Linked List</tag>
       
     </tags>
     
@@ -1215,11 +1215,11 @@
     
     <tags>
       
-      <tag>Linked List</tag>
-      
       <tag>Python</tag>
       
       <tag>LeetCode</tag>
+      
+      <tag>Linked List</tag>
       
     </tags>
     

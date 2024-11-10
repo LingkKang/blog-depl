@@ -74,11 +74,11 @@
     
     <category term="CNN" scheme="https://lingkang.dev/tags/CNN/"/>
     
-    <category term="Pruning" scheme="https://lingkang.dev/tags/Pruning/"/>
-    
     <category term="Residual Learning" scheme="https://lingkang.dev/tags/Residual-Learning/"/>
     
     <category term="Dynamic Inference" scheme="https://lingkang.dev/tags/Dynamic-Inference/"/>
+    
+    <category term="Pruning" scheme="https://lingkang.dev/tags/Pruning/"/>
     
   </entry>
   
@@ -107,13 +107,13 @@
     
     <category term="Docker" scheme="https://lingkang.dev/tags/Docker/"/>
     
-    <category term="Finance" scheme="https://lingkang.dev/tags/Finance/"/>
-    
     <category term="Self-Host" scheme="https://lingkang.dev/tags/Self-Host/"/>
     
     <category term="Web App" scheme="https://lingkang.dev/tags/Web-App/"/>
     
     <category term="SSL" scheme="https://lingkang.dev/tags/SSL/"/>
+    
+    <category term="Finance" scheme="https://lingkang.dev/tags/Finance/"/>
     
     <category term="Ruby" scheme="https://lingkang.dev/tags/Ruby/"/>
     
@@ -140,11 +140,11 @@
     
     <category term="Sparsity" scheme="https://lingkang.dev/tags/Sparsity/"/>
     
+    <category term="Pruning" scheme="https://lingkang.dev/tags/Pruning/"/>
+    
     <category term="Graph" scheme="https://lingkang.dev/tags/Graph/"/>
     
     <category term="KSP" scheme="https://lingkang.dev/tags/KSP/"/>
-    
-    <category term="Pruning" scheme="https://lingkang.dev/tags/Pruning/"/>
     
     <category term="CSR" scheme="https://lingkang.dev/tags/CSR/"/>
     
