@@ -6,7 +6,7 @@
   <link href="https://lingkang.dev/atom.xml" rel="self"/>
   
   <link href="https://lingkang.dev/"/>
-  <updated>2024-11-11T10:18:37.997Z</updated>
+  <updated>2024-11-11T10:37:04.645Z</updated>
   <id>https://lingkang.dev/</id>
   
   <author>
@@ -18,10 +18,10 @@
   
   <entry>
     <title>Paper Notes: FlipBit - Save Energy for Flash Memory Write with Approximation</title>
-    <link href="https://lingkang.dev/2024/11/01/read-paper-flipbit/"/>
-    <id>https://lingkang.dev/2024/11/01/read-paper-flipbit/</id>
-    <published>2024-11-01T13:37:41.000Z</published>
-    <updated>2024-11-11T10:18:37.997Z</updated>
+    <link href="https://lingkang.dev/2024/11/11/read-paper-flipbit/"/>
+    <id>https://lingkang.dev/2024/11/11/read-paper-flipbit/</id>
+    <published>2024-11-11T13:37:41.000Z</published>
+    <updated>2024-11-11T10:37:04.645Z</updated>
     
     
     <summary type="html">Alexander Buck, Karthik Ganesan, and Natalie Enright Jerger. FlipBit: Approximate Flash Memory for IoT Devices. IEEE International Symposium on High-Performance Computer Architecture (HPCA), 2024</summary>
