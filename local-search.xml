@@ -100,11 +100,11 @@
       
       <tag>CNN</tag>
       
+      <tag>Pruning</tag>
+      
       <tag>Residual Learning</tag>
       
       <tag>Dynamic Inference</tag>
-      
-      <tag>Pruning</tag>
       
     </tags>
     
@@ -139,13 +139,13 @@
       
       <tag>Docker</tag>
       
-      <tag>Finance</tag>
-      
       <tag>Self-Host</tag>
       
       <tag>Web App</tag>
       
       <tag>SSL</tag>
+      
+      <tag>Finance</tag>
       
       <tag>Ruby</tag>
       
@@ -178,11 +178,11 @@
       
       <tag>Sparsity</tag>
       
-      <tag>Pruning</tag>
-      
       <tag>Graph</tag>
       
       <tag>KSP</tag>
+      
+      <tag>Pruning</tag>
       
       <tag>CSR</tag>
       
@@ -277,8 +277,6 @@
       
       <tag>C</tag>
       
-      <tag>Docker</tag>
-      
       <tag>CentOS</tag>
       
       <tag>Core Dump</tag>
@@ -298,6 +296,8 @@
       <tag>POSIX</tag>
       
       <tag>WSL2</tag>
+      
+      <tag>Docker</tag>
       
     </tags>
     
@@ -370,6 +370,37 @@
   
   
   <entry>
+    <title>Paper Notes: OPU - FPGA-Based Overlay Processor for CNNs</title>
+    <link href="/2023/08/07/read-paper-1-yu/"/>
+    <url>/2023/08/07/read-paper-1-yu/</url>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="https://cdn.jsdelivr.net/npm/meting/dist/Meting.min.js"></script><h1 id="Paper-Notes-OPU-FPGA-Based-Overlay-Processor-for-CNNs"><a href="#Paper-Notes-OPU-FPGA-Based-Overlay-Processor-for-CNNs" class="headerlink" title="Paper Notes: OPU - FPGA-Based Overlay Processor for CNNs"></a>Paper Notes: OPU - FPGA-Based Overlay Processor for CNNs</h1><h2 id="Info"><a href="#Info" class="headerlink" title="Info"></a>Info</h2><p><strong>OPU: An FPGA-Based Overlay Processor for Convolutional Neural Networks</strong></p><p><strong>Authors</strong>: <a href="https://scholar.google.com/citations?user=udxQYH0AAAAJ">Yunxuan Yu</a>, Chen Wu, Tiandong Zhao, Kun Wang, Lei He</p><p><strong>Published in</strong>: TVLSI 2020 Jan.</p><p><strong>DOI</strong>: <a href="https://doi.org/10.1109/TVLSI.2019.2939726">10.1109&#x2F;TVLSI.2019.2939726</a></p><p><strong>Keywords</strong>: CNN overlay processor, FPGA acceleration, hardware-software codesign</p><h2 id="Background-Problems"><a href="#Background-Problems" class="headerlink" title="Background &amp; Problems"></a>Background &amp; Problems</h2><p>FPGA acceleration for CNNs -&gt; automatic compilers for FPGA CNN accelerators</p><ul><li>Can not achieve the best performance</li><li>Impossible for edge computing</li></ul><h2 id="Key-Ideas"><a href="#Key-Ideas" class="headerlink" title="Key Ideas"></a>Key Ideas</h2><p>RTL-based hand-coded FPGA overlay domain-specific processor unit (OPU) with software-programmability and fast compilation time, targeting at general CNN accelerations.</p><p><img src="https://ieeexplore.ieee.org/mediastore_new/IEEE/content/media/92/8945454/8863128/he1-2939726-large.gif" alt="OPU work flow"></p><p>Features:</p><ul><li>User friendliness like CPU&#x2F;GPU</li><li>Domain-specific ISA with optimized granularity: flexibility, efficiency and lower complexity</li><li>FPGA-based high-performance microarchitecture: computation, data communication and reorganization</li><li>Compiler with comprehensive optimization</li></ul><h2 id="Implementation"><a href="#Implementation" class="headerlink" title="Implementation"></a>Implementation</h2><h3 id="ISA"><a href="#ISA" class="headerlink" title="ISA"></a>ISA</h3><p>Conditional instructions (C-type)</p><p>Unconditional instructions (U-type)</p><pre><code class=" mermaid">flowchart LR    A[&quot;1 C-type&quot;]    B[&quot;1 to n U-type&quot;]    PE[&quot;1 Processing Element (PE)&lt;br&gt;module&quot;]    subgraph IB [Instruction Block]        subgraph IU [Instruction Unit]            A            B        end        subgraph IU1 [many instruction units]            C[Instructions]        end    end    IB --- PE</code></pre><p>One <em>instruction block</em> is fetched together and distributed to one <em>processing element</em> module.</p><h4 id="C-type"><a href="#C-type" class="headerlink" title="C-type"></a>C-type</h4><p>Specify target operations and set operation trigger conditions</p><ul><li>Operation code (OP code): target operation</li><li>trigger condition: when operation is ready to execute</li></ul><p>6 types in total:</p><ul><li>Memory Read</li><li>Memory Write</li><li>Data Fetch</li><li>Compute</li><li>Post Process: combination of pooling, activation, data quantization, intermediate result addition and residual operations</li><li>Instruction Read</li></ul><p>Each one corresponds to a dedicated operation module in the PE.</p><h4 id="U-type"><a href="#U-type" class="headerlink" title="U-type"></a>U-type</h4><p>Deliver corresponding operation parameters for its paired C-type</p><h3 id="Microarchitecture"><a href="#Microarchitecture" class="headerlink" title="Microarchitecture"></a>Microarchitecture</h3><p><strong>Overlay</strong>: reconfigurable architectures implemented on top of FPGAs. They are regular designs described using structural HDL, but have reconfigurable capabilities. They may be considered as “softcore FPGA IPs (<a href="https://en.wikipedia.org/wiki/Semiconductor_intellectual_property_core">Semiconductor intellectual property core</a>)”. </p><h3 id="Compiler"><a href="#Compiler" class="headerlink" title="Compiler"></a>Compiler</h3><p>Do the following on input CNN configuration:</p><ul><li>Operation fusion</li><li>Network slicing</li><li>Throughput optimization</li></ul><p>Divided into two major stages: Translation and Optimization.</p><p>Extract necessary information from model definition files and reorganize them into a unified <strong>intermediate representation</strong> (<strong>IR</strong>)</p><ol><li>perform <strong>operation fusion</strong> to combine closely related operations.</li><li>perform data quantization (generate dynamic fixed-point representations)</li><li>perform network slicing</li><li>perform optimization</li><li>rearrange processed weights</li></ol><h4 id="Translation-Operation-Fusion"><a href="#Translation-Operation-Fusion" class="headerlink" title="Translation: Operation Fusion"></a>Translation: Operation Fusion</h4><p>merge or concatenate related layer operations</p><ol><li>p-fusion: only contributes to off-chip memory access reduction</li><li>r-fusion: <ul><li>avoids communication latency</li><li>reduces the total number of operations and inference time</li></ul></li></ol><p>Major layers: Convolution and Fully Connected (FC) layers</p><p>Affiliated layers: Pooling, Padding, Activation, Residual and Output Concatenation layers</p><p>r-fusion-I: batch normalization elimination, avoiding separate computation of batch normalization</p><p>r-fusion-II: input sharing, identifying input sharing layers and reassembling them</p><h4 id="Data-Quantization"><a href="#Data-Quantization" class="headerlink" title="Data Quantization"></a>Data Quantization</h4><p>Use <strong>dynamic quantization scheme</strong> to get 8-bit fixed-point values.</p><h4 id="Intermediate-Representation"><a href="#Intermediate-Representation" class="headerlink" title="Intermediate Representation"></a>Intermediate Representation</h4><h2 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h2><p><strong>MAC</strong>: multiply and accumulate <a href="https://en.wikipedia.org/wiki/Multiply%E2%80%93accumulate_operation">Multiply–accumulate operation - Wikipedia</a></p><h2 id="Limitation"><a href="#Limitation" class="headerlink" title="Limitation"></a>Limitation</h2><hr><blockquote><p>Y. Yu, C. Wu, T. Zhao, K. Wang and L. He, “OPU: An FPGA-Based Overlay Processor for Convolutional Neural Networks,” in IEEE Transactions on Very Large Scale Integration (VLSI) Systems, vol. 28, no. 1, pp. 35-47, Jan. 2020, doi: 10.1109&#x2F;TVLSI.2019.2939726.</p></blockquote><div class="note note-warning">            <p>Unfinished</p>          </div><!--https://lingkkang.github.io/2023/08/06/read-paper-1-yu/-->]]></content>
+    
+    
+    <categories>
+      
+      <category>Paper Notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>OPU</tag>
+      
+      <tag>OpenOPU</tag>
+      
+      <tag>FPGA</tag>
+      
+      <tag>CNN</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Migrate GitLab from CentOS to Ubuntu on ECS</title>
     <link href="/2023/07/31/migrate-gitlab/"/>
     <url>/2023/07/31/migrate-gitlab/</url>
@@ -399,6 +430,39 @@
       <tag>GitLab</tag>
       
       <tag>Ubuntu</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Paper Notes: CPU/GPU Task Scheduling with SVM</title>
+    <link href="/2023/07/28/read-paper-0-wen/"/>
+    <url>/2023/07/28/read-paper-0-wen/</url>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="https://cdn.jsdelivr.net/npm/meting/dist/Meting.min.js"></script><h1 id="Paper-Notes-CPU-GPU-Task-Scheduling-with-SVM"><a href="#Paper-Notes-CPU-GPU-Task-Scheduling-with-SVM" class="headerlink" title="Paper Notes: CPU&#x2F;GPU Task Scheduling with SVM"></a>Paper Notes: CPU&#x2F;GPU Task Scheduling with SVM</h1><h2 id="Info"><a href="#Info" class="headerlink" title="Info"></a>Info</h2><p><strong>Smart Multi-Task Scheduling for OpenCL Programs on CPU&#x2F;GPU Heterogeneous Platforms</strong></p><p><strong>Authors</strong>: <a href="https://scholar.google.com/citations?user=8CHUcJEAAAAJ">Yuan Wen</a>, Zheng Wang, Michael F.P. O’Boyle</p><p><strong>Published in</strong>: HiPC 2014 Dec.</p><p><strong>DOI</strong>: <a href="https://doi.org/10.1109/HiPC.2014.7116910">10.1109&#x2F;HiPC.2014.7116910</a></p><p><strong>Keywords</strong>: GPU, OpenCL, task scheduling, machine learning</p><h2 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h2><h3 id="Problem"><a href="#Problem" class="headerlink" title="Problem"></a>Problem</h3><p>To find the best map from OpenCL application to hardware resource, CPU or GPU. </p><p>The requirements are:</p><ul><li>Enlarge the system throughput (STP)</li><li>Reduce the average normalized turn-around time (ANTT)</li></ul><p><strong>STP</strong>: the number of tasks completed per unit time.</p><p><strong>ANTT</strong>: the average time between the submission of a task and the completion of it.</p><h3 id="Alternative"><a href="#Alternative" class="headerlink" title="Alternative"></a>Alternative</h3><p>Other scheduling policies:</p><ul><li>All on CPU</li><li>All on GPU</li><li>First come first serve (FCFS): baseline</li><li>Input size guided: GPU gets the task with larger input size</li><li>Work item guided: GPU gets the task with larger number of work items</li></ul><h2 id="Key-Idea"><a href="#Key-Idea" class="headerlink" title="Key Idea"></a>Key Idea</h2><p>Predict the <strong>speedup</strong> of a task. Speedup is defined as the ratio of the execution time of a task on CPU to that on GPU.</p><p>Organize all OpenCL tasks into a queue based on <strong>predicted speedup</strong> and <strong>runtime data transfer size</strong>. High speedup side tasks are scheduled to GPU, while low speedup side tasks are scheduled to CPU.</p><p>When CPU or GPU is idle, pop the task from the queue’s two side accordingly, until the end of the queue.</p><h2 id="Implementation"><a href="#Implementation" class="headerlink" title="Implementation"></a>Implementation</h2><p>The predictor takes in:</p><ol><li>Static code features</li><li>Runtime features</li></ol><p>Output a speedup category of the task. Tow categories are used: high speedup side and low speedup side.</p><p>Use <strong>Support Vector Machines</strong> classifier and train &#x2F; evaluate with <strong>leave-one-out cross-validation</strong>.</p><p><img src="https://ieeexplore.ieee.org/mediastore_new/IEEE/content/media/7113430/7116705/7116910/7116910-table-1-source-large.gif" alt="Used features"></p><p><img src="https://ieeexplore.ieee.org/mediastore_new/IEEE/content/media/7113430/7116705/7116910/7116910-fig-6-source-large.gif" alt="Importance of the features"></p><blockquote><p>The larger the square is, the more important the feature is.</p></blockquote><h2 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h2><p>The experiment took place on real machine.</p><p>35 OpenCL benchmarks are used.</p><h2 id="Limitation"><a href="#Limitation" class="headerlink" title="Limitation"></a>Limitation</h2><ol><li>To compare with the <em>best STP</em> queue (comes from exhaustive searching), there is still 50% gap. As speedup is only one proxy of execution time. (Impossible to find the best ANTT queue)</li><li>prediction accuracy is not high enough. On STP, SVM model is 87% accurate, decision tree model is 72%.</li><li>coarse-grained classification. Only two categories are used. Enlarge the number of categories may improve the performance but not always.</li></ol><hr><blockquote><p>Y. Wen, Z. Wang and M. F.P. O’Boyle, “Smart Multi-Task Scheduling for OpenCL Programs on CPU&#x2F;GPU Heterogeneous Platforms,” 2014 21st International Conference on High Performance Computing (HiPC), Goa, India, 2014, pp. 1-10, doi: 10.1109&#x2F;HiPC.2014.7116910.</p></blockquote><!--https://lingkkang.github.io/2023/07/27/read-paper-0-wen/-->]]></content>
+    
+    
+    <categories>
+      
+      <category>Paper Notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>task scheduling</tag>
+      
+      <tag>GPU</tag>
+      
+      <tag>OpenCL</tag>
+      
+      <tag>machine learning</tag>
+      
+      <tag>SVM</tag>
       
     </tags>
     
@@ -711,13 +775,13 @@
       
       <tag>Optimization</tag>
       
-      <tag>Machine Learning</tag>
-      
       <tag>Artificial Intelligence</tag>
       
       <tag>Linear Perceptron</tag>
       
       <tag>Neural Network</tag>
+      
+      <tag>Machine Learning</tag>
       
       <tag>Deep Learning</tag>
       
@@ -746,11 +810,11 @@
       
       <tag>Optimization</tag>
       
-      <tag>MDP</tag>
+      <tag>Artificial Intelligence</tag>
       
       <tag>Machine Learning</tag>
       
-      <tag>Artificial Intelligence</tag>
+      <tag>MDP</tag>
       
       <tag>Bellman Equation</tag>
       
