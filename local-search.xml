@@ -28,6 +28,10 @@
       
       <tag>IoT</tag>
       
+      <tag>Software-Hardware Co-Design</tag>
+      
+      <tag>Storage</tag>
+      
     </tags>
     
   </entry>
@@ -100,11 +104,11 @@
       
       <tag>CNN</tag>
       
-      <tag>Pruning</tag>
-      
       <tag>Residual Learning</tag>
       
       <tag>Dynamic Inference</tag>
+      
+      <tag>Pruning</tag>
       
     </tags>
     
@@ -139,13 +143,13 @@
       
       <tag>Docker</tag>
       
+      <tag>Finance</tag>
+      
       <tag>Self-Host</tag>
       
       <tag>Web App</tag>
       
       <tag>SSL</tag>
-      
-      <tag>Finance</tag>
       
       <tag>Ruby</tag>
       
@@ -178,11 +182,11 @@
       
       <tag>Sparsity</tag>
       
+      <tag>Pruning</tag>
+      
       <tag>Graph</tag>
       
       <tag>KSP</tag>
-      
-      <tag>Pruning</tag>
       
       <tag>CSR</tag>
       
@@ -324,9 +328,9 @@
       
       <tag>Python</tag>
       
-      <tag>C</tag>
-      
       <tag>Linux</tag>
+      
+      <tag>C</tag>
       
       <tag>task scheduling</tag>
       
@@ -775,13 +779,13 @@
       
       <tag>Optimization</tag>
       
+      <tag>Machine Learning</tag>
+      
       <tag>Artificial Intelligence</tag>
       
       <tag>Linear Perceptron</tag>
       
       <tag>Neural Network</tag>
-      
-      <tag>Machine Learning</tag>
       
       <tag>Deep Learning</tag>
       
@@ -810,11 +814,11 @@
       
       <tag>Optimization</tag>
       
-      <tag>Artificial Intelligence</tag>
+      <tag>MDP</tag>
       
       <tag>Machine Learning</tag>
       
-      <tag>MDP</tag>
+      <tag>Artificial Intelligence</tag>
       
       <tag>Bellman Equation</tag>
       
