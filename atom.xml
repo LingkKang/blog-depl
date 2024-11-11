@@ -6,7 +6,7 @@
   <link href="https://lingkang.dev/atom.xml" rel="self"/>
   
   <link href="https://lingkang.dev/"/>
-  <updated>2024-10-19T08:27:06.228Z</updated>
+  <updated>2024-11-11T09:38:56.256Z</updated>
   <id>https://lingkang.dev/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Paper Notes: FlipBit - Save Energy for Flash Memory Write with Approximation</title>
+    <link href="https://lingkang.dev/2024/11/01/read-paper-flipbit/"/>
+    <id>https://lingkang.dev/2024/11/01/read-paper-flipbit/</id>
+    <published>2024-11-01T13:37:41.000Z</published>
+    <updated>2024-11-11T09:38:56.256Z</updated>
+    
+    
+    <summary type="html">Alexander Buck, Karthik Ganesan, and Natalie Enright Jerger. FlipBit: Approximate Flash Memory for IoT Devices. IEEE International Symposium on High-Performance Computer Architecture (HPCA), 2024</summary>
+    
+    
+    
+    <category term="Paper Notes" scheme="https://lingkang.dev/categories/Paper-Notes/"/>
+    
+    
+    <category term="Memory" scheme="https://lingkang.dev/tags/Memory/"/>
+    
+    <category term="Flash" scheme="https://lingkang.dev/tags/Flash/"/>
+    
+    <category term="Approximate Computing" scheme="https://lingkang.dev/tags/Approximate-Computing/"/>
+    
+    <category term="IoT" scheme="https://lingkang.dev/tags/IoT/"/>
+    
+  </entry>
   
   <entry>
     <title>Self-Host Vikunja To-Do List Web App</title>
@@ -58,7 +83,7 @@
     <link href="https://lingkang.dev/2024/10/16/read-paper-dyn-cnn/"/>
     <id>https://lingkang.dev/2024/10/16/read-paper-dyn-cnn/</id>
     <published>2024-10-15T17:18:12.000Z</published>
-    <updated>2024-10-16T12:20:22.493Z</updated>
+    <updated>2024-11-11T06:18:32.607Z</updated>
     
     
     <summary type="html">Wenhan Xia, Hongxu Yin, Xiaoliang Dai and Niraj Kumar Jha. Fully Dynamic Inference With Deep Neural Networks. IEEE Transactions on Emerging Topics in Computing, 2020</summary>
@@ -107,13 +132,13 @@
     
     <category term="Docker" scheme="https://lingkang.dev/tags/Docker/"/>
     
+    <category term="Finance" scheme="https://lingkang.dev/tags/Finance/"/>
+    
     <category term="Self-Host" scheme="https://lingkang.dev/tags/Self-Host/"/>
     
     <category term="Web App" scheme="https://lingkang.dev/tags/Web-App/"/>
     
     <category term="SSL" scheme="https://lingkang.dev/tags/SSL/"/>
-    
-    <category term="Finance" scheme="https://lingkang.dev/tags/Finance/"/>
     
     <category term="Ruby" scheme="https://lingkang.dev/tags/Ruby/"/>
     
@@ -149,33 +174,6 @@
     <category term="CSR" scheme="https://lingkang.dev/tags/CSR/"/>
     
     <category term="Sparse Graph" scheme="https://lingkang.dev/tags/Sparse-Graph/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Implement RPC demo from scratch</title>
-    <link href="https://lingkang.dev/2024/01/08/rpc/"/>
-    <id>https://lingkang.dev/2024/01/08/rpc/</id>
-    <published>2024-01-08T15:55:00.000Z</published>
-    <updated>2024-01-09T09:10:00.000Z</updated>
-    
-    
-    <summary type="html">A simple RPC demo implemented in Go (server) and Rust (client).</summary>
-    
-    
-    
-    <category term="Operating System &amp; Architecture" scheme="https://lingkang.dev/categories/Operating-System-Architecture/"/>
-    
-    
-    <category term="Go" scheme="https://lingkang.dev/tags/Go/"/>
-    
-    <category term="Distributed System" scheme="https://lingkang.dev/tags/Distributed-System/"/>
-    
-    <category term="RPC" scheme="https://lingkang.dev/tags/RPC/"/>
-    
-    <category term="TCP" scheme="https://lingkang.dev/tags/TCP/"/>
-    
-    <category term="Rust" scheme="https://lingkang.dev/tags/Rust/"/>
     
   </entry>
   
