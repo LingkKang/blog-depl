@@ -6,7 +6,7 @@
   <link href="https://lingkang.dev/atom.xml" rel="self"/>
   
   <link href="https://lingkang.dev/"/>
-  <updated>2024-11-11T09:46:09.465Z</updated>
+  <updated>2024-11-11T10:18:37.997Z</updated>
   <id>https://lingkang.dev/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://lingkang.dev/2024/11/01/read-paper-flipbit/"/>
     <id>https://lingkang.dev/2024/11/01/read-paper-flipbit/</id>
     <published>2024-11-01T13:37:41.000Z</published>
-    <updated>2024-11-11T09:46:09.465Z</updated>
+    <updated>2024-11-11T10:18:37.997Z</updated>
     
     
     <summary type="html">Alexander Buck, Karthik Ganesan, and Natalie Enright Jerger. FlipBit: Approximate Flash Memory for IoT Devices. IEEE International Symposium on High-Performance Computer Architecture (HPCA), 2024</summary>
@@ -136,13 +136,13 @@
     
     <category term="Docker" scheme="https://lingkang.dev/tags/Docker/"/>
     
-    <category term="Finance" scheme="https://lingkang.dev/tags/Finance/"/>
-    
     <category term="Self-Host" scheme="https://lingkang.dev/tags/Self-Host/"/>
     
     <category term="Web App" scheme="https://lingkang.dev/tags/Web-App/"/>
     
     <category term="SSL" scheme="https://lingkang.dev/tags/SSL/"/>
+    
+    <category term="Finance" scheme="https://lingkang.dev/tags/Finance/"/>
     
     <category term="Ruby" scheme="https://lingkang.dev/tags/Ruby/"/>
     

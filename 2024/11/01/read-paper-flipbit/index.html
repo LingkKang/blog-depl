@@ -27,7 +27,7 @@
 <meta property="og:description" content="Alexander Buck, Karthik Ganesan, and Natalie Enright Jerger. FlipBit: Approximate Flash Memory for IoT Devices. IEEE International Symposium on High-Performance Computer Architecture (HPCA), 2024">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-11-01T13:37:41.000Z">
-<meta property="article:modified_time" content="2024-11-11T09:46:09.465Z">
+<meta property="article:modified_time" content="2024-11-11T10:18:37.997Z">
 <meta property="article:author" content="Lingkang">
 <meta property="article:tag" content="Memory">
 <meta property="article:tag" content="Flash">
@@ -258,7 +258,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          324 words
+          398 words
         
       </span>
     
@@ -269,7 +269,7 @@
         
         
         
-          3 mins
+          4 mins
         
       </span>
     
@@ -568,6 +568,15 @@
 
 <p>While the N-bit approximation is presented in iteration, it can be parallelized on hardware with repeated logic units, thus is <em>hardware-friendly</em>.</p>
 <h2 id="4-Evaluation"><a href="#4-Evaluation" class="headerlink" title="4. Evaluation"></a>4. Evaluation</h2><p>FlipBit is evaluated under two common IoT devices’ use cases: 1) sense and send data, and 2) compute and send data, with video capturing and deep neural network (DNN) inference as the representative applications.</p>
+<h2 id="5-Some-Thoughts"><a href="#5-Some-Thoughts" class="headerlink" title="5. Some Thoughts"></a>5. Some Thoughts</h2><p>The <em>mean absolute error</em> (MAE) of each write is tracked as a threshold that determines whether a precise write is necessary. The threshold is designed to be configurable, allowing the system to adapt to different application scenarios, where energy savings can be traded off against accuracy. However, a question arises regarding the <em>accumulation of errors over time</em>. Specifically, will these approximations, when compounded across multiple writes, lead to an accumulation of error that ultimately affects the correctness of the system’s outcome?</p>
+<p>In the tested use cases presented in the paper, the accumulation of errors is not such significant. For video capturing, the approximations are applied to individual frames, and therefore, any approximation-induced error resides only within those frames. The nature of video data allows for some degree of error without significantly impacting the overall quality, as each frame is independently approximated, and the accumulated error across frames does not propagate. Peak Signal-to-Noise Ratio (PSNR) is an appropriate metric from this perspective.</p>
+<p>Similarly, in the case of Deep Neural Network (DNN) inference, each inference is a distinct computation that resets the error. In this scenario, the approximation effectively “resets” after each inference pass, which prevents significant propagation of errors between inferences. This makes FlipBit well-suited to inference-only use cases where maintaining acceptable accuracy at low energy costs is more important than ensuring precise state across multiple iterations.</p>
+<p>However, this characteristic of error handling may not generalize to all applications. In particular, scenarios where persistent state is critical, such as local neural network training (such as federated learning for data privacy) on IoT devices, pose a different set of challenges. In such cases, data from one iteration directly influences the subsequent iterations, which could lead to <em>error propagation or accumulation</em>. For example, during local model training, errors introduced into the weights during updates are carried forward into subsequent training iterations. This can lead to accumulated errors that degrade the model’s performance over time, potentially rendering it inaccurate or even divergent. Unlike inference, where the data is essentially “consumed” after each computation, training relies on continuously refining model parameters, making it more vulnerable to compounding errors.</p>
+<p>There might be a few ways to address this issue:</p>
+<ul>
+<li>Adaptive approximation managing: decide the approximation acceptance not only based on current write AME, but also the historical error accumulation.</li>
+<li>Periodic evaluation: periodically perform a evaluation to check if the threshold is still appropriate, and adjust it if necessary (for example to break model training in non-convergence).</li>
+</ul>
 
                 
               </div>
