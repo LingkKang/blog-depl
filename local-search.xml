@@ -4,35 +4,6 @@
   
   
   <entry>
-    <title>Paper Notes: eOPF - Extensible Orchestration and Protection Framework for Confidential Cloud Computing</title>
-    <link href="/2024/11/21/read-paper-eopf/"/>
-    <url>/2024/11/21/read-paper-eopf/</url>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="https://cdn.jsdelivr.net/npm/meting/dist/Meting.min.js"></script><h1 id="Paper-Notes-eOPF-Extensible-Orchestration-and-Protection-Framework-for-Confidential-Cloud-Computing"><a href="#Paper-Notes-eOPF-Extensible-Orchestration-and-Protection-Framework-for-Confidential-Cloud-Computing" class="headerlink" title="Paper Notes: eOPF - Extensible Orchestration and Protection Framework for Confidential Cloud Computing"></a>Paper Notes: eOPF - Extensible Orchestration and Protection Framework for Confidential Cloud Computing</h1><blockquote><p>Adil Ahmad, Alex Shultz, Byoungyoung Lee, and Pedro Fonseca. An Extensible Orchestration and Protection Framework for Confidential Cloud Computing. <em>USENIX Operating Systems Design and Implementation (OSDI)</em>, 2023. <a href="https://www.usenix.org/conference/osdi23/presentation/ahmad">https://www.usenix.org/conference/osdi23/presentation/ahmad</a></p></blockquote><h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul><li><a href="https://www.usenix.org/conference/osdi23/presentation/ahmad">An Extensible Orchestration and Protection Framework for Confidential Cloud Computing | USENIX</a></li><li><a href="https://cloud.ibm.com/docs/bare-metal?topic=bare-metal-bm-intel-sgx">IBM Cloud Docs</a></li><li><a href="https://csrc.nist.gov/glossary/term/enclave">enclave - Glossary | CSRC</a></li><li><a href="https://eprint.iacr.org/2016/086">Intel SGX Explained</a></li><li></li></ul>]]></content>
-    
-    
-    <categories>
-      
-      <category>Paper Notes</category>
-      
-    </categories>
-    
-    
-    <tags>
-      
-      <tag>Cloud Computing</tag>
-      
-      <tag>Confidential Computing</tag>
-      
-      <tag>Security</tag>
-      
-    </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
     <title>Paper Notes: FlipBit - Save Energy for Flash Memory Write with Approximation</title>
     <link href="/2024/11/11/read-paper-flipbit/"/>
     <url>/2024/11/11/read-paper-flipbit/</url>
@@ -310,8 +281,6 @@
       
       <tag>C</tag>
       
-      <tag>Docker</tag>
-      
       <tag>CentOS</tag>
       
       <tag>Core Dump</tag>
@@ -331,6 +300,8 @@
       <tag>POSIX</tag>
       
       <tag>WSL2</tag>
+      
+      <tag>Docker</tag>
       
     </tags>
     
@@ -419,13 +390,13 @@
     
     <tags>
       
-      <tag>CNN</tag>
-      
       <tag>OPU</tag>
       
       <tag>OpenOPU</tag>
       
       <tag>FPGA</tag>
+      
+      <tag>CNN</tag>
       
     </tags>
     
@@ -1167,6 +1138,35 @@
   
   
   <entry>
+    <title>Use CSLinux with SSH</title>
+    <link href="/2022/11/28/better-way-to-cslinux/"/>
+    <url>/2022/11/28/better-way-to-cslinux/</url>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="https://cdn.jsdelivr.net/npm/meting/dist/Meting.min.js"></script><h1 id="优雅一点的远程调试-Windows-版"><a href="#优雅一点的远程调试-Windows-版" class="headerlink" title="优雅一点的远程调试 (Windows 版)"></a>优雅一点的远程调试 (Windows 版)</h1><p>昨晚大佬介绍了 MacOS 下在 Clion 中实现远程调试（<a href="https://mp.weixin.qq.com/s/sLvcp29VJFMiX00C3cUa8w">优雅一点的远程调试？</a>），这里也大致介绍一下用 Windows 中的方式。</p><p>以 Windows 10 和 VS Code 为例。</p><p>珠玉在前，瓦石难当。</p><h2 id="连接学校虚拟专用网络"><a href="#连接学校虚拟专用网络" class="headerlink" title="连接学校虚拟专用网络"></a>连接学校虚拟专用网络</h2><p>具体情况参考这篇<a href="https://myit.nottingham.edu.cn/dwp/app/#/knowledge/KBA00001065/rkm">学校官方教程</a>。</p><p>如图，确保已经连接至学校 VPN。</p><p><img src="/../images/cslinux/vpn.png"></p><p><code>Nottingham_1</code> 和 <code>Nottingham_2</code> 并无区别。</p><h2 id="VS-Code"><a href="#VS-Code" class="headerlink" title="VS Code"></a>VS Code</h2><p>确保已安装 <a href="https://code.visualstudio.com/">VS Code</a>。</p><p>打开后在最左列找到 <code>Extensions</code> 图标（类似俄罗斯方块）并点开。搜索 <code>ssh</code>，找到如下两个插件（一般位于前三位）并安装。</p><p><img src="/../images/cslinux/remote_ssh.png"><br><img src="/../images/cslinux/ssh_config.png"></p><h2 id="配置-SSH"><a href="#配置-SSH" class="headerlink" title="配置 SSH"></a>配置 SSH</h2><p>点击 VS Code 界面左下角的按钮。</p><p><img src="/../images/cslinux/left_bottom_cornor.png"></p><p>在弹出的窗口点击 <code>Open SSH Configuration File...</code></p><p><img src="/../images/cslinux/open_config.png"></p><p>直接选择第一个文件路径即可，默认为当前用户 <code>.ssh</code> 文件夹下的配置文件 <code>config</code>（我的为<code>C:\Users\Lingkang\.ssh\config</code>）。</p><p>将以下内容添加在文件末尾并保存。</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs config">Host cslinux.nottingham.edu.cn<br>    HostName cslinux.nottingham.edu.cn<br>    User user_name<br>    Port 22<br></code></pre></td></tr></table></figure><p>此处 <code>user_name</code> 为邮箱前缀。</p><h2 id="SSH-连接"><a href="#SSH-连接" class="headerlink" title="SSH 连接"></a>SSH 连接</h2><p>再次点击左下角的按钮，在弹出的窗口选择 <code>Connect to Host</code> 选项。</p><p><img src="/../images/cslinux/connect.png"></p><p>继续点击第一项 <code>cslinux.nottingham.edu.cn</code>，会弹出新的 VS Code 窗口，在最上方输入密码即可。</p><p><img src="/../images/cslinux/pw.png"></p><p>（VS Code 会自动弹出会话框要求选择远程机器的平台，选择 Linux 即可。）</p><p>首次连接会时间稍长，会自动在 cslinux 上安装 <code>vscode ssh server</code>，等待三五分钟完成初始化即可。</p><p>至此，就已经通过 ssh 连接上了 cslinux。可以看到 VS Code 界面左下角已经显示了连接机器的 <code>Host Name</code>。</p><p><img src="/../images/cslinux/connected.png"></p><p>点击左上角 <code>Explorer</code>，并点击 <code>Open Folder</code>，这里的文件夹就已经是虚拟机中的文件夹了，找到你的文件就可以开始了!</p><p><img src="/../images/cslinux/done.png" alt="Done!"></p><h2 id="免密登录"><a href="#免密登录" class="headerlink" title="免密登录"></a>免密登录</h2><h3 id="生成-SSH-密钥"><a href="#生成-SSH-密钥" class="headerlink" title="生成 SSH 密钥"></a>生成 SSH 密钥</h3><p>在本地打开 <code>PowerShell</code>，输入 <code>ssh-keygen</code>，这会在用户下生成一对 SSH 密钥。文件默认保存在 <code>C:\Users\user-name\.ssh\id_rsa</code> 地址中，如无特殊情况，直接回车确认默认地址即可。</p><p>提示需要密语 <code>passphrase</code>，同样直接回车为空即可。</p><p>输出内容大致如下：</p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs PowerShell"><span class="hljs-built_in">PS</span> C:\Users\Lingkang\&gt; ssh<span class="hljs-literal">-keygen</span><br>Generating public/private rsa key pair.<br>Enter file <span class="hljs-keyword">in</span> which to save the key (C:\Users\Lingkang/.ssh/id_rsa): <br>Enter passphrase (empty <span class="hljs-keyword">for</span> no passphrase):<br>Enter same passphrase again:<br>Your identification has been saved <span class="hljs-keyword">in</span> C:\Users\Lingkang/.ssh/id_rsa.<br>Your public key has been saved <span class="hljs-keyword">in</span> C:\Users\Lingkang/.ssh/id_rsa.pub.<br>The key fingerprint is:<br>SHA256:ZS2XOAQaloal5ClzeqNVde5kwooPxUZXLBG3J7pbn+o lingkang@DESKTOP<span class="hljs-literal">-4T7NV3Q</span><br>The key<span class="hljs-string">&#x27;s randomart image is:</span><br><span class="hljs-string">+---[RSA 3072]----+</span><br><span class="hljs-string">|   . . +..*=o    |</span><br><span class="hljs-string">|  = o o o+o+oE   |</span><br><span class="hljs-string">| = o..  +.=o .   |</span><br><span class="hljs-string">|. o += = + .     |</span><br><span class="hljs-string">| . .o=o S        |</span><br><span class="hljs-string">| . .B ..         |</span><br><span class="hljs-string">|. .+.oo          |</span><br><span class="hljs-string">|.  + +.          |</span><br><span class="hljs-string">| .+o=.           |</span><br><span class="hljs-string">+----[SHA256]-----+</span><br></code></pre></td></tr></table></figure><h3 id="配置免密连接"><a href="#配置免密连接" class="headerlink" title="配置免密连接"></a>配置免密连接</h3><p>打开 cslinux 中用户名下的 <code>.ssh</code> 目录，新建文件 <code>authorized_keys</code>，将生成密钥中的 <code>id_rsa.pub</code> 内容复制粘贴到新文件中并保存。</p><p>并且在本地的 <code>.ssh/config</code> 中相对应的 <code>Host</code> 添加如下内容（<a href="#%E9%85%8D%E7%BD%AE-SSH">参考此处</a>）：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs config">IdentityFile &quot;C:\Users\user-name\.ssh\id_rsa&quot;<br></code></pre></td></tr></table></figure><p>引号内即 <code>ssh-keygen</code> 生成的私钥文件 <code>id_rsa</code> 地址，记得把 <code>user-name</code> 替换成当前用户名并保存。</p><p>完成之后重新连接 cslinux，可以发现已经不需要再次输入密码了。</p><h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ol><li><a href="https://mp.weixin.qq.com/s/sLvcp29VJFMiX00C3cUa8w">晓然晓然 - 优雅一点的远程调试？</a></li><li><a href="https://code.visualstudio.com/">VS Code</a></li><li><a href="https://myit.nottingham.edu.cn/dwp/app/#/knowledge/KBA00001065/rkm">How to use VPN to connect to campus internal network</a></li><li><a href="https://code.visualstudio.com/docs/remote/ssh-tutorial">Remote development over SSH</a></li><li><a href="https://adamtheautomator.com/add-ssh-key-to-vs-code/">How to Add SSH Key to VS Code and Connect to a Host</a></li><li><a href="https://www.cnblogs.com/liyufeia/p/11405779.html">玩转VSCode插件之Remote-SSH</a></li></ol><!-- https://lingkkang.github.io/2022/11/28/better-way-to-cslinux/ -->]]></content>
+    
+    
+    <categories>
+      
+      <category>DevOps</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>ssh</tag>
+      
+      <tag>CSLinux</tag>
+      
+      <tag>VS Code</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Advanced Concatenate with Sqlite3</title>
     <link href="/2022/10/28/concat/"/>
     <url>/2022/10/28/concat/</url>
@@ -1235,13 +1235,13 @@
     
     <tags>
       
-      <tag>Python</tag>
-      
-      <tag>LeetCode</tag>
-      
       <tag>Tree</tag>
       
       <tag>Binary Tree</tag>
+      
+      <tag>Python</tag>
+      
+      <tag>LeetCode</tag>
       
     </tags>
     
@@ -1291,9 +1291,9 @@
     
     <tags>
       
-      <tag>Linked List</tag>
-      
       <tag>Python</tag>
+      
+      <tag>Linked List</tag>
       
     </tags>
     
@@ -1374,11 +1374,11 @@
     
     <tags>
       
-      <tag>Linked List</tag>
-      
       <tag>Python</tag>
       
       <tag>LeetCode</tag>
+      
+      <tag>Linked List</tag>
       
     </tags>
     

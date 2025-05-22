@@ -6,7 +6,7 @@
   <link href="https://blog.lingkang.dev/atom.xml" rel="self"/>
   
   <link href="https://blog.lingkang.dev/"/>
-  <updated>2024-11-20T14:17:20.928Z</updated>
+  <updated>2024-11-11T10:37:04.645Z</updated>
   <id>https://blog.lingkang.dev/</id>
   
   <author>
@@ -15,29 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>Paper Notes: eOPF - Extensible Orchestration and Protection Framework for Confidential Cloud Computing</title>
-    <link href="https://blog.lingkang.dev/2024/11/21/read-paper-eopf/"/>
-    <id>https://blog.lingkang.dev/2024/11/21/read-paper-eopf/</id>
-    <published>2024-11-20T22:18:12.000Z</published>
-    <updated>2024-11-20T14:17:20.928Z</updated>
-    
-    
-    <summary type="html">Adil Ahmad, Alex Shultz, Byoungyoung Lee, and Pedro Fonseca. An Extensible Orchestration and Protection Framework for Confidential Cloud Computing. USENIX Operating Systems Design and Implementation (OSDI), 2023</summary>
-    
-    
-    
-    <category term="Paper Notes" scheme="https://blog.lingkang.dev/categories/Paper-Notes/"/>
-    
-    
-    <category term="Cloud Computing" scheme="https://blog.lingkang.dev/tags/Cloud-Computing/"/>
-    
-    <category term="Confidential Computing" scheme="https://blog.lingkang.dev/tags/Confidential-Computing/"/>
-    
-    <category term="Security" scheme="https://blog.lingkang.dev/tags/Security/"/>
-    
-  </entry>
   
   <entry>
     <title>Paper Notes: FlipBit - Save Energy for Flash Memory Write with Approximation</title>
@@ -168,6 +145,39 @@
     <category term="SSL" scheme="https://blog.lingkang.dev/tags/SSL/"/>
     
     <category term="Ruby" scheme="https://blog.lingkang.dev/tags/Ruby/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Paper Notes: PeeK - Pruning for K-th Shortest Paths</title>
+    <link href="https://blog.lingkang.dev/2024/08/09/read-paper-peek/"/>
+    <id>https://blog.lingkang.dev/2024/08/09/read-paper-peek/</id>
+    <published>2024-08-08T18:49:41.000Z</published>
+    <updated>2025-05-22T04:24:04.663Z</updated>
+    
+    
+    <summary type="html">Wang Feng, Shiyang Chen, Hang Liu, and Yuede Ji. PeeK: A Prune-Centric Approach for K Shortest Path Computation. International Conference for High Performance Computing, Networking, Storage, and Analysis, 2023</summary>
+    
+    
+    
+    <category term="Paper Notes" scheme="https://blog.lingkang.dev/categories/Paper-Notes/"/>
+    
+    
+    <category term="Python" scheme="https://blog.lingkang.dev/tags/Python/"/>
+    
+    <category term="C Plus Plus" scheme="https://blog.lingkang.dev/tags/C-Plus-Plus/"/>
+    
+    <category term="Sparsity" scheme="https://blog.lingkang.dev/tags/Sparsity/"/>
+    
+    <category term="Pruning" scheme="https://blog.lingkang.dev/tags/Pruning/"/>
+    
+    <category term="Graph" scheme="https://blog.lingkang.dev/tags/Graph/"/>
+    
+    <category term="KSP" scheme="https://blog.lingkang.dev/tags/KSP/"/>
+    
+    <category term="CSR" scheme="https://blog.lingkang.dev/tags/CSR/"/>
+    
+    <category term="Sparse Graph" scheme="https://blog.lingkang.dev/tags/Sparse-Graph/"/>
     
   </entry>
   
