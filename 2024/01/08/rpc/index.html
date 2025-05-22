@@ -337,7 +337,7 @@
 </code></pre>
 
 <p>The source code can be found on GitHub: <a target="_blank" rel="noopener" href="https://github.com/LingkKang/rpc_demo">LingkKang&#x2F;rpc_demo</a>.</p>
-<p>The documentation of client side is available at <a target="_blank" rel="noopener" href="https://lingkang.dev/rpc_demo/client/index.html">lingkang.dev&#x2F;rpc_demo</a>.</p>
+<p>The documentation of client side is available at <a target="_blank" rel="noopener" href="https://lingkkang.github.io/rpc_demo/client/index.html">lingkang.dev&#x2F;rpc_demo</a>.</p>
 <h2 id="Design"><a href="#Design" class="headerlink" title="Design"></a>Design</h2><p>The design of RPC is simple. The client side calls a function, and the server side executes the function and returns the result to the client side.</p>
 <p>In this small demo, I plan to set the task as calculating the hypotenuse of a right triangle. The client side sends the length of the two sides of the triangle, and the server side calculates the hypotenuse and returns the result to the client side. All of them are denoted as <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Double-precision_floating-point_format">float64</a>.</p>
 <p>Next step is to design the interface of the RPC, i.e., the message used for communication between client and server. The design is simple and not considering scalability and security issue.</p>
@@ -399,7 +399,7 @@
 </tbody></table>
 </div>
 
-<p>See the documentation of <a target="_blank" rel="noopener" href="https://lingkang.dev/rpc_demo/client/protocol/message/index.html"><code>client::protocol::message</code></a> for more details.</p>
+<p>See the documentation of <a target="_blank" rel="noopener" href="https://lingkkang.github.io/rpc_demo/client/protocol/message/index.html"><code>client::protocol::message</code></a> for more details.</p>
 <h2 id="Implementation"><a href="#Implementation" class="headerlink" title="Implementation"></a>Implementation</h2><p>There are lots of RPC frameworks available, but implementing it from scratch is a good way to understand how it works.</p>
 <p>As described above, the code will be divided into two parts: client side and server side. Source code is available on GitHub: <a target="_blank" rel="noopener" href="https://github.com/LingkKang/rpc_demo">LingkKang&#x2F;rpc_demo</a>.</p>
 <h2 id="Remote-development"><a href="#Remote-development" class="headerlink" title="Remote development"></a>Remote development</h2><p>The server side in Go was developed on an Aliyun remote server, and the client side in Rust was developed on a local machine.</p>
