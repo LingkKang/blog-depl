@@ -143,13 +143,13 @@
       
       <tag>Docker</tag>
       
-      <tag>Finance</tag>
-      
       <tag>Self-Host</tag>
       
       <tag>Web App</tag>
       
       <tag>SSL</tag>
+      
+      <tag>Finance</tag>
       
       <tag>Ruby</tag>
       
@@ -390,13 +390,13 @@
     
     <tags>
       
+      <tag>CNN</tag>
+      
       <tag>OPU</tag>
       
       <tag>OpenOPU</tag>
       
       <tag>FPGA</tag>
-      
-      <tag>CNN</tag>
       
     </tags>
     
@@ -878,9 +878,9 @@
       
       <tag>Emulation</tag>
       
-      <tag>Interrupt</tag>
-      
       <tag>Peripheral</tag>
+      
+      <tag>Interrupt</tag>
       
       <tag>PLIC</tag>
       
@@ -952,13 +952,13 @@
       
       <tag>Emulation</tag>
       
-      <tag>Peripheral</tag>
-      
       <tag>UART</tag>
       
       <tag>Baud Rate</tag>
       
       <tag>Polling</tag>
+      
+      <tag>Peripheral</tag>
       
     </tags>
     

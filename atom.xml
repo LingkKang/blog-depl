@@ -136,13 +136,13 @@
     
     <category term="Docker" scheme="https://blog.lingkang.dev/tags/Docker/"/>
     
-    <category term="Finance" scheme="https://blog.lingkang.dev/tags/Finance/"/>
-    
     <category term="Self-Host" scheme="https://blog.lingkang.dev/tags/Self-Host/"/>
     
     <category term="Web App" scheme="https://blog.lingkang.dev/tags/Web-App/"/>
     
     <category term="SSL" scheme="https://blog.lingkang.dev/tags/SSL/"/>
+    
+    <category term="Finance" scheme="https://blog.lingkang.dev/tags/Finance/"/>
     
     <category term="Ruby" scheme="https://blog.lingkang.dev/tags/Ruby/"/>
     
