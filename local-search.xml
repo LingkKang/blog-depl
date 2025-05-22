@@ -4,6 +4,35 @@
   
   
   <entry>
+    <title>Paper Notes: eOPF - Extensible Orchestration and Protection Framework for Confidential Cloud Computing</title>
+    <link href="/2024/11/21/read-paper-eopf/"/>
+    <url>/2024/11/21/read-paper-eopf/</url>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="https://cdn.jsdelivr.net/npm/meting/dist/Meting.min.js"></script><h1 id="Paper-Notes-eOPF-Extensible-Orchestration-and-Protection-Framework-for-Confidential-Cloud-Computing"><a href="#Paper-Notes-eOPF-Extensible-Orchestration-and-Protection-Framework-for-Confidential-Cloud-Computing" class="headerlink" title="Paper Notes: eOPF - Extensible Orchestration and Protection Framework for Confidential Cloud Computing"></a>Paper Notes: eOPF - Extensible Orchestration and Protection Framework for Confidential Cloud Computing</h1><blockquote><p>Adil Ahmad, Alex Shultz, Byoungyoung Lee, and Pedro Fonseca. An Extensible Orchestration and Protection Framework for Confidential Cloud Computing. <em>USENIX Operating Systems Design and Implementation (OSDI)</em>, 2023. <a href="https://www.usenix.org/conference/osdi23/presentation/ahmad">https://www.usenix.org/conference/osdi23/presentation/ahmad</a></p></blockquote><h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul><li><a href="https://www.usenix.org/conference/osdi23/presentation/ahmad">An Extensible Orchestration and Protection Framework for Confidential Cloud Computing | USENIX</a></li><li><a href="https://cloud.ibm.com/docs/bare-metal?topic=bare-metal-bm-intel-sgx">IBM Cloud Docs</a></li><li><a href="https://csrc.nist.gov/glossary/term/enclave">enclave - Glossary | CSRC</a></li><li><a href="https://eprint.iacr.org/2016/086">Intel SGX Explained</a></li><li></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>Paper Notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Cloud Computing</tag>
+      
+      <tag>Confidential Computing</tag>
+      
+      <tag>Security</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Paper Notes: FlipBit - Save Energy for Flash Memory Write with Approximation</title>
     <link href="/2024/11/11/read-paper-flipbit/"/>
     <url>/2024/11/11/read-paper-flipbit/</url>
@@ -143,13 +172,13 @@
       
       <tag>Docker</tag>
       
+      <tag>Finance</tag>
+      
       <tag>Self-Host</tag>
       
       <tag>Web App</tag>
       
       <tag>SSL</tag>
-      
-      <tag>Finance</tag>
       
       <tag>Ruby</tag>
       
@@ -1316,9 +1345,9 @@
     
     <tags>
       
-      <tag>生活</tag>
-      
       <tag>读书</tag>
+      
+      <tag>生活</tag>
       
       <tag>Summary</tag>
       

@@ -22,11 +22,11 @@
     <meta name="description" content="Plan your work and work your plan.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Self-Host Vikunja To-Do List Web App">
-<meta property="og:url" content="https://lingkang.dev/2024/10/19/host-vikunja/index.html">
+<meta property="og:url" content="https://blog.lingkang.dev/2024/10/19/host-vikunja/index.html">
 <meta property="og:site_name" content="Lingkang&#39;s Blog">
 <meta property="og:description" content="Plan your work and work your plan.">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://lingkang.dev/images/one_time/vikunja.png">
+<meta property="og:image" content="https://blog.lingkang.dev/images/one_time/vikunja.png">
 <meta property="article:published_time" content="2024-10-19T13:08:49.000Z">
 <meta property="article:modified_time" content="2024-10-19T08:27:06.228Z">
 <meta property="article:author" content="Lingkang">
@@ -41,7 +41,7 @@
 <meta property="article:tag" content="Vue">
 <meta property="article:tag" content="To-Do List">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://lingkang.dev/images/one_time/vikunja.png">
+<meta name="twitter:image" content="https://blog.lingkang.dev/images/one_time/vikunja.png">
   
   
   
@@ -89,7 +89,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"lingkang.dev","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":"G-S9PGLW5JVZ"},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"blog.lingkang.dev","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":"G-S9PGLW5JVZ"},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -358,7 +358,7 @@
 <td>2.11.0 (install later)</td>
 </tr>
 </tbody></table>
-<h2 id="1-Install-Docker"><a href="#1-Install-Docker" class="headerlink" title="1. Install Docker"></a>1. Install Docker</h2><p>Please refer to the instructions in the <a href="https://lingkang.dev/2024/08/29/host-maybe/#1-Install-Docker">Self-Host Maybe Finance Web App - 1. Install Docker</a> section.</p>
+<h2 id="1-Install-Docker"><a href="#1-Install-Docker" class="headerlink" title="1. Install Docker"></a>1. Install Docker</h2><p>Please refer to the instructions in the <a target="_blank" rel="noopener" href="https://lingkang.dev/2024/08/29/host-maybe/#1-Install-Docker">Self-Host Maybe Finance Web App - 1. Install Docker</a> section.</p>
 <h2 id="2-Setup-Docker-Compose"><a href="#2-Setup-Docker-Compose" class="headerlink" title="2. Setup Docker Compose"></a>2. Setup Docker Compose</h2><p>Vikunja is available via many different methods. In this guide, we plan to use Docker Compose to manage the Vikunja service and its dependencies.</p>
 <h3 id="2-1-Prepare-for-environment-variables"><a href="#2-1-Prepare-for-environment-variables" class="headerlink" title="2.1. Prepare for environment variables"></a>2.1. Prepare for environment variables</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs Bash"><span class="hljs-built_in">mkdir</span> -p ~/app/todolist<br><span class="hljs-built_in">cd</span> ~/app/todolist<br><span class="hljs-built_in">touch</span> .<span class="hljs-built_in">env</span><br>openssl rand -hex 64 &gt; .<span class="hljs-built_in">env</span><br></code></pre></td></tr></table></figure>
 
@@ -376,8 +376,8 @@
 
 <p>Now the app is available at <code>http://localhost:3456</code> or <code>&lt;your_pub_ip&gt;:3456</code>. (Don’t forget to open the port of the server in the firewall.)</p>
 <p><img src="/./images/one_time/vikunja.png" srcset="/img/loading.gif" lazyload alt="Successfully Hosted! 🎉"></p>
-<h2 id="3-Setup-SSL-Certificates"><a href="#3-Setup-SSL-Certificates" class="headerlink" title="3. Setup SSL Certificates"></a>3. Setup SSL Certificates</h2><p>This part is same as the <a href="https://lingkang.dev/2024/08/29/host-maybe/#3-Setup-SSL-Certificates">Self-Host Maybe Finance Web App - 3. Setup SSL Certificates</a> section.</p>
-<h2 id="4-Disable-Default-nginx-Site"><a href="#4-Disable-Default-nginx-Site" class="headerlink" title="4. Disable Default nginx Site"></a>4. Disable Default <code>nginx</code> Site</h2><p>This part is optional. This part is also same as the <a href="https://lingkang.dev/2024/08/29/host-maybe/#4-Disable-default-Nginx-site">Self-Host Maybe Finance Web App - 4. Disable default Nginx site</a> section.</p>
+<h2 id="3-Setup-SSL-Certificates"><a href="#3-Setup-SSL-Certificates" class="headerlink" title="3. Setup SSL Certificates"></a>3. Setup SSL Certificates</h2><p>This part is same as the <a target="_blank" rel="noopener" href="https://lingkang.dev/2024/08/29/host-maybe/#3-Setup-SSL-Certificates">Self-Host Maybe Finance Web App - 3. Setup SSL Certificates</a> section.</p>
+<h2 id="4-Disable-Default-nginx-Site"><a href="#4-Disable-Default-nginx-Site" class="headerlink" title="4. Disable Default nginx Site"></a>4. Disable Default <code>nginx</code> Site</h2><p>This part is optional. This part is also same as the <a target="_blank" rel="noopener" href="https://lingkang.dev/2024/08/29/host-maybe/#4-Disable-default-Nginx-site">Self-Host Maybe Finance Web App - 4. Disable default Nginx site</a> section.</p>
 <h2 id="5-Disable-New-Registration"><a href="#5-Disable-New-Registration" class="headerlink" title="5. Disable New Registration"></a>5. Disable New Registration</h2><p>At the moment, the self-hosted Vikunja instance allows anyone to register. If you want to disable new registration, you can set the <code>VIKUNJA_SERVICE_ENABLEREGISTRATION</code> environment variable to <code>false</code> in <code>compose.yml</code>.</p>
 <p>For example:</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs YAML"><span class="hljs-attr">services:</span><br>  <span class="hljs-attr">vikunja:</span><br>    <span class="hljs-string">...</span><br>    <span class="hljs-attr">environment:</span><br>      <span class="hljs-string">...</span><br>      <span class="hljs-attr">VIKUNJA_SERVICE_ENABLEREGISTRATION:</span> <span class="hljs-literal">false</span><br>    <span class="hljs-string">...</span><br></code></pre></td></tr></table></figure>
@@ -392,7 +392,7 @@
 <li><a target="_blank" rel="noopener" href="https://vikunja.io/docs/installing">Vikunja: Installing</a></li>
 <li><a target="_blank" rel="noopener" href="https://vikunja.io/docs/full-docker-example">Vikunja: Full docker example</a></li>
 <li><a target="_blank" rel="noopener" href="https://vikunja.io/docs/config-options">Vikunja: Configuration options</a></li>
-<li><a href="https://lingkang.dev/2024/08/29/host-maybe/">Self-Host Maybe Finance Web App - Lingkang’s Blog</a></li>
+<li><a target="_blank" rel="noopener" href="https://lingkang.dev/2024/08/29/host-maybe/">Self-Host Maybe Finance Web App - Lingkang’s Blog</a></li>
 </ol>
 
                 
@@ -458,7 +458,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>Self-Host Vikunja To-Do List Web App</div>
-      <div>https://lingkang.dev/2024/10/19/host-vikunja/</div>
+      <div>https://blog.lingkang.dev/2024/10/19/host-vikunja/</div>
     </div>
     <div class="license-meta">
       

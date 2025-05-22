@@ -3,11 +3,11 @@
   <title>Lingkang&#39;s Blog</title>
   
   <subtitle>Hi there! This is Lingkang :)</subtitle>
-  <link href="https://lingkang.dev/atom.xml" rel="self"/>
+  <link href="https://blog.lingkang.dev/atom.xml" rel="self"/>
   
-  <link href="https://lingkang.dev/"/>
-  <updated>2024-11-11T10:37:04.645Z</updated>
-  <id>https://lingkang.dev/</id>
+  <link href="https://blog.lingkang.dev/"/>
+  <updated>2024-11-20T14:17:20.928Z</updated>
+  <id>https://blog.lingkang.dev/</id>
   
   <author>
     <name>Lingkang</name>
@@ -17,9 +17,32 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Paper Notes: eOPF - Extensible Orchestration and Protection Framework for Confidential Cloud Computing</title>
+    <link href="https://blog.lingkang.dev/2024/11/21/read-paper-eopf/"/>
+    <id>https://blog.lingkang.dev/2024/11/21/read-paper-eopf/</id>
+    <published>2024-11-20T22:18:12.000Z</published>
+    <updated>2024-11-20T14:17:20.928Z</updated>
+    
+    
+    <summary type="html">Adil Ahmad, Alex Shultz, Byoungyoung Lee, and Pedro Fonseca. An Extensible Orchestration and Protection Framework for Confidential Cloud Computing. USENIX Operating Systems Design and Implementation (OSDI), 2023</summary>
+    
+    
+    
+    <category term="Paper Notes" scheme="https://blog.lingkang.dev/categories/Paper-Notes/"/>
+    
+    
+    <category term="Cloud Computing" scheme="https://blog.lingkang.dev/tags/Cloud-Computing/"/>
+    
+    <category term="Confidential Computing" scheme="https://blog.lingkang.dev/tags/Confidential-Computing/"/>
+    
+    <category term="Security" scheme="https://blog.lingkang.dev/tags/Security/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Paper Notes: FlipBit - Save Energy for Flash Memory Write with Approximation</title>
-    <link href="https://lingkang.dev/2024/11/11/read-paper-flipbit/"/>
-    <id>https://lingkang.dev/2024/11/11/read-paper-flipbit/</id>
+    <link href="https://blog.lingkang.dev/2024/11/11/read-paper-flipbit/"/>
+    <id>https://blog.lingkang.dev/2024/11/11/read-paper-flipbit/</id>
     <published>2024-11-11T13:37:41.000Z</published>
     <updated>2024-11-11T10:37:04.645Z</updated>
     
@@ -28,27 +51,27 @@
     
     
     
-    <category term="Paper Notes" scheme="https://lingkang.dev/categories/Paper-Notes/"/>
+    <category term="Paper Notes" scheme="https://blog.lingkang.dev/categories/Paper-Notes/"/>
     
     
-    <category term="Memory" scheme="https://lingkang.dev/tags/Memory/"/>
+    <category term="Memory" scheme="https://blog.lingkang.dev/tags/Memory/"/>
     
-    <category term="Flash" scheme="https://lingkang.dev/tags/Flash/"/>
+    <category term="Flash" scheme="https://blog.lingkang.dev/tags/Flash/"/>
     
-    <category term="Approximate Computing" scheme="https://lingkang.dev/tags/Approximate-Computing/"/>
+    <category term="Approximate Computing" scheme="https://blog.lingkang.dev/tags/Approximate-Computing/"/>
     
-    <category term="IoT" scheme="https://lingkang.dev/tags/IoT/"/>
+    <category term="IoT" scheme="https://blog.lingkang.dev/tags/IoT/"/>
     
-    <category term="Software-Hardware Co-Design" scheme="https://lingkang.dev/tags/Software-Hardware-Co-Design/"/>
+    <category term="Software-Hardware Co-Design" scheme="https://blog.lingkang.dev/tags/Software-Hardware-Co-Design/"/>
     
-    <category term="Storage" scheme="https://lingkang.dev/tags/Storage/"/>
+    <category term="Storage" scheme="https://blog.lingkang.dev/tags/Storage/"/>
     
   </entry>
   
   <entry>
     <title>Self-Host Vikunja To-Do List Web App</title>
-    <link href="https://lingkang.dev/2024/10/19/host-vikunja/"/>
-    <id>https://lingkang.dev/2024/10/19/host-vikunja/</id>
+    <link href="https://blog.lingkang.dev/2024/10/19/host-vikunja/"/>
+    <id>https://blog.lingkang.dev/2024/10/19/host-vikunja/</id>
     <published>2024-10-19T13:08:49.000Z</published>
     <updated>2024-10-19T08:27:06.228Z</updated>
     
@@ -57,35 +80,35 @@
     
     
     
-    <category term="DevOps" scheme="https://lingkang.dev/categories/DevOps/"/>
+    <category term="DevOps" scheme="https://blog.lingkang.dev/categories/DevOps/"/>
     
     
-    <category term="Server" scheme="https://lingkang.dev/tags/Server/"/>
+    <category term="Server" scheme="https://blog.lingkang.dev/tags/Server/"/>
     
-    <category term="Cloud" scheme="https://lingkang.dev/tags/Cloud/"/>
+    <category term="Cloud" scheme="https://blog.lingkang.dev/tags/Cloud/"/>
     
-    <category term="Nginx" scheme="https://lingkang.dev/tags/Nginx/"/>
+    <category term="Nginx" scheme="https://blog.lingkang.dev/tags/Nginx/"/>
     
-    <category term="Docker" scheme="https://lingkang.dev/tags/Docker/"/>
+    <category term="Docker" scheme="https://blog.lingkang.dev/tags/Docker/"/>
     
-    <category term="Self-Host" scheme="https://lingkang.dev/tags/Self-Host/"/>
+    <category term="Self-Host" scheme="https://blog.lingkang.dev/tags/Self-Host/"/>
     
-    <category term="Web App" scheme="https://lingkang.dev/tags/Web-App/"/>
+    <category term="Web App" scheme="https://blog.lingkang.dev/tags/Web-App/"/>
     
-    <category term="SSL" scheme="https://lingkang.dev/tags/SSL/"/>
+    <category term="SSL" scheme="https://blog.lingkang.dev/tags/SSL/"/>
     
-    <category term="Go" scheme="https://lingkang.dev/tags/Go/"/>
+    <category term="Go" scheme="https://blog.lingkang.dev/tags/Go/"/>
     
-    <category term="Vue" scheme="https://lingkang.dev/tags/Vue/"/>
+    <category term="Vue" scheme="https://blog.lingkang.dev/tags/Vue/"/>
     
-    <category term="To-Do List" scheme="https://lingkang.dev/tags/To-Do-List/"/>
+    <category term="To-Do List" scheme="https://blog.lingkang.dev/tags/To-Do-List/"/>
     
   </entry>
   
   <entry>
     <title>Paper Notes: Dynamic Inference of Convolutional Neural Networks</title>
-    <link href="https://lingkang.dev/2024/10/16/read-paper-dyn-cnn/"/>
-    <id>https://lingkang.dev/2024/10/16/read-paper-dyn-cnn/</id>
+    <link href="https://blog.lingkang.dev/2024/10/16/read-paper-dyn-cnn/"/>
+    <id>https://blog.lingkang.dev/2024/10/16/read-paper-dyn-cnn/</id>
     <published>2024-10-15T17:18:12.000Z</published>
     <updated>2024-11-11T06:18:32.607Z</updated>
     
@@ -94,27 +117,27 @@
     
     
     
-    <category term="Paper Notes" scheme="https://lingkang.dev/categories/Paper-Notes/"/>
+    <category term="Paper Notes" scheme="https://blog.lingkang.dev/categories/Paper-Notes/"/>
     
     
-    <category term="Optimization" scheme="https://lingkang.dev/tags/Optimization/"/>
+    <category term="Optimization" scheme="https://blog.lingkang.dev/tags/Optimization/"/>
     
-    <category term="Neural Network" scheme="https://lingkang.dev/tags/Neural-Network/"/>
+    <category term="Neural Network" scheme="https://blog.lingkang.dev/tags/Neural-Network/"/>
     
-    <category term="CNN" scheme="https://lingkang.dev/tags/CNN/"/>
+    <category term="CNN" scheme="https://blog.lingkang.dev/tags/CNN/"/>
     
-    <category term="Residual Learning" scheme="https://lingkang.dev/tags/Residual-Learning/"/>
+    <category term="Residual Learning" scheme="https://blog.lingkang.dev/tags/Residual-Learning/"/>
     
-    <category term="Dynamic Inference" scheme="https://lingkang.dev/tags/Dynamic-Inference/"/>
+    <category term="Dynamic Inference" scheme="https://blog.lingkang.dev/tags/Dynamic-Inference/"/>
     
-    <category term="Pruning" scheme="https://lingkang.dev/tags/Pruning/"/>
+    <category term="Pruning" scheme="https://blog.lingkang.dev/tags/Pruning/"/>
     
   </entry>
   
   <entry>
     <title>Self-Host Maybe Finance Web App</title>
-    <link href="https://lingkang.dev/2024/08/29/host-maybe/"/>
-    <id>https://lingkang.dev/2024/08/29/host-maybe/</id>
+    <link href="https://blog.lingkang.dev/2024/08/29/host-maybe/"/>
+    <id>https://blog.lingkang.dev/2024/08/29/host-maybe/</id>
     <published>2024-08-29T08:30:35.000Z</published>
     <updated>2024-10-09T08:15:10.287Z</updated>
     
@@ -123,61 +146,28 @@
     
     
     
-    <category term="DevOps" scheme="https://lingkang.dev/categories/DevOps/"/>
+    <category term="DevOps" scheme="https://blog.lingkang.dev/categories/DevOps/"/>
     
     
-    <category term="Server" scheme="https://lingkang.dev/tags/Server/"/>
+    <category term="Server" scheme="https://blog.lingkang.dev/tags/Server/"/>
     
-    <category term="Cloud" scheme="https://lingkang.dev/tags/Cloud/"/>
+    <category term="Cloud" scheme="https://blog.lingkang.dev/tags/Cloud/"/>
     
-    <category term="Nginx" scheme="https://lingkang.dev/tags/Nginx/"/>
+    <category term="Nginx" scheme="https://blog.lingkang.dev/tags/Nginx/"/>
     
-    <category term="ECS" scheme="https://lingkang.dev/tags/ECS/"/>
+    <category term="ECS" scheme="https://blog.lingkang.dev/tags/ECS/"/>
     
-    <category term="Docker" scheme="https://lingkang.dev/tags/Docker/"/>
+    <category term="Docker" scheme="https://blog.lingkang.dev/tags/Docker/"/>
     
-    <category term="Self-Host" scheme="https://lingkang.dev/tags/Self-Host/"/>
+    <category term="Finance" scheme="https://blog.lingkang.dev/tags/Finance/"/>
     
-    <category term="Web App" scheme="https://lingkang.dev/tags/Web-App/"/>
+    <category term="Self-Host" scheme="https://blog.lingkang.dev/tags/Self-Host/"/>
     
-    <category term="SSL" scheme="https://lingkang.dev/tags/SSL/"/>
+    <category term="Web App" scheme="https://blog.lingkang.dev/tags/Web-App/"/>
     
-    <category term="Finance" scheme="https://lingkang.dev/tags/Finance/"/>
+    <category term="SSL" scheme="https://blog.lingkang.dev/tags/SSL/"/>
     
-    <category term="Ruby" scheme="https://lingkang.dev/tags/Ruby/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Paper Notes: PeeK - Pruning for K-th Shortest Paths</title>
-    <link href="https://lingkang.dev/2024/08/09/read-paper-peek/"/>
-    <id>https://lingkang.dev/2024/08/09/read-paper-peek/</id>
-    <published>2024-08-08T18:49:41.000Z</published>
-    <updated>2024-10-15T10:29:25.753Z</updated>
-    
-    
-    <summary type="html">Wang Feng, Shiyang Chen, Hang Liu, and Yuede Ji. PeeK: A Prune-Centric Approach for K Shortest Path Computation. International Conference for High Performance Computing, Networking, Storage, and Analysis, 2023</summary>
-    
-    
-    
-    <category term="Paper Notes" scheme="https://lingkang.dev/categories/Paper-Notes/"/>
-    
-    
-    <category term="Python" scheme="https://lingkang.dev/tags/Python/"/>
-    
-    <category term="C Plus Plus" scheme="https://lingkang.dev/tags/C-Plus-Plus/"/>
-    
-    <category term="Sparsity" scheme="https://lingkang.dev/tags/Sparsity/"/>
-    
-    <category term="Pruning" scheme="https://lingkang.dev/tags/Pruning/"/>
-    
-    <category term="Graph" scheme="https://lingkang.dev/tags/Graph/"/>
-    
-    <category term="KSP" scheme="https://lingkang.dev/tags/KSP/"/>
-    
-    <category term="CSR" scheme="https://lingkang.dev/tags/CSR/"/>
-    
-    <category term="Sparse Graph" scheme="https://lingkang.dev/tags/Sparse-Graph/"/>
+    <category term="Ruby" scheme="https://blog.lingkang.dev/tags/Ruby/"/>
     
   </entry>
   
