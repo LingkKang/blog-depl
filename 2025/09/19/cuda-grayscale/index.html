@@ -1,0 +1,888 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/profile_img.png">
+  <link rel="icon" href="/images/profile_img.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Lingkang">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Learn how to grayscale BMP images with CUDA, compare against plain C, and see where GPU parallelism shines.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Grayscale BMP Images: A Practical Yet Gentle CUDA Tutorial for Beginners">
+<meta property="og:url" content="https://blog.lingkang.dev/2025/09/19/cuda-grayscale/index.html">
+<meta property="og:site_name" content="Lingkang&#39;s Blog">
+<meta property="og:description" content="Learn how to grayscale BMP images with CUDA, compare against plain C, and see where GPU parallelism shines.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.lingkang.dev/images/cuda/source.bmp">
+<meta property="og:image" content="https://blog.lingkang.dev/images/cuda/output.bmp">
+<meta property="article:published_time" content="2025-09-19T10:51:19.000Z">
+<meta property="article:modified_time" content="2025-09-21T13:04:07.000Z">
+<meta property="article:author" content="Lingkang">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="CUDA">
+<meta property="article:tag" content="Parallel Programming">
+<meta property="article:tag" content="BMP">
+<meta property="article:tag" content="SPMD">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://blog.lingkang.dev/images/cuda/source.bmp">
+  
+  
+  
+    <meta name="google-site-verification" content="_Z4a0qEOBfzKcSi9b2FxvxEvBcSQPH0SDX8XFGBut9M">
+  
+  <title>Grayscale BMP Images: A Practical Yet Gentle CUDA Tutorial for Beginners - Lingkang&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"blog.lingkang.dev","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":"G-S9PGLW5JVZ"},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Lingkang's Blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Lingkang&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>Links</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/images/bg_img/bg_post.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.6)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Grayscale BMP Images: A Practical Yet Gentle CUDA Tutorial for Beginners"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-09-19 11:51" pubdate>
+          September 19, 2025 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.5k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          13 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Grayscale BMP Images: A Practical Yet Gentle CUDA Tutorial for Beginners</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    Last updated on September 21, 2025 pm
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Grayscale-BMP-Images-A-Practical-Yet-Gentle-CUDA-Tutorial-for-Beginners"><a href="#Grayscale-BMP-Images-A-Practical-Yet-Gentle-CUDA-Tutorial-for-Beginners" class="headerlink" title="Grayscale BMP Images: A Practical Yet Gentle CUDA Tutorial for Beginners"></a>Grayscale BMP Images: A Practical Yet Gentle CUDA Tutorial for Beginners</h1><p>In this blog post, we would implement a simple yet effective grayscale program, in both plain C and CUDA version, to compare their performance, and see the power of parallel processing.</p>
+<p>Firstly we would briefly go through the BMP file format, and the C implementation and gray scaling formula. Then we would go through some basic CUDA concepts, and see how they contribute to our CUDA version. Finally, we would set up timers and run experiments on large images, to see the performance gap and the power of parallelization. Some related references and resources used in this post are listed at the end, along with runnable source code in the appendixes.</p>
+<p>It assumes that you have a CUDA-compatible computer, with <code>gcc</code> and <code>nvcc</code> (the CUDA compiler driver) installed.</p>
+<h2 id="Understanding-the-BMP-Format"><a href="#Understanding-the-BMP-Format" class="headerlink" title="Understanding the BMP Format"></a>Understanding the BMP Format</h2><p>We are choosing <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/BMP_file_format">BMP format</a> as our inputs and outputs, with the following reasons:</p>
+<ol>
+<li>The BMP format is simple and easy to understand. Except some headers at the beginning, it simply places all pixels sequentially, in blue, green, and red order. It provides an uncompressed, unpadded format, allowing us to focus on pixel manipulations. That’s why it is named as Bit Map (BMP) format.</li>
+<li>The BMP format is widely supported by most image viewer, although it is a pretty old format. So we can easily see our outcomes, nothing hidden inside.</li>
+</ol>
+<p>A clear BMP format explanation can be found from <a target="_blank" rel="noopener" href="https://www.ece.ualberta.ca/~elliott/ee552/studentAppNotes/2003_w/misc/bmp_file_format/bmp_file_format.htm">The BMP File Format</a>, mainly composed of 4 parts: <em>Header</em>, <em>InfoHeader</em>, <em>ColorTable</em>, and <em>Pixels</em>.</p>
+<p>As we are simply grayscaling the image, we would mainly pay attention to 3 values in the non-pixel part: <strong>DataOffset</strong> in <em>Header</em> (where the pixel data starts), <strong>Width</strong> in <em>InfoHeader</em> (how many pixels horizontally in the image), and <strong>Height</strong> in <em>InfoHeader</em> (how many pixels vertically in the image). Additionally we would like to confirm it is an uncompressed, unpadded version, based on the <strong>BPP</strong> in <em>InfoHeader</em> (bits per pixel, expecting 24 for 24-bit RGB, 3 bytes per pixel, stored in BGR order) and <strong>Compression</strong> in <em>InfoHeader</em> (0 for no compression). Additionally we can safely copy the non-pixel part from the input image to output image, as the file size or other metadata will not during grayscaling.</p>
+<p>You can try implementing this part yourself, as a gentle recap of C file I&#x2F;O and pointer manipulation. BMP files are little-endian, so be careful when reading integers. You can also refer to the <em>line 43 - 69</em> in the Appendix <a href="#Source-Code-Plain-C-Version">Source Code: Plain C Version</a>. This part would be shared between the Plain C implementation and the CUDA C implementation, as CUDA C is a superset of standard C.</p>
+<p>Here we prepared a <code>1024 × 1024</code> BMP file as an example, adapted from <a target="_blank" rel="noopener" href="https://unsplash.com/photos/an-urban-street-scene-is-filled-with-cars-UIjPYiFM704">unsplash.com</a> and converted by <a target="_blank" rel="noopener" href="https://www.freeconvert.com/image-converter">FreeConvert.com</a>.</p>
+<p><img src="/../images/cuda/source.bmp" srcset="/img/loading.gif" lazyload alt="Example input image"></p>
+<p>The main difference of the gray scaler lies in the memory management and pixel processing, covered in following sections (<a href="#Plain-C-Implementation-CPU-Baseline">Plain C Implementation</a> and <a href="#CUDA-C-Implementation-GPU-Version">CUDA C Implementation</a>, respectively).</p>
+<h2 id="Plain-C-Implementation-CPU-Baseline"><a href="#Plain-C-Implementation-CPU-Baseline" class="headerlink" title="Plain C Implementation (CPU Baseline)"></a>Plain C Implementation (CPU Baseline)</h2><p>The implementation of the plain C version is quite intuitive: load the pixels row by row, process them and write back to the output file. Reading&#x2F;writing pixel by pixel or row by ro would harm performance, since each <code>fread()</code> and <code>fwrite()</code> incurs overhead and breaks cache locality.</p>
+<p>So our code looks like this:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">uint32_t</span> pix_num = width * height;<br><span class="hljs-type">uint32_t</span> img_size = pix_num * <span class="hljs-number">3u</span>;<br><span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *img = (<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *)<span class="hljs-built_in">malloc</span>(img_size);<br><br>(<span class="hljs-type">void</span>)!fread(img, <span class="hljs-number">1</span>, img_size, fpi);<br><br><span class="hljs-keyword">for</span> (<span class="hljs-type">int32_t</span> y = <span class="hljs-number">0</span>; y &lt; height; y++)<br>&#123;<br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">int32_t</span> x = <span class="hljs-number">0</span>; x &lt; width; x++)<br>  &#123;<br>      <span class="hljs-type">int32_t</span> i = (y * width + x);<br>      <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *p = &amp;img[i * <span class="hljs-number">3</span>]; <span class="hljs-comment">// One pixel, BGR.</span><br>      <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> gray = grayscale(p[<span class="hljs-number">2</span>], p[<span class="hljs-number">1</span>], p[<span class="hljs-number">0</span>]);<br>      p[<span class="hljs-number">0</span>] = gray;<br>      p[<span class="hljs-number">1</span>] = gray;<br>      p[<span class="hljs-number">2</span>] = gray;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>Here each <code>unsigned char</code> is regarded as a byte. Note that BMP stores pixels in blue–green–red (BGR) order. The grayscale function <code>grayscale()</code> looks like this:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">static</span> <span class="hljs-keyword">inline</span> <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> <span class="hljs-title function_">grayscale</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> r, <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> g, <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> b)</span><br>&#123;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> y = <span class="hljs-number">77u</span> * r + <span class="hljs-number">150u</span> * g + <span class="hljs-number">29u</span> * b + <span class="hljs-number">128u</span>; <span class="hljs-comment">/* +128 for rounding */</span><br>    <span class="hljs-keyword">return</span> (<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span>)(y &gt;&gt; <span class="hljs-number">8</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>The gray scale formula is a fixed-point integer approximation of the <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Rec._601">ITU-R Recommendation BT.601</a> luma transform. The original formula is <code>Y = 0.299 * R + 0.587 * G + 0.114 * B</code>, but instead of using floating point, both sides are scaled by <code>256</code>, for example, <code>0.299 * 256 ≈ 76.544 ≈ 77</code>. So the formula becomes <code>Y= (77 * R + 150 * G + 29 * B) / 256</code>. The right shift by <code>8</code> represents division by <code>256</code>. Adding the <code>128u</code> is just like adding a <code>0.5</code> before rounding a floating point. This integer-based method would be much faster than floating point-based method, which involves type conversion, floating-point computation, etc.</p>
+<p>This gray scale formula would also be used in our CUDA version.</p>
+<p>Other than the grayscale formula, nothing in this C snippet should be too obscure. Here we ignore the return value of <code>fread()</code> for brevity (<code>(void)!fread(...)</code>), but checking errors is always a good habit. You can compile it with simple command <code>gcc -o scaler ./scaler.c</code>, and play around with BMP images. Its output of our <code>1024 × 1024</code> example would shown as:</p>
+<p><img src="/../images/cuda/output.bmp" srcset="/img/loading.gif" lazyload alt="Example output image from pure C"></p>
+<p>Full code is available at Appendix <a href="#Source-Code-Plain-C-Version">Source Code: Plain C Version</a>.</p>
+<p>Now, let’s step into the CUDA world!</p>
+<h2 id="CUDA-Basics-in-a-Nutshell"><a href="#CUDA-Basics-in-a-Nutshell" class="headerlink" title="CUDA Basics in a Nutshell"></a>CUDA Basics in a Nutshell</h2><h3 id="Host-and-Device"><a href="#Host-and-Device" class="headerlink" title="Host and Device"></a>Host and Device</h3><p>In CUDA programming, every CUDA-compatible GPU is called a <em>device</em>. Its counterpart, the CPU, is referred to as the <em>host</em>. you need to tell the CUDA runtime which parts of the code run on the host and which run on the device, typically by <em>qualifier keywords</em>, e.g., <code>__host__</code>, <code>__global__</code>, and <code>__device__</code>.</p>
+<p>The <code>__host__</code> qualifier means that the function can be called by host, and executed on host. It is the default behavior if no qualifier is specified, making CUDA C compatible with traditional C function declarations.</p>
+<p>The <code>__global__</code> qualifier means that the function can be called by host, but executed on device, conceptually acting as the bridge between host and device. Such a CUDA C function is typically called a <em>kernel</em>, or kernel function.</p>
+<p>The <code>__device__</code> qualifier, as its name suggests, indicates that the function is called from, and executed on, the device.</p>
+<p>Thus, our CUDA kernel would be something like:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C">__global__ <span class="hljs-type">void</span> <span class="hljs-title function_">grayscaleKernel</span><span class="hljs-params">(...)</span><br>&#123;<br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Threads-Blocks-and-Grids"><a href="#Threads-Blocks-and-Grids" class="headerlink" title="Threads, Blocks, and Grids"></a>Threads, Blocks, and Grids</h3><p>When a kernel is launched, it runs in parallel across many <em>threads</em> on the GPU. (Note that this thread is different from the thread in operating system.) A CUDA thread maps to a lightweight execution context on the GPU. This is a typical example of single-program multiple-data (SPMD). When the host calls a kernel, it would launch a <em>grid</em>, and the grid would generate many threads, and manage them by <em>blocks</em>. A block commonly contains 128 to 1024 threads. Earlier CUDA versions capped this at 512, but modern GPUs typically allow up to 1024.</p>
+<p>As we mentioned, CUDA follows the SPMD model: every thread runs the same kernel code, but on different data. So how could the thread know what data to process? This is indicated by <code>blockIdx</code> and <code>threadIdx</code>.</p>
+<p>The following is a kernel that adds two vectors (<code>A</code> and <code>B</code>) together, and write to <code>C</code>:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C">__global__ <span class="hljs-type">void</span> <span class="hljs-title function_">vecAddKernel</span><span class="hljs-params">(<span class="hljs-type">int</span>* A, <span class="hljs-type">int</span>* B, <span class="hljs-type">int</span>* C, <span class="hljs-type">int</span> vec_size)</span><br>&#123;<br>    <span class="hljs-type">int</span> i = blockDim.x * blockIdx.x + threadIdx.x;<br>    <span class="hljs-keyword">if</span> (i &lt; vec_size)<br>    &#123;<br>        C[i] = A[i] + B[i];<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>The kernel can retrieve the data they need to process by indexing based on <code>blockIdx</code> and <code>threadIdx</code>. They are unique and assigned by the CUDA runtime. Think of it like a spreadsheet: <code>blockIdx</code> picks which page, <code>blockDim</code> tells you how many rows per page, and <code>threadIdx</code> picks the row, so you can go ahead to the part you need to focus on. Although the we do not manually assign <code>blockIdx</code> and <code>threadIdx</code>, there are two things that we do need to manage: the number of blocks in the grid, and the number of threads per blocks.</p>
+<p>The <code>blockDim</code> represents how many threads are in a block. When we call the kernel from the host, we need to tell CUDA runtime how many threads are there per block, and how many blocks are there in the grid.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">int</span> threads_per_block = <span class="hljs-number">256</span>; <span class="hljs-comment">// blockDim</span><br><span class="hljs-type">int</span> blocks_per_grid = <span class="hljs-number">4</span>;     <span class="hljs-comment">// gridDim</span><br>vecAddKernel&lt;&lt;&lt;blocks_per_grid, threads_per_block&gt;&gt;&gt;(A, B, C, <span class="hljs-number">1000</span>);<br></code></pre></td></tr></table></figure>
+
+<p>Here the <code>threads_per_block</code> would become <code>blockDim</code> in the kernel. Combined with <code>blocks_per_grid</code>, they are telling the CUDA runtime that we want to start <code>4</code> blocks in the grid, and each block contains <code>256</code> threads. Note the triple-angle brackets <code>&lt;&lt;&lt;</code> and <code>&gt;&gt;&gt;</code>, which distinguish a kernel launch from a regular function call. As <code>256 * 4 = 1024 &gt; 1000</code>, it would be capable to handle the 1000-length vector. If a thread’s index exceeds the vector length, that thread simply does nothing. A more idiomatic way to define <code>blocks_per_grid</code> is to associate it with the target size:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">int</span> vec_size = <span class="hljs-number">1000</span>;<br><span class="hljs-type">int</span> threads_per_block = <span class="hljs-number">256</span>;                                                  <span class="hljs-comment">// blockDim</span><br><span class="hljs-type">int</span> blocks_per_grid = (vec_size + threads_per_block - <span class="hljs-number">1</span>) / threads_per_block; <span class="hljs-comment">// gridDim</span><br>vecAddKernel&lt;&lt;&lt;blocks_per_grid, threads_per_block&gt;&gt;&gt;(A, B, C, vec_size);<br></code></pre></td></tr></table></figure>
+
+<p>You may have noticed that we are using <code>.x</code> in kernel data indexing, and might get a bit confused. <em>Why the provided integer <code>threads_per_block</code> becomes <code>blockDim.x</code>, not exactly <code>blockDim</code>?</em> This is because CUDA also accepts multidimensional blockDim (and also the gridDim). For example, <code>dim3 blockDim(16, 8, 3);</code> allows us to have number of threads in shape <code>16 × 8 × 3</code>, so we can calculate index inside the kernel with <code>blockDim.x</code>, <code>blockDim.y</code> and <code>blockDim.z</code>. This is very convenient for some conceptually 3D inputs.</p>
+<h3 id="CUDA-Memory-Model"><a href="#CUDA-Memory-Model" class="headerlink" title="CUDA Memory Model"></a>CUDA Memory Model</h3><p>CUDA devices have their own memory, typically GDDR6 or GDDR6X in <a target="_blank" rel="noopener" href="https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/">NVIDIA GeForce RTX 40 Series Graphics Cards</a>. They resemble DRAM (DDR4 or DDR5 in mainstream laptops or desktops) on your computer, but managed by the GPU via CUDA. So if we want to ask CUDA devices to do some computation, we first need to allocate memory (similar to how you’d use <code>malloc()</code> in C), and copy data into it. Similarly, we need to retrieve the calculation results from CUDA’s memory once the computation is finished. These could be done by calling <code>cudaMalloc()</code> and <code>cudaMemcpy()</code>.</p>
+<p>So in the big picture, if we need to use CUDA devices to help us, we need to perform at least the following steps:</p>
+<ol>
+<li>Apply for required CUDA memory;</li>
+<li>Write data to CUDA memory;</li>
+<li>Launch kernel;</li>
+<li>Collect data from CUDA memory.</li>
+</ol>
+<p>You might wonder whether this computing model is efficient enough, since it involves many memory operations that look costly. We would find it out as we add timer to them.</p>
+<h2 id="CUDA-C-Implementation-GPU-Version"><a href="#CUDA-C-Implementation-GPU-Version" class="headerlink" title="CUDA C Implementation (GPU Version)"></a>CUDA C Implementation (GPU Version)</h2><p>Now we are fully prepared to implement the CUDA version. Recall that CUDA C is a superset of plain C, so most parts (such as BMP header parsing and file I&#x2F;O) will be the same. All we need to consider is how to write a CUDA kernel, and how to launch it.</p>
+<p>Please feel free to give it a shot yourself. And if you are ready, let’s see our minimalist CUDA kernel:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">/*</span><br><span class="hljs-comment"> * The CUDA kernel for pixel grayscaling. Each thread handles a specific pixel.</span><br><span class="hljs-comment"> */</span><br>__global__ <span class="hljs-type">void</span> <span class="hljs-title function_">grayscaleKernel</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *__restrict__ img, <span class="hljs-type">int</span> pix_num)</span><br>&#123;<br>    <span class="hljs-type">int</span> pix = (blockDim.x * blockIdx.x + threadIdx.x);<br>    <span class="hljs-keyword">if</span> (pix &gt;= pix_num)<br>        <span class="hljs-keyword">return</span>;<br><br>    <span class="hljs-type">int</span> i = pix * <span class="hljs-number">3</span>;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> y = <span class="hljs-number">77u</span> * img[i + <span class="hljs-number">2</span>] + <span class="hljs-number">150u</span> * img[i + <span class="hljs-number">1</span>] + <span class="hljs-number">29u</span> * img[i];<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> gray = (<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span>)(y &gt;&gt; <span class="hljs-number">8</span>);<br>    img[i] = gray;<br>    img[i + <span class="hljs-number">1</span>] = gray;<br>    img[i + <span class="hljs-number">2</span>] = gray;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>You can observe that it follows our <code>vecAddKernel()</code> example, firstly get the data index, exit if out-of-range, and then manipulate the data. The grayscale formula is exactly the same as in our plain C version. Each thread processes exactly one pixel.</p>
+<p>To call our gray scale kernel, we need to setup memory and dimensions for it. To make it as parallel as possible, we can provide the entire image to our CUDA device. Recall that the maximum number of threads per block (<code>blockDim</code>) is <code>1024</code>, so we can safely set it to that value. Naturally, <code>blocks_per_grid</code> (or <code>gridDim</code>) can be computed as <code>(pix_num + threads_per_block - 1) / threads_per_block</code>, as division (<code>/</code>) in C by default is integer division. So our CUDA code for calling the kernel (includes preparations and related clean-up) would look like:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">uint32_t</span> pix_num = width * height;<br><span class="hljs-type">uint32_t</span> img_size = pix_num * <span class="hljs-number">3u</span>;<br><span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *img_h = (<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *)<span class="hljs-built_in">malloc</span>(img_size);<br><br>(<span class="hljs-type">void</span>)!fread(img_h, <span class="hljs-number">1</span>, img_size, fpi);<br><br><span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *img_d;<br>cudaMalloc((<span class="hljs-type">void</span> **)&amp;img_d, img_size);<br>cudaMemcpy(img_d, img_h, img_size, cudaMemcpyHostToDevice);<br><br><span class="hljs-type">int</span> threads_per_block = (width &gt; <span class="hljs-number">1024</span>) ? <span class="hljs-number">1024</span> : width;<br><span class="hljs-type">int</span> blocks_per_grid = (pix_num + threads_per_block - <span class="hljs-number">1</span>) / threads_per_block;<br>grayscaleKernel&lt;&lt;&lt;blocks_per_grid, threads_per_block&gt;&gt;&gt;(img_d, pix_num);<br><br>cudaMemcpy(img_h, img_d, img_size, cudaMemcpyDeviceToHost);<br>cudaFree(img_d);<br><br><span class="hljs-comment">// Don&#x27;t forget to free `img_h` after writing output.</span><br></code></pre></td></tr></table></figure>
+
+<p>It’s common CUDA practice to append <code>_h</code> and <code>_d</code> to variable names to indicate host or device memory. Also note that any pointer passed into a kernel must point to device memory, such as <code>img_d</code> in this case.</p>
+<p>Similarly, simply run <code>nvcc -o scaler_cu ./scaler.cu</code> to compile and try it with BMP files! The output should exactly the same as the C version.</p>
+<p>Full code is available at Appendix <a href="#Source-Code-CUDA-C-Version">Source Code: CUDA C Version</a>.</p>
+<h2 id="Experimental-Setup-and-Results"><a href="#Experimental-Setup-and-Results" class="headerlink" title="Experimental Setup and Results"></a>Experimental Setup and Results</h2><p>Now that we have two well-functioning grayscale programs, we can measure their performance with timers and compare the results.</p>
+<h3 id="Timer-Setup"><a href="#Timer-Setup" class="headerlink" title="Timer Setup"></a>Timer Setup</h3><p>Following our minimalism philosophy, we simply record the start and end time of an operation, for example:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">double</span> t_s = now_sec(); <span class="hljs-comment">// Start time.</span><br>cudaMemcpy(img_d, img_h, img_size, cudaMemcpyHostToDevice);<br><span class="hljs-type">double</span> t_e = now_sec(); <span class="hljs-comment">// End time.</span><br><span class="hljs-type">double</span> t_memcpy_h2d = t_e - t_s;<br><br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Memcpy Host to Device: %.4f s\n&quot;</span>, t_memcpy_h2d);<br></code></pre></td></tr></table></figure>
+
+<p>With <code>now_sec()</code> defined as:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;time.h&gt;</span></span><br><br><span class="hljs-type">static</span> <span class="hljs-keyword">inline</span> <span class="hljs-type">double</span> <span class="hljs-title function_">now_sec</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">timespec</span> <span class="hljs-title">ts</span>;</span><br>    clock_gettime(CLOCK_MONOTONIC, &amp;ts);<br>    <span class="hljs-keyword">return</span> (<span class="hljs-type">double</span>)ts.tv_sec + (<span class="hljs-type">double</span>)ts.tv_nsec * <span class="hljs-number">1e-9</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>For the pure C version, we measured: <strong>1)</strong> total time, <strong>2)</strong> file input time, <strong>3)</strong> pixel processing time, and <strong>4)</strong> file output time. Full code is available at Appendix <a href="#Source-Code-Plain-C-Version">Source Code: Plain C Version</a>.</p>
+<p>For the CUDA C version, we measured: <strong>1)</strong> total time, <strong>2)</strong> file input time, <strong>3)</strong> memory copy time from host to device, <strong>4)</strong> pixel processing time, <strong>5)</strong> memory copy time from device to host, and <strong>6)</strong> file output time. Full code is available at Appendix <a href="#Source-Code-CUDA-C-Version">Source Code: CUDA C Version</a>.</p>
+<p>Note: since kernel launches are asynchronous, we call <code>cudaDeviceSynchronize()</code> before stopping the timer to ensure accurate measurements.</p>
+<h3 id="Compiler-Optimizations-and-Flags"><a href="#Compiler-Optimizations-and-Flags" class="headerlink" title="Compiler Optimizations and Flags"></a>Compiler Optimizations and Flags</h3><p>The default commands <code>gcc -o scaler ./scaler.o</code> and <code>nvcc -o scaler_cu ./scaler.cu</code> of course work fine, but as we are profiling their performance, we also want to enable compiler optimizations (using aggressive settings), for both of them. This is how we compile them:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sh">nvcc -O3 -Xcompiler <span class="hljs-string">&quot;-march=native -mtune=native -pipe&quot;</span> -gencode <span class="hljs-built_in">arch</span>=compute_89,code=sm_89 -o scaler ./scaler.c<br>nvcc -O3 -Xcompiler <span class="hljs-string">&quot;-march=native -mtune=native -pipe&quot;</span> -gencode <span class="hljs-built_in">arch</span>=compute_89,code=sm_89 -o scaler_cu ./scaler.cu<br></code></pre></td></tr></table></figure>
+
+<p>We are using <code>nvcc</code> for both pure C version and CUDA version, to avoid any compiler version mismatches. Since CUDA C is a superset of C, <code>nvcc</code> can also compile our <code>scaler.c</code> without issues. This is a breakdown of these flags:</p>
+<ul>
+<li><code>-O3</code> maximize optimization, applies to both host and device code;</li>
+<li><code>-Xcompiler</code> provides flags that only apply to the host compiler (<code>gcc</code> in this case):<ul>
+<li><code>-march</code> specifies CPU type, set to <code>native</code> enables all instruction subsets supported by host machine;</li>
+<li><code>-mtune=native</code> produces code optimized for the local machine under the constraints of the selected instruction set;</li>
+<li><code>-pipe</code> uses pipes rather than temporary files during compilation, which can speed up builds slightly.</li>
+</ul>
+</li>
+<li><code>-gencode</code> specifies the CUDA architecture for code generation, <code>sm_89</code> stands for <a target="_blank" rel="noopener" href="https://www.nvidia.com/en-us/geforce/ada-lovelace-architecture/">Ada Lovelace architecture</a>, which is the architecture of NVIDIA GeForce RTX 40 Series GPU (the CUDA equivalent of <code>-march=native -mtune=native</code>). Remember to update this if you are running it on different devices.</li>
+</ul>
+<h3 id="Experimental-Results-and-Analysis"><a href="#Experimental-Results-and-Analysis" class="headerlink" title="Experimental Results and Analysis"></a>Experimental Results and Analysis</h3><p>The following table gives a typical result comparison when running on our <code>1024 × 1024</code> example:</p>
+<div style="margin: 0 auto; width: fit-content;">
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th align="center">Read</th>
+<th align="center">H2D</th>
+<th align="center">Compute</th>
+<th align="center">D2H</th>
+<th align="center">Write</th>
+<th align="center">Total</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Plain C</td>
+<td align="center">0.0096</td>
+<td align="center">\</td>
+<td align="center">0.0193</td>
+<td align="center">\</td>
+<td align="center">0.0097</td>
+<td align="center">0.0599</td>
+</tr>
+<tr>
+<td>CUDA C</td>
+<td align="center">0.0094</td>
+<td align="center">0.0008</td>
+<td align="center">0.0013</td>
+<td align="center">0.0002</td>
+<td align="center">0.0095</td>
+<td align="center">0.1621</td>
+</tr>
+</tbody></table>
+</div>
+
+<p>We also run the gray scalers on a 12K image (not presenting it here, as such large image would significantly drag behind the webpage loading speed, it would occupy around 351 MB in BMP format), you can get it from <a target="_blank" rel="noopener" href="https://unsplash.com/photos/green-trees-on-brown-field-during-daytime-BUu1gsIZqdE">this beautiful picture of a forest path</a>, which is at <code>12325 × 9979</code> resolution (remember to download the original size and convert it to BMP format).</p>
+<p>Here is the result of the 12K image:</p>
+<div style="margin: 0 auto; width: fit-content;">
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th align="center">Read</th>
+<th align="center">H2D</th>
+<th align="center">Compute</th>
+<th align="center">D2H</th>
+<th align="center">Write</th>
+<th align="center">Total</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Plain C</td>
+<td align="center">0.8983</td>
+<td align="center">\</td>
+<td align="center">2.2435</td>
+<td align="center">\</td>
+<td align="center">1.1176</td>
+<td align="center">6.6233</td>
+</tr>
+<tr>
+<td>CUDA C</td>
+<td align="center">0.9539</td>
+<td align="center">0.0260</td>
+<td align="center">0.0014</td>
+<td align="center">0.0213</td>
+<td align="center">1.1110</td>
+<td align="center">2.2435</td>
+</tr>
+</tbody></table>
+</div>
+
+<p>We can clearly see that there is a crossover between CPU’s performance and GPU’s. For small images (<code>1024 × 1024</code>), CPU outperforms GPU. This is because the overhead of launching kernels and handling memory transfers, dominate the time consumption in GPU.</p>
+<p>As the image grows larger, the power of parallelism begins to show. With more pixels, kernel throughput and device memory bandwidth amortize the kernel launch and transfer overheads. Also the GPU compute time barely increases, showing that all computing units in the CUDA device are contributing to parallelism.</p>
+<p>As someone may have questions at the <a href="#CUDA-Memory-Model">CUDA Memory Model</a> section, questioning the efficiency of CUDA’s memory model. Here we can see an important property of GPU memory: graphics memory is optimized for high bandwidth, rather than low latency. This also contribute to GPU’s outperforming on large images. This is also why GPUs excel when there’s enough data to keep thousands of threads busy.</p>
+<p>After all, grayscale conversion is not a compute-bound task; the bottleneck lies in memory I&#x2F;O and data transfers. This experiment is a good example of a memory-bound workload.</p>
+<p>In more advanced context, when facing the scenario that processing multiple BMP images, the CUDA version can be further optimized for pipelining. In other words, GPU compute can overlap with transfers, while CPU is loading &#x2F; saving next &#x2F; previous image. This would not be possible without CUDA, and would further improve the performance gap between CPU-only and CUDA programming. Other improvements such as multi-streaming, pinned memory, event-based control, error handling, and many other interesting topics would be covered in future posts.</p>
+<p>In short, CPUs handle small workloads more efficiently due to lower overhead, but GPUs clearly dominate once the workload size grows large enough to utilize their parallelism.</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li>Wen-mei W. Hwu, David B. Kirk and Izzat EI Hajj. 2023. Programming Massively Parallel Processors: A Hands-on Approach (4th. ed.). Morgan Kaufmann Publishers Inc., San Francisco, CA, USA.</li>
+</ul>
+<p><strong>Online Contents:</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.ece.ualberta.ca/~elliott/ee552/studentAppNotes/2003_w/misc/bmp_file_format/bmp_file_format.htm">The BMP File Format</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/BMP_file_format">BMP file format - Wikipedia</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.freeconvert.com/image-converter">Image Converter - FreeConvert.com</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.itu.int/rec/R-REC-BT.601">BT.601 : Studio encoding parameters of digital television for standard 4:3 and wide screen 16:9 aspect ratios</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Rec._601">Rec. 601 - Wikipedia</a></li>
+<li><a target="_blank" rel="noopener" href="https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html">Optimize Options (Using the GNU Compiler Collection (GCC))</a></li>
+<li><a target="_blank" rel="noopener" href="https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html">x86 Options (Using the GNU Compiler Collection (GCC))</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/#gpu-generations">5. GPU Compilation - 5.1. GPU Generations</a></li>
+</ul>
+<p><strong>Used Images:</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://unsplash.com/photos/an-urban-street-scene-is-filled-with-cars-UIjPYiFM704">An urban street scene is filled with cars. photo – Free Street photography Image on Unsplash</a></li>
+<li><a target="_blank" rel="noopener" href="https://unsplash.com/photos/green-trees-on-brown-field-during-daytime-BUu1gsIZqdE">Green trees on brown field during daytime photo – Free Wallpaper Image on Unsplash</a></li>
+</ul>
+<h2 id="Appendix"><a href="#Appendix" class="headerlink" title="Appendix"></a>Appendix</h2><h3 id="Source-Code-Plain-C-Version"><a href="#Source-Code-Plain-C-Version" class="headerlink" title="Source Code: Plain C Version"></a>Source Code: Plain C Version</h3><p>A measured version with timers could be found <u><a href="/files/cuda/scaler.c">here</a></u>.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdint.h&gt;</span></span><br><br><span class="hljs-type">const</span> <span class="hljs-type">size_t</span> HEADER_STR = <span class="hljs-number">0x00</span>; <span class="hljs-comment">// Starting byte of BITMAPFILEHEADER.</span><br><span class="hljs-type">const</span> <span class="hljs-type">size_t</span> HEADER_END = <span class="hljs-number">0x0D</span>;<br><span class="hljs-type">const</span> <span class="hljs-type">size_t</span> HEADER_SIZE = HEADER_END - HEADER_STR + <span class="hljs-number">1</span>;<br><span class="hljs-type">const</span> <span class="hljs-type">size_t</span> COMMON_INFO_SIZE = <span class="hljs-number">40</span>; <span class="hljs-comment">// Common part of BITMAPINFOHEADER.</span><br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment"> * Little-endian 32-bit integer reader.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">static</span> <span class="hljs-keyword">inline</span> <span class="hljs-type">uint32_t</span> <span class="hljs-title function_">le32</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *p)</span><br>&#123;<br>    <span class="hljs-keyword">return</span> (<span class="hljs-type">uint32_t</span>)p[<span class="hljs-number">0</span>] | ((<span class="hljs-type">uint32_t</span>)p[<span class="hljs-number">1</span>] &lt;&lt; <span class="hljs-number">8</span>) | ((<span class="hljs-type">uint32_t</span>)p[<span class="hljs-number">2</span>] &lt;&lt; <span class="hljs-number">16</span>) | ((<span class="hljs-type">uint32_t</span>)p[<span class="hljs-number">3</span>] &lt;&lt; <span class="hljs-number">24</span>);<br>&#125;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment"> * Little-endian 16-bit integer reader.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">static</span> <span class="hljs-keyword">inline</span> <span class="hljs-type">uint16_t</span> <span class="hljs-title function_">le16</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *p)</span><br>&#123;<br>    <span class="hljs-keyword">return</span> (<span class="hljs-type">uint16_t</span>)p[<span class="hljs-number">0</span>] | ((<span class="hljs-type">uint16_t</span>)p[<span class="hljs-number">1</span>] &lt;&lt; <span class="hljs-number">8</span>);<br>&#125;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment"> * Grayscaler with fast integer (BT.601).</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">static</span> <span class="hljs-keyword">inline</span> <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> <span class="hljs-title function_">grayscale</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> r, <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> g, <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> b)</span><br>&#123;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> y = <span class="hljs-number">77u</span> * r + <span class="hljs-number">150u</span> * g + <span class="hljs-number">29u</span> * b + <span class="hljs-number">128u</span>; <span class="hljs-comment">/* +128 for rounding */</span><br>    <span class="hljs-keyword">return</span> (<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span>)(y &gt;&gt; <span class="hljs-number">8</span>);<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    FILE *fpi = fopen(<span class="hljs-string">&quot;source.bmp&quot;</span>, <span class="hljs-string">&quot;rb&quot;</span>);<br>    FILE *fpo = fopen(<span class="hljs-string">&quot;output.bmp&quot;</span>, <span class="hljs-string">&quot;wb&quot;</span>);<br><br>    <span class="hljs-keyword">if</span> (!fpi || !fpo)<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br><br>    <span class="hljs-comment">// Load header and common info header.</span><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> header[HEADER_SIZE];<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> common_info[COMMON_INFO_SIZE];<br><br>    (<span class="hljs-type">void</span>)!fread(header, <span class="hljs-number">1</span>, HEADER_SIZE, fpi);<br>    (<span class="hljs-type">void</span>)!fread(common_info, <span class="hljs-number">1</span>, COMMON_INFO_SIZE, fpi);<br>    <span class="hljs-type">uint32_t</span> data_offset = le32(&amp;header[<span class="hljs-number">10</span>]);<br>    <span class="hljs-type">uint32_t</span> remain_info_size = data_offset - HEADER_SIZE - COMMON_INFO_SIZE;<br>    <span class="hljs-type">uint32_t</span> width = le32(&amp;common_info[<span class="hljs-number">4</span>]);<br>    <span class="hljs-type">uint32_t</span> height = le32(&amp;common_info[<span class="hljs-number">8</span>]);<br>    <span class="hljs-type">uint16_t</span> bpp = le16(&amp;common_info[<span class="hljs-number">14</span>]);         <span class="hljs-comment">// Bits per pixel.</span><br>    <span class="hljs-type">uint16_t</span> compression = le32(&amp;common_info[<span class="hljs-number">16</span>]); <span class="hljs-comment">// Compression.</span><br><br>    <span class="hljs-keyword">if</span> (bpp != <span class="hljs-number">24</span> || compression != <span class="hljs-number">0</span>)<br>    &#123;<br>        <span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stderr</span>, <span class="hljs-string">&quot;Unsupported format&quot;</span>);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>    &#125;<br><br>    <span class="hljs-comment">// Load remaining info header.</span><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> remain_info[remain_info_size];<br>    (<span class="hljs-type">void</span>)!fread(remain_info, <span class="hljs-number">1</span>, remain_info_size, fpi);<br><br>    <span class="hljs-comment">// Write header and info header to output image.</span><br>    fwrite(header, <span class="hljs-number">1</span>, HEADER_SIZE, fpo);<br>    fwrite(common_info, <span class="hljs-number">1</span>, COMMON_INFO_SIZE, fpo);<br>    fwrite(remain_info, <span class="hljs-number">1</span>, remain_info_size, fpo);<br><br>    <span class="hljs-type">uint32_t</span> pix_num = width * height;<br>    <span class="hljs-type">uint32_t</span> img_size = pix_num * <span class="hljs-number">3u</span>;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *img = (<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *)<span class="hljs-built_in">malloc</span>(img_size);<br><br>    (<span class="hljs-type">void</span>)!fread(img, <span class="hljs-number">1</span>, img_size, fpi);<br><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int32_t</span> y = <span class="hljs-number">0</span>; y &lt; height; y++)<br>    &#123;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int32_t</span> x = <span class="hljs-number">0</span>; x &lt; width; x++)<br>        &#123;<br>            <span class="hljs-type">int32_t</span> i = (y * width + x);<br>            <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *p = &amp;img[i * <span class="hljs-number">3</span>]; <span class="hljs-comment">// One pixel, BGR.</span><br>            <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> gray = grayscale(p[<span class="hljs-number">2</span>], p[<span class="hljs-number">1</span>], p[<span class="hljs-number">0</span>]);<br>            p[<span class="hljs-number">0</span>] = gray;<br>            p[<span class="hljs-number">1</span>] = gray;<br>            p[<span class="hljs-number">2</span>] = gray;<br>        &#125;<br>    &#125;<br><br>    fwrite(img, <span class="hljs-number">1</span>, img_size, fpo);<br><br>    <span class="hljs-built_in">free</span>(img);<br>    fclose(fpi);<br>    fclose(fpo);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Source-Code-CUDA-C-Version"><a href="#Source-Code-CUDA-C-Version" class="headerlink" title="Source Code: CUDA C Version"></a>Source Code: CUDA C Version</h3><p>A measured version with timers could be found <u><a href="/files/cuda/scaler.cu">here</a></u>.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdint.h&gt;</span></span><br><br><span class="hljs-type">const</span> <span class="hljs-type">size_t</span> HEADER_STR = <span class="hljs-number">0x00</span>; <span class="hljs-comment">// Starting byte of BITMAPFILEHEADER.</span><br><span class="hljs-type">const</span> <span class="hljs-type">size_t</span> HEADER_END = <span class="hljs-number">0x0D</span>;<br><span class="hljs-type">const</span> <span class="hljs-type">size_t</span> HEADER_SIZE = HEADER_END - HEADER_STR + <span class="hljs-number">1</span>;<br><span class="hljs-type">const</span> <span class="hljs-type">size_t</span> COMMON_INFO_SIZE = <span class="hljs-number">40</span>; <span class="hljs-comment">// Common part of BITMAPINFOHEADER.</span><br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment"> * Little-endian 32-bit integer reader.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">static</span> <span class="hljs-keyword">inline</span> <span class="hljs-type">uint32_t</span> <span class="hljs-title function_">le32</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *p)</span><br>&#123;<br>    <span class="hljs-keyword">return</span> (<span class="hljs-type">uint32_t</span>)p[<span class="hljs-number">0</span>] | ((<span class="hljs-type">uint32_t</span>)p[<span class="hljs-number">1</span>] &lt;&lt; <span class="hljs-number">8</span>) | ((<span class="hljs-type">uint32_t</span>)p[<span class="hljs-number">2</span>] &lt;&lt; <span class="hljs-number">16</span>) | ((<span class="hljs-type">uint32_t</span>)p[<span class="hljs-number">3</span>] &lt;&lt; <span class="hljs-number">24</span>);<br>&#125;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment"> * Little-endian 16-bit integer reader.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">static</span> <span class="hljs-keyword">inline</span> <span class="hljs-type">uint16_t</span> <span class="hljs-title function_">le16</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *p)</span><br>&#123;<br>    <span class="hljs-keyword">return</span> (<span class="hljs-type">uint16_t</span>)p[<span class="hljs-number">0</span>] | ((<span class="hljs-type">uint16_t</span>)p[<span class="hljs-number">1</span>] &lt;&lt; <span class="hljs-number">8</span>);<br>&#125;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment"> * The CUDA kernel for pixel grayscaling. Each thread handles a specific pixel.</span><br><span class="hljs-comment"> */</span><br>__global__ <span class="hljs-type">void</span> <span class="hljs-title function_">grayscaleKernel</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *__restrict__ img, <span class="hljs-type">int</span> pix_num)</span><br>&#123;<br>    <span class="hljs-type">int</span> pix = (blockDim.x * blockIdx.x + threadIdx.x);<br>    <span class="hljs-keyword">if</span> (pix &gt;= pix_num)<br>        <span class="hljs-keyword">return</span>;<br><br>    <span class="hljs-type">int</span> i = pix * <span class="hljs-number">3</span>;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> y = <span class="hljs-number">77u</span> * img[i + <span class="hljs-number">2</span>] + <span class="hljs-number">150u</span> * img[i + <span class="hljs-number">1</span>] + <span class="hljs-number">29u</span> * img[i];<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> gray = (<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span>)(y &gt;&gt; <span class="hljs-number">8</span>);<br>    img[i] = gray;<br>    img[i + <span class="hljs-number">1</span>] = gray;<br>    img[i + <span class="hljs-number">2</span>] = gray;<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    FILE *fpi = fopen(<span class="hljs-string">&quot;source.bmp&quot;</span>, <span class="hljs-string">&quot;rb&quot;</span>);<br>    FILE *fpo = fopen(<span class="hljs-string">&quot;output_cuda.bmp&quot;</span>, <span class="hljs-string">&quot;wb&quot;</span>);<br><br>    <span class="hljs-keyword">if</span> (!fpi || !fpo)<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br><br>    <span class="hljs-comment">// Load header and common info header.</span><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> header[HEADER_SIZE];<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> common_info[COMMON_INFO_SIZE];<br><br>    (<span class="hljs-type">void</span>)!fread(header, <span class="hljs-number">1</span>, HEADER_SIZE, fpi);<br>    (<span class="hljs-type">void</span>)!fread(common_info, <span class="hljs-number">1</span>, COMMON_INFO_SIZE, fpi);<br>    <span class="hljs-type">uint32_t</span> data_offset = le32(&amp;header[<span class="hljs-number">10</span>]);<br>    <span class="hljs-type">uint32_t</span> remain_info_size = data_offset - HEADER_SIZE - COMMON_INFO_SIZE;<br>    <span class="hljs-type">uint32_t</span> width = le32(&amp;common_info[<span class="hljs-number">4</span>]);<br>    <span class="hljs-type">uint32_t</span> height = le32(&amp;common_info[<span class="hljs-number">8</span>]);<br>    <span class="hljs-type">uint16_t</span> bpp = le16(&amp;common_info[<span class="hljs-number">14</span>]);         <span class="hljs-comment">// Bits per pixel.</span><br>    <span class="hljs-type">uint16_t</span> compression = le32(&amp;common_info[<span class="hljs-number">16</span>]); <span class="hljs-comment">// Compression.</span><br><br>    <span class="hljs-keyword">if</span> (bpp != <span class="hljs-number">24</span> || compression != <span class="hljs-number">0</span>)<br>    &#123;<br>        <span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stderr</span>, <span class="hljs-string">&quot;Unsupported BMP: expecting 24bbp, uncompressed.\n&quot;</span>);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>    &#125;<br><br>    <span class="hljs-comment">// Load remaining info header.</span><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> remain_info[remain_info_size];<br>    (<span class="hljs-type">void</span>)!fread(remain_info, <span class="hljs-number">1</span>, remain_info_size, fpi);<br><br>    <span class="hljs-comment">// Write header and info header to output image.</span><br>    fwrite(header, <span class="hljs-number">1</span>, HEADER_SIZE, fpo);<br>    fwrite(common_info, <span class="hljs-number">1</span>, COMMON_INFO_SIZE, fpo);<br>    fwrite(remain_info, <span class="hljs-number">1</span>, remain_info_size, fpo);<br><br>    <span class="hljs-type">uint32_t</span> pix_num = width * height;<br>    <span class="hljs-type">uint32_t</span> img_size = pix_num * <span class="hljs-number">3u</span>;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *img_h = (<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *)<span class="hljs-built_in">malloc</span>(img_size);<br><br>    (<span class="hljs-type">void</span>)!fread(img_h, <span class="hljs-number">1</span>, img_size, fpi);<br><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *img_d;<br><br>    cudaMalloc((<span class="hljs-type">void</span> **)&amp;img_d, img_size);<br>    cudaMemcpy(img_d, img_h, img_size, cudaMemcpyHostToDevice);<br><br>    <span class="hljs-type">int</span> threads_per_block = (width &gt; <span class="hljs-number">1024</span>) ? <span class="hljs-number">1024</span> : width;<br>    <span class="hljs-type">int</span> blocks_per_grid = (pix_num + threads_per_block - <span class="hljs-number">1</span>) / threads_per_block;<br>    grayscaleKernel&lt;&lt;&lt;blocks_per_grid, threads_per_block&gt;&gt;&gt;(img_d, pix_num);<br><br>    cudaGetLastError();<br><br>    cudaMemcpy(img_h, img_d, img_size, cudaMemcpyDeviceToHost);<br><br>    cudaFree(img_d);<br><br>    fwrite(img_h, <span class="hljs-number">1</span>, img_size, fpo);<br><br>    <span class="hljs-built_in">free</span>(img_h);<br>    fclose(fpi);<br>    fclose(fpo);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Programming-Language/" class="category-chain-item">Programming Language</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/C/" class="print-no-link">#C</a>
+      
+        <a href="/tags/CUDA/" class="print-no-link">#CUDA</a>
+      
+        <a href="/tags/Parallel-Programming/" class="print-no-link">#Parallel Programming</a>
+      
+        <a href="/tags/BMP/" class="print-no-link">#BMP</a>
+      
+        <a href="/tags/SPMD/" class="print-no-link">#SPMD</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Grayscale BMP Images: A Practical Yet Gentle CUDA Tutorial for Beginners</div>
+      <div>https://blog.lingkang.dev/2025/09/19/cuda-grayscale/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Lingkang</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>September 19, 2025</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/11/11/read-paper-flipbit/" title="Paper Notes: FlipBit - Save Energy for Flash Memory Write with Approximation">
+                        <span class="hidden-mobile">Paper Notes: FlipBit - Save Energy for Flash Memory Write with Approximation</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

@@ -6,7 +6,7 @@
   <link href="https://blog.lingkang.dev/atom.xml" rel="self"/>
   
   <link href="https://blog.lingkang.dev/"/>
-  <updated>2024-11-11T10:37:04.645Z</updated>
+  <updated>2025-09-21T13:04:07.000Z</updated>
   <id>https://blog.lingkang.dev/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Grayscale BMP Images: A Practical Yet Gentle CUDA Tutorial for Beginners</title>
+    <link href="https://blog.lingkang.dev/2025/09/19/cuda-grayscale/"/>
+    <id>https://blog.lingkang.dev/2025/09/19/cuda-grayscale/</id>
+    <published>2025-09-19T10:51:19.000Z</published>
+    <updated>2025-09-21T13:04:07.000Z</updated>
+    
+    
+    <summary type="html">Learn how to grayscale BMP images with CUDA, compare against plain C, and see where GPU parallelism shines.</summary>
+    
+    
+    
+    <category term="Programming Language" scheme="https://blog.lingkang.dev/categories/Programming-Language/"/>
+    
+    
+    <category term="C" scheme="https://blog.lingkang.dev/tags/C/"/>
+    
+    <category term="CUDA" scheme="https://blog.lingkang.dev/tags/CUDA/"/>
+    
+    <category term="Parallel Programming" scheme="https://blog.lingkang.dev/tags/Parallel-Programming/"/>
+    
+    <category term="BMP" scheme="https://blog.lingkang.dev/tags/BMP/"/>
+    
+    <category term="SPMD" scheme="https://blog.lingkang.dev/tags/SPMD/"/>
+    
+  </entry>
   
   <entry>
     <title>Paper Notes: FlipBit - Save Energy for Flash Memory Write with Approximation</title>
@@ -136,48 +163,15 @@
     
     <category term="Docker" scheme="https://blog.lingkang.dev/tags/Docker/"/>
     
+    <category term="Finance" scheme="https://blog.lingkang.dev/tags/Finance/"/>
+    
     <category term="Self-Host" scheme="https://blog.lingkang.dev/tags/Self-Host/"/>
     
     <category term="Web App" scheme="https://blog.lingkang.dev/tags/Web-App/"/>
     
     <category term="SSL" scheme="https://blog.lingkang.dev/tags/SSL/"/>
     
-    <category term="Finance" scheme="https://blog.lingkang.dev/tags/Finance/"/>
-    
     <category term="Ruby" scheme="https://blog.lingkang.dev/tags/Ruby/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Paper Notes: PeeK - Pruning for K-th Shortest Paths</title>
-    <link href="https://blog.lingkang.dev/2024/08/09/read-paper-peek/"/>
-    <id>https://blog.lingkang.dev/2024/08/09/read-paper-peek/</id>
-    <published>2024-08-08T18:49:41.000Z</published>
-    <updated>2025-05-22T04:24:04.663Z</updated>
-    
-    
-    <summary type="html">Wang Feng, Shiyang Chen, Hang Liu, and Yuede Ji. PeeK: A Prune-Centric Approach for K Shortest Path Computation. International Conference for High Performance Computing, Networking, Storage, and Analysis, 2023</summary>
-    
-    
-    
-    <category term="Paper Notes" scheme="https://blog.lingkang.dev/categories/Paper-Notes/"/>
-    
-    
-    <category term="Python" scheme="https://blog.lingkang.dev/tags/Python/"/>
-    
-    <category term="C Plus Plus" scheme="https://blog.lingkang.dev/tags/C-Plus-Plus/"/>
-    
-    <category term="Sparsity" scheme="https://blog.lingkang.dev/tags/Sparsity/"/>
-    
-    <category term="Pruning" scheme="https://blog.lingkang.dev/tags/Pruning/"/>
-    
-    <category term="Graph" scheme="https://blog.lingkang.dev/tags/Graph/"/>
-    
-    <category term="KSP" scheme="https://blog.lingkang.dev/tags/KSP/"/>
-    
-    <category term="CSR" scheme="https://blog.lingkang.dev/tags/CSR/"/>
-    
-    <category term="Sparse Graph" scheme="https://blog.lingkang.dev/tags/Sparse-Graph/"/>
     
   </entry>
   
