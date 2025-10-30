@@ -6,7 +6,7 @@
   <link href="https://blog.lingkang.dev/atom.xml" rel="self"/>
   
   <link href="https://blog.lingkang.dev/"/>
-  <updated>2025-09-21T13:04:07.000Z</updated>
+  <updated>2025-10-30T15:52:00.000Z</updated>
   <id>https://blog.lingkang.dev/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Setting Up CUDA Environment on a New Windows Machine</title>
+    <link href="https://blog.lingkang.dev/2025/10/30/cuda-setup/"/>
+    <id>https://blog.lingkang.dev/2025/10/30/cuda-setup/</id>
+    <published>2025-10-30T15:06:19.000Z</published>
+    <updated>2025-10-30T15:52:00.000Z</updated>
+    
+    
+    <summary type="html">A step-by-step guide to setting up CUDA on a new Windows machine.</summary>
+    
+    
+    
+    <category term="DevOps" scheme="https://blog.lingkang.dev/categories/DevOps/"/>
+    
+    
+    <category term="VS Code" scheme="https://blog.lingkang.dev/tags/VS-Code/"/>
+    
+    <category term="WSL2" scheme="https://blog.lingkang.dev/tags/WSL2/"/>
+    
+    <category term="Docker" scheme="https://blog.lingkang.dev/tags/Docker/"/>
+    
+    <category term="CUDA" scheme="https://blog.lingkang.dev/tags/CUDA/"/>
+    
+    <category term="Windows" scheme="https://blog.lingkang.dev/tags/Windows/"/>
+    
+  </entry>
   
   <entry>
     <title>Grayscale BMP Images: A Practical Yet Gentle CUDA Tutorial for Beginners</title>
@@ -135,43 +162,6 @@
     <category term="Dynamic Inference" scheme="https://blog.lingkang.dev/tags/Dynamic-Inference/"/>
     
     <category term="Pruning" scheme="https://blog.lingkang.dev/tags/Pruning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Self-Host Maybe Finance Web App</title>
-    <link href="https://blog.lingkang.dev/2024/08/29/host-maybe/"/>
-    <id>https://blog.lingkang.dev/2024/08/29/host-maybe/</id>
-    <published>2024-08-29T08:30:35.000Z</published>
-    <updated>2024-10-09T08:15:10.287Z</updated>
-    
-    
-    <summary type="html">Look after the pennies, and the pounds will look after themselves.</summary>
-    
-    
-    
-    <category term="DevOps" scheme="https://blog.lingkang.dev/categories/DevOps/"/>
-    
-    
-    <category term="Server" scheme="https://blog.lingkang.dev/tags/Server/"/>
-    
-    <category term="Cloud" scheme="https://blog.lingkang.dev/tags/Cloud/"/>
-    
-    <category term="Nginx" scheme="https://blog.lingkang.dev/tags/Nginx/"/>
-    
-    <category term="ECS" scheme="https://blog.lingkang.dev/tags/ECS/"/>
-    
-    <category term="Docker" scheme="https://blog.lingkang.dev/tags/Docker/"/>
-    
-    <category term="Finance" scheme="https://blog.lingkang.dev/tags/Finance/"/>
-    
-    <category term="Self-Host" scheme="https://blog.lingkang.dev/tags/Self-Host/"/>
-    
-    <category term="Web App" scheme="https://blog.lingkang.dev/tags/Web-App/"/>
-    
-    <category term="SSL" scheme="https://blog.lingkang.dev/tags/SSL/"/>
-    
-    <category term="Ruby" scheme="https://blog.lingkang.dev/tags/Ruby/"/>
     
   </entry>
   
