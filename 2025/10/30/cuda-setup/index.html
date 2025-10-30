@@ -257,7 +257,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          583 words
+          584 words
         
       </span>
     
@@ -332,7 +332,7 @@
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs PowerShell">wsl <span class="hljs-literal">--install</span> Ubuntu<span class="hljs-literal">-24</span>.<span class="hljs-number">04</span><br></code></pre></td></tr></table></figure>
 
 <p>Reboot your machine again if prompted.</p>
-<h2 id="Step-3-Install-Docker-Desktop"><a href="#Step-3-Install-Docker-Desktop" class="headerlink" title="Step 3: Install Docker Desktop"></a>Step 3: Install Docker Desktop</h2><p>Download and install Docker Desktop from the <a target="_blank" rel="noopener" href="https://docs.docker.com/desktop/setup/install/windows-install/">Install Docker Desktop on Windows</a> page. Reboot your machine if prompted.</p>
+<h2 id="Step-3-Install-Docker-Desktop"><a href="#Step-3-Install-Docker-Desktop" class="headerlink" title="Step 3: Install Docker Desktop"></a>Step 3: Install Docker Desktop</h2><p>Download and install Docker Desktop from the <a target="_blank" rel="noopener" href="https://docs.docker.com/desktop/setup/install/windows-install/">Install Docker Desktop on Windows</a> page. Remember to choose the WSL 2 as the backend during installation. Reboot your machine if prompted.</p>
 <h2 id="Step-4-Setup-Docker-Container-with-NVIDIA-Toolkit"><a href="#Step-4-Setup-Docker-Container-with-NVIDIA-Toolkit" class="headerlink" title="Step 4: Setup Docker Container with NVIDIA Toolkit"></a>Step 4: Setup Docker Container with NVIDIA Toolkit</h2><p>Start a Docker container with the following command:</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs PowerShell">docker run <span class="hljs-literal">-dit</span> <span class="hljs-literal">--name</span> cuda_dev <span class="hljs-literal">-v</span> <span class="hljs-string">&quot;<span class="hljs-variable">$</span>&#123;PWD&#125;:/workspace/cuda&quot;</span> <span class="hljs-literal">-w</span> /workspace/cuda <span class="hljs-literal">--gpus</span> all ubuntu:<span class="hljs-number">24.04</span><br></code></pre></td></tr></table></figure>
 
