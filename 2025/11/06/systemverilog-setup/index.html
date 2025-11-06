@@ -19,34 +19,27 @@
   <meta name="author" content="Lingkang">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Manage MySQL server on Windows host from WSL2.">
+    <meta name="description" content="Setting up guide of running SystemVerilog in docker containers.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Access MySQL Localhost on Windows Host from WSL2">
-<meta property="og:url" content="https://blog.lingkang.dev/2023/07/07/wsl2mysql/index.html">
+<meta property="og:title" content="Setting up Docker Image for SystemVerilog Workspace">
+<meta property="og:url" content="https://blog.lingkang.dev/2025/11/06/systemverilog-setup/index.html">
 <meta property="og:site_name" content="Lingkang&#39;s Blog">
-<meta property="og:description" content="Manage MySQL server on Windows host from WSL2.">
+<meta property="og:description" content="Setting up guide of running SystemVerilog in docker containers.">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-07-07T08:00:04.000Z">
-<meta property="article:modified_time" content="2023-07-07T10:33:04.000Z">
+<meta property="article:published_time" content="2025-11-06T12:25:46.000Z">
+<meta property="article:modified_time" content="2025-11-06T04:43:51.407Z">
 <meta property="article:author" content="Lingkang">
-<meta property="article:tag" content="Linux">
-<meta property="article:tag" content="WSL2">
-<meta property="article:tag" content="SQL">
-<meta property="article:tag" content="Windows">
-<meta property="article:tag" content="Hyper-V">
-<meta property="article:tag" content="IP">
-<meta property="article:tag" content="Routing">
-<meta property="article:tag" content="IPv4">
-<meta property="article:tag" content="MySQL">
-<meta property="article:tag" content="CRUD">
-<meta property="article:tag" content="Privileged Access Management">
+<meta property="article:tag" content="Docker">
+<meta property="article:tag" content="SystemVerilog">
+<meta property="article:tag" content="Icarus Verilog">
+<meta property="article:tag" content="Verilator">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
     <meta name="google-site-verification" content="_Z4a0qEOBfzKcSi9b2FxvxEvBcSQPH0SDX8XFGBut9M">
   
-  <title>Access MySQL Localhost on Windows Host from WSL2 - Lingkang&#39;s Blog</title>
+  <title>Setting up Docker Image for SystemVerilog Workspace - Lingkang&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -240,7 +233,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Access MySQL Localhost on Windows Host from WSL2"></span>
+            <span id="subtitle" data-typed-text="Setting up Docker Image for SystemVerilog Workspace"></span>
           
         </div>
 
@@ -251,8 +244,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-07-07 09:00" pubdate>
-          July 7, 2023 am
+        <time datetime="2025-11-06 12:25" pubdate>
+          November 6, 2025 pm
         </time>
       </span>
     
@@ -263,7 +256,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          272 words
+          306 words
         
       </span>
     
@@ -311,12 +304,12 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Access MySQL Localhost on Windows Host from WSL2</h1>
+            <h1 id="seo-header">Setting up Docker Image for SystemVerilog Workspace</h1>
             
               <p id="updated-time" class="note note-info" style="">
                 
                   
-                    Last updated on July 7, 2023 am
+                    Last updated on November 6, 2025 am
                   
                 
               </p>
@@ -324,54 +317,24 @@
             
               <div class="markdown-body">
                 
-                <h1 id="Access-MySQL-Localhost-on-Windows-Host-from-WSL2"><a href="#Access-MySQL-Localhost-on-Windows-Host-from-WSL2" class="headerlink" title="Access MySQL Localhost on Windows Host from WSL2"></a>Access MySQL Localhost on Windows Host from WSL2</h1><p>It’s common to have a MySQL server running on localhost for development. But when using WSL2, it’s not that easy to access the localhost on Windows host. This post will show how to do it.</p>
-<h2 id="Check-Private-Network"><a href="#Check-Private-Network" class="headerlink" title="Check Private Network"></a>Check Private Network</h2><p>Run command <code>ip route</code> on WSL2 to get the IP address of the private network.</p>
-<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">ip route</span><br>default via 172.23.144.1 dev eth0<br>172.23.144.0/20 dev eth0 proto kernel scope link src 172.23.151.37 <br></code></pre></td></tr></table></figure>
+                <h1 id="Setting-up-Docker-Image-for-SystemVerilog-Workspace"><a href="#Setting-up-Docker-Image-for-SystemVerilog-Workspace" class="headerlink" title="Setting up Docker Image for SystemVerilog Workspace"></a>Setting up Docker Image for SystemVerilog Workspace</h1><h2 id="Build-Image-with-Dockerfile"><a href="#Build-Image-with-Dockerfile" class="headerlink" title="Build Image with Dockerfile"></a>Build Image with Dockerfile</h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs PowerShell">docker build <span class="hljs-literal">--tag</span> sv_image:latest <span class="hljs-literal">--no-cache</span> .<br></code></pre></td></tr></table></figure>
 
-<p>The first line represents the default route, the IP address <code>172.23.144.1</code> is the gateway or next-hop IP address. Actually, this is also the IP address of the host machine, where our MySQL server is running.</p>
-<p>The second line represents a specific route for the network <code>172.23.144.0/20</code>, which is a <a target="_blank" rel="noopener" href="https://lingkkang.github.io/2023/05/15/subnet/">subnet</a> for WSL2. The source <code>src 172.23.151.37</code> is the IP address that will be used when sending traffic to the network, i.e., the IP address of WSL2.</p>
-<p>Run following command can also validate the IP address of the host machine.</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sh"><span class="hljs-built_in">echo</span> $(hostname).<span class="hljs-built_in">local</span><br>ping -c 2 $(hostname).<span class="hljs-built_in">local</span><br></code></pre></td></tr></table></figure>
+<p>Run the above PowerShell code with the following Dockerfile:</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><code class="hljs Dockerfile"><span class="hljs-keyword">FROM</span> ubuntu:<span class="hljs-number">24.04</span><br><br><span class="hljs-keyword">ENV</span> DEBIAN_FRONTEND=noninteractive<br><span class="hljs-keyword">RUN</span><span class="language-bash"> apt update &amp;&amp; apt upgrade -y</span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> apt install -y --no-install-recommends locales tzdata</span><br><br><span class="hljs-comment"># Set the locale to English (UTF-8)</span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> sed -i <span class="hljs-string">&#x27;/en_US.UTF-8/s/^# //g&#x27;</span> /etc/locale.gen &amp;&amp; locale-gen</span><br><br><span class="hljs-comment"># Set environment variables for English locale</span><br><span class="hljs-keyword">ENV</span> LANG=en_US.UTF-<span class="hljs-number">8</span><br><span class="hljs-keyword">ENV</span> LANGUAGE=en_US:en<br><span class="hljs-keyword">ENV</span> LC_ALL=en_US.UTF-<span class="hljs-number">8</span><br><br><span class="hljs-comment"># Set timezone to Hong Kong</span><br><span class="hljs-keyword">ENV</span> TZ=Asia/Hong_Kong<br><span class="hljs-keyword">RUN</span><span class="language-bash"> <span class="hljs-built_in">ln</span> -snf /usr/share/zoneinfo/<span class="hljs-variable">$TZ</span> /etc/localtime &amp;&amp; <span class="hljs-built_in">echo</span> <span class="hljs-variable">$TZ</span> &gt; /etc/timezone</span><br><br><span class="hljs-keyword">RUN</span><span class="language-bash"> apt update &amp;&amp; apt install -y --no-install-recommends \</span><br><span class="language-bash">    make git curl ca-certificates python3 \</span><br><span class="language-bash">    build-essential pkg-config libz-dev \</span><br><span class="language-bash">    iverilog \</span><br><span class="language-bash">    verilator</span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> <span class="hljs-built_in">rm</span> -rf /var/lib/apt/lists/*</span><br><br><span class="hljs-keyword">RUN</span><span class="language-bash"> iverilog -V</span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> verilator --version</span><br><br><span class="hljs-comment"># Set up better PS1 prompt</span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> <span class="hljs-built_in">cat</span> &lt;&lt;<span class="hljs-string">&#x27;EOF&#x27;</span> &gt;&gt; /root/.bashrc</span><br><br>RED=<span class="hljs-string">&quot;\[\033[0;31m\]&quot;</span><br>GREEN=<span class="hljs-string">&quot;\[\033[0;32m\]&quot;</span><br>YELLOW=<span class="hljs-string">&quot;\[\033[0;33m\]&quot;</span><br>BLUE=<span class="hljs-string">&quot;\[\033[0;34m\]&quot;</span><br>MAGENTA=<span class="hljs-string">&quot;\[\033[0;35m\]&quot;</span><br>CYAN=<span class="hljs-string">&quot;\[\033[0;36m\]&quot;</span><br>WHITE=<span class="hljs-string">&quot;\[\033[0;37m\]&quot;</span><br>BOLD=<span class="hljs-string">&quot;\[\033[1m\]&quot;</span><br>RESET=<span class="hljs-string">&quot;\[\033[0m\]&quot;</span><br><br>PS1=<span class="hljs-string">&quot;$&#123;GREEN&#125;$&#123;BOLD&#125;\u$&#123;WHITE&#125;@$&#123;BLUE&#125;$&#123;BOLD&#125;\w $&#123;MAGENTA&#125;\$(date +%H:%M)$&#123;RESET&#125; &gt; &quot;</span><br>EOF<br><br><span class="hljs-keyword">RUN</span><span class="language-bash"> <span class="hljs-built_in">mkdir</span> -p /workspace/sv/</span><br><span class="hljs-keyword">WORKDIR</span><span class="language-bash"> /workspace/sv/</span><br><br><span class="hljs-comment"># Default shell</span><br><span class="hljs-keyword">CMD</span><span class="language-bash"> [<span class="hljs-string">&quot;/bin/bash&quot;</span>]</span><br></code></pre></td></tr></table></figure>
 
-<p>Actually, the WSL2 and the Windows host machine are all on a shared Hyper-V switch, which is a virtual network switch.</p>
-<p>However, the IP address of the host machine is <strong>not static</strong>, it will change after rebooting. So it’s not a good idea to have the IP address hard-coded in the configuration.</p>
-<p>And the solution is to use the hostname of the host machine, which is also the name of the host machine. The hostname can be found by running <code>hostname</code> on Windows PowerShell, or <code>echo $(hostname)</code> on WSL2. The <code>.local</code> suffix is also needed. See the python script for <a href="#test-connection">connection testing</a>.</p>
-<p>It is also noteworthy that the private network IPv4 addresses all begin with <code>172</code>. This would be helpful when we configure MySQL user.</p>
-<h2 id="Create-MySQL-User"><a href="#Create-MySQL-User" class="headerlink" title="Create MySQL User"></a>Create MySQL User</h2><p>Since all users on MySQL server are on <code>localhost</code> by default, it is required to create a new user for WSL2. </p>
-<p>Note that both user name <code>user</code> and host name <code>host</code> need to match to log in, otherwise, it will be denied. For example, if we try to log in as root in Python from WSL2, it will raise an an <code>mysql.connector.errors.ProgrammingError</code>, with an error message that <code>1045 (28000): Access denied for user &#39;root&#39;@&#39;172.23.151.37&#39;</code>.</p>
-<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs console"><span class="hljs-meta prompt_">mysql&gt; </span><span class="language-bash">SELECT user, host FROM mysql.user;</span><br>+------------------+-----------+<br>| user             | host      |<br>+------------------+-----------+<br>| mysql.infoschema | localhost |<br>| mysql.session    | localhost |<br>| mysql.sys        | localhost |<br>| root             | localhost |<br>+------------------+-----------+<br>4 rows in set (0.01 sec)<br></code></pre></td></tr></table></figure>
+<h2 id="Start-a-Container"><a href="#Start-a-Container" class="headerlink" title="Start a Container"></a>Start a Container</h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs PowerShell">docker run <span class="hljs-literal">-dit</span> sv_image<br><br><span class="hljs-comment"># or mounting current working directory to the container:</span><br>docker run <span class="hljs-literal">-dit</span> <span class="hljs-literal">--name</span> sv_container <span class="hljs-literal">-v</span> <span class="hljs-variable">$</span>&#123;<span class="hljs-built_in">PWD</span>&#125;:/workspace/<span class="hljs-built_in">sv</span> sv_image:latest<br></code></pre></td></tr></table></figure>
 
-<p>Log in MySQL Command Line Client with root privilege, and create a user for WSL2, say, <code>wsl2</code>.</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs SQL"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">USER</span> <span class="hljs-string">&#x27;wsl2&#x27;</span>@<span class="hljs-string">&#x27;172.%&#x27;</span>;<br></code></pre></td></tr></table></figure>
+<h2 id="Sample-SystemVerilog-Code"><a href="#Sample-SystemVerilog-Code" class="headerlink" title="Sample SystemVerilog Code"></a>Sample SystemVerilog Code</h2><p>Source code <code>counter.sv</code>:</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs Verilog"><span class="hljs-comment">/*</span><br><span class="hljs-comment"> counter.sv</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">module</span> counter #(<span class="hljs-keyword">parameter</span> WIDTH=<span class="hljs-number">4</span>) (<br>  <span class="hljs-keyword">input</span>  <span class="hljs-keyword">logic</span> clk, rst_n,<br>  <span class="hljs-keyword">output</span> <span class="hljs-keyword">logic</span> [WIDTH-<span class="hljs-number">1</span>:<span class="hljs-number">0</span>] q<br>);<br>  <span class="hljs-keyword">always_ff</span> @(<span class="hljs-keyword">posedge</span> clk <span class="hljs-keyword">or</span> <span class="hljs-keyword">negedge</span> rst_n) <span class="hljs-keyword">begin</span><br>    <span class="hljs-keyword">if</span> (!rst_n) q &lt;= &#x27;<span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">else</span>        q &lt;= q + <span class="hljs-number">1&#x27;b1</span>;<br>  <span class="hljs-keyword">end</span><br><span class="hljs-keyword">endmodule</span><br></code></pre></td></tr></table></figure>
 
-<p>or, if password is needed,</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs SQL"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">USER</span> <span class="hljs-string">&#x27;wsl2&#x27;</span>@<span class="hljs-string">&#x27;172.%&#x27;</span> IDENTIFIED <span class="hljs-keyword">BY</span> <span class="hljs-string">&#x27;password&#x27;</span>;<br></code></pre></td></tr></table></figure>
+<p>Test bench code <code>counter_tb.sv</code>:</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs Verilog"><span class="hljs-comment">/*</span><br><span class="hljs-comment"> counter_tb.sv</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">`<span class="hljs-keyword">timescale</span> 1ns/1ps</span><br><span class="hljs-keyword">module</span> counter_tb;<br>  <span class="hljs-keyword">logic</span> clk = <span class="hljs-number">0</span>, rst_n = <span class="hljs-number">0</span>;<br>  <span class="hljs-keyword">logic</span> [<span class="hljs-number">3</span>:<span class="hljs-number">0</span>] q;<br><br>  <span class="hljs-comment">// DUT</span><br>  counter <span class="hljs-variable">#(4) dut(.clk(clk), .rst_n(rst_n), .q(q))</span>;<br><br>  <span class="hljs-comment">// clock: 10ns period</span><br>  <span class="hljs-keyword">always</span> #<span class="hljs-number">5</span> clk &lt;= ~clk;<br><br>  <span class="hljs-comment">// waveform dump</span><br>  <span class="hljs-keyword">initial</span> <span class="hljs-keyword">begin</span><br>    <span class="hljs-built_in">$dumpfile</span>(<span class="hljs-string">&quot;wave.vcd&quot;</span>);<br>    <span class="hljs-built_in">$dumpvars</span>(<span class="hljs-number">0</span>, counter_tb);<br>  <span class="hljs-keyword">end</span><br><br>  <span class="hljs-keyword">initial</span> <span class="hljs-keyword">begin</span><br>    rst_n = <span class="hljs-number">0</span>; <span class="hljs-keyword">repeat</span>(<span class="hljs-number">2</span>) @(<span class="hljs-keyword">posedge</span> clk);<br>    rst_n = <span class="hljs-number">1</span>; <span class="hljs-keyword">repeat</span>(<span class="hljs-number">20</span>) @(<span class="hljs-keyword">posedge</span> clk);<br>    <span class="hljs-built_in">$display</span>(<span class="hljs-string">&quot;Final q = %0d&quot;</span>, q);<br>    <span class="hljs-built_in">$finish</span>;<br>  <span class="hljs-keyword">end</span><br><span class="hljs-keyword">endmodule</span><br></code></pre></td></tr></table></figure>
 
-<p>Here <code>%</code> percentage sign is a wildcard which means any IP address that begins with <code>172</code>.</p>
-<p>We could see at this stage the user <code>wsl2</code> has no privilege.</p>
-<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs console"><span class="hljs-meta prompt_">mysql&gt; </span><span class="language-bash">SELECT user, host, select_priv, create_priv, insert_priv FROM mysql.user WHERE user=<span class="hljs-string">&#x27;wsl2&#x27;</span>;</span><br>+------+-------+-------------+-------------+-------------+<br>| user | host  | select_priv | create_priv | insert_priv |<br>+------+-------+-------------+-------------+-------------+<br>| wsl2 | 172.% | N           | N           | N           |<br>+------+-------+-------------+-------------+-------------+<br>1 row in set (0.01 sec)<br></code></pre></td></tr></table></figure>
+<h2 id="Run-Verilator"><a href="#Run-Verilator" class="headerlink" title="Run Verilator"></a>Run Verilator</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">verilator -Wall --sv --timing --trace-fst --binary -o sim_verilator --top-module counter_tb counter_tb.sv counter.sv<br><br>./obj_dir/sim_verilator<br></code></pre></td></tr></table></figure>
 
-<h2 id="Grant-Privilege"><a href="#Grant-Privilege" class="headerlink" title="Grant Privilege"></a>Grant Privilege</h2><p>Grant privilege to the user <code>wsl2</code> as per requirement.</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs SQL"><span class="hljs-keyword">GRANT</span> <span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">ON</span> <span class="hljs-operator">*</span>.<span class="hljs-operator">*</span> <span class="hljs-keyword">TO</span> <span class="hljs-string">&#x27;wsl2&#x27;</span>@<span class="hljs-string">&#x27;172.%&#x27;</span>;<br><span class="hljs-keyword">GRANT</span> <span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">ON</span> <span class="hljs-operator">*</span>.<span class="hljs-operator">*</span> <span class="hljs-keyword">TO</span> <span class="hljs-string">&#x27;wsl2&#x27;</span>@<span class="hljs-string">&#x27;172.%&#x27;</span>;<br><span class="hljs-keyword">GRANT</span> <span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">ON</span> <span class="hljs-operator">*</span>.<span class="hljs-operator">*</span> <span class="hljs-keyword">TO</span> <span class="hljs-string">&#x27;wsl2&#x27;</span>@<span class="hljs-string">&#x27;172.%&#x27;</span>;<br>FLUSH PRIVILEGES;<br></code></pre></td></tr></table></figure>
+<h2 id="Run-Icarus-Verilog"><a href="#Run-Icarus-Verilog" class="headerlink" title="Run Icarus Verilog"></a>Run Icarus Verilog</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">iverilog -g2012 -o sim.vvp counter_tb.sv counter.sv<br><br>vvp sim.vvp<br></code></pre></td></tr></table></figure>
 
-<p>Rerun the query, we could see the user <code>wsl2</code> has the privilege now.</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs SQL"><span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">user</span>, host, select_priv, create_priv, insert_priv <span class="hljs-keyword">FROM</span> mysql.user <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">user</span><span class="hljs-operator">=</span><span class="hljs-string">&#x27;wsl2&#x27;</span>;<br></code></pre></td></tr></table></figure>
-
-<h2 id="Test-Connection"><a href="#Test-Connection" class="headerlink" title="Test Connection"></a>Test Connection</h2><p>Here is a simple python script. Run it on WSL2 to test the connection.</p>
-<p>Remember to replace the <code>user</code>, <code>password</code> and <code>host</code> with your own. The <code>host</code> should be exactly the same as what <code>echo $(hostname).local</code> returns on WSL2.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs Python"><span class="hljs-comment">#!/usr/bin/python3</span><br><br><span class="hljs-keyword">from</span> mysql <span class="hljs-keyword">import</span> connector<br><br>connection = connector.connect(<br>    user=<span class="hljs-string">&quot;wsl2&quot;</span>,<br>    password=<span class="hljs-string">&quot;password&quot;</span>,<br>    host=<span class="hljs-string">&quot;DESKTOP-4T7NV3Q.local&quot;</span><br>)<br><br>cursor = connection.cursor()<br>cursor.execute(<span class="hljs-string">&quot;SHOW DATABASES;&quot;</span>)<br><br><span class="hljs-keyword">for</span> db <span class="hljs-keyword">in</span> cursor.fetchall():<br>    <span class="hljs-built_in">print</span>(db[<span class="hljs-number">0</span>])<br><br>cursor.close()<br>connection.close()<br></code></pre></td></tr></table></figure>
-
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ol>
-<li><a target="_blank" rel="noopener" href="https://man7.org/linux/man-pages/man8/ip.8.html">ip(8) - Linux manual page</a></li>
-<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/wsl/networking">Accessing network applications with WSL | Microsoft Learn</a></li>
-<li><a target="_blank" rel="noopener" href="https://unix.stackexchange.com/questions/715507/connect-to-host-machine-from-wsl2">networking - Connect to host machine from WSL2 - Unix &amp; Linux Stack Exchange</a></li>
-<li><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/user-names.html">MySQL :: MySQL 8.0 Reference Manual :: 6.2.1 Account User Names and Passwords</a></li>
-<li><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/grant-tables.html">MySQL :: MySQL 8.0 Reference Manual :: 6.2.3 Grant Tables</a></li>
-<li><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/create-user.html">MySQL :: MySQL 8.0 Reference Manual :: 13.7.1.3 CREATE USER Statement</a></li>
-<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/50177216/how-to-grant-all-privileges-to-root-user-in-mysql-8-0">How to grant all privileges to root user in MySQL 8.0 - Stack Overflow</a></li>
-<li><a target="_blank" rel="noopener" href="https://askubuntu.com/questions/1322175/not-allowed-to-create-user-with-grant">mysql - Not Allowed to Create User with GRANT - Ask Ubuntu</a></li>
-<li><a target="_blank" rel="noopener" href="https://docs.digitalocean.com/products/databases/mysql/how-to/modify-user-privileges/">How to Modify User Privileges in MySQL Databases :: DigitalOcean Documentation</a></li>
-</ol>
+<p>You can put the output waveform file <code>wave.vcd</code> to <a target="_blank" rel="noopener" href="https://vc.drom.io/">VC Drom</a> to conveniently check the results.</p>
 
                 
               </div>
@@ -405,27 +368,13 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/Linux/" class="print-no-link">#Linux</a>
+        <a href="/tags/Docker/" class="print-no-link">#Docker</a>
       
-        <a href="/tags/WSL2/" class="print-no-link">#WSL2</a>
+        <a href="/tags/SystemVerilog/" class="print-no-link">#SystemVerilog</a>
       
-        <a href="/tags/SQL/" class="print-no-link">#SQL</a>
+        <a href="/tags/Icarus-Verilog/" class="print-no-link">#Icarus Verilog</a>
       
-        <a href="/tags/Windows/" class="print-no-link">#Windows</a>
-      
-        <a href="/tags/Hyper-V/" class="print-no-link">#Hyper-V</a>
-      
-        <a href="/tags/IP/" class="print-no-link">#IP</a>
-      
-        <a href="/tags/Routing/" class="print-no-link">#Routing</a>
-      
-        <a href="/tags/IPv4/" class="print-no-link">#IPv4</a>
-      
-        <a href="/tags/MySQL/" class="print-no-link">#MySQL</a>
-      
-        <a href="/tags/CRUD/" class="print-no-link">#CRUD</a>
-      
-        <a href="/tags/Privileged-Access-Management/" class="print-no-link">#Privileged Access Management</a>
+        <a href="/tags/Verilator/" class="print-no-link">#Verilator</a>
       
     </div>
   
@@ -437,8 +386,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Access MySQL Localhost on Windows Host from WSL2</div>
-      <div>https://blog.lingkang.dev/2023/07/07/wsl2mysql/</div>
+      <div>Setting up Docker Image for SystemVerilog Workspace</div>
+      <div>https://blog.lingkang.dev/2025/11/06/systemverilog-setup/</div>
     </div>
     <div class="license-meta">
       
@@ -450,7 +399,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>July 7, 2023</div>
+          <div>November 6, 2025</div>
         </div>
       
       
@@ -482,18 +431,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/07/27/align-test/" title="Performance Issue of Memory Alignment">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Performance Issue of Memory Alignment</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/06/16/share-file-host-and-vm-hyper-v/" title="Share Files Between Host and Linux Virtual Machine over Hyper-V">
-                        <span class="hidden-mobile">Share Files Between Host and Linux Virtual Machine over Hyper-V</span>
+                      <a href="/2025/10/30/cuda-setup/" title="Setting up Docker-based CUDA Environment on a New Windows Machine">
+                        <span class="hidden-mobile">Setting up Docker-based CUDA Environment on a New Windows Machine</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
